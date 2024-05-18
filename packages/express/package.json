@@ -1,0 +1,63 @@
+{
+  "name": "@graphai/express_adapter",
+  "version": "0.0.1",
+  "description": "GraphAI express web server middleware.",
+  "main": "lib/index.js",
+  "bin": {
+    "graphai": "lib/index.js"
+  },
+  "files": [
+    "./lib"
+  ],
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "eslint": "eslint --fix",
+    "format": "prettier --write '{src,test}/**/*.{yaml,ts,json}'",
+    "test": "node --test  -r tsconfig-paths/register --require ts-node/register ./test/test_*.ts",
+    "b": "yarn run format && yarn run eslint && yarn run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/receptron/graphai_utils"
+  },
+  "author": "Receptron team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/receptron/graphai_utils/issues"
+  },
+  "homepage": "https://github.com/receptron/graphai_utils#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/json-schema-generator": "^2.0.3",
+    "@types/node": "^20.8.7",
+    "@types/yargs": "^17.0.32",
+    "eslint": "^9.2.0",
+    "prettier": "^3.0.3",
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.8",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.4.3",
+    "typescript-eslint": "^7.8.0"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^5.0.0",
+    "arxiv-api-ts": "^1.0.3",
+    "deepmerge": "^4.3.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "graphai": "0.4.2",
+    "groq-sdk": "^0.3.3",
+    "json-schema-generator": "^2.0.6",
+    "openai": "^4.12.4",
+    "slashgpt": "^0.0.8",
+    "tiktoken": "^1.0.14",
+    "wikipedia": "^2.1.2",
+    "xml2js": "^0.6.2",
+    "yaml": "^2.3.3",
+    "yargs": "^17.7.2"
+  },
+  "types": "./lib/index.d.ts",
+  "directories": {
+    "lib": "lib"
+  }
+}
