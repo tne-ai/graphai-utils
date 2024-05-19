@@ -23,9 +23,34 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.agentsList = exports.agentDispatcher = exports.agentDoc = void 0;
+exports.streamAgentDispatcher = exports.agentDispatcher = exports.agentDoc = exports.agentsList = void 0;
+const test_utils_1 = require("graphai/lib/utils/test_utils");
+const stream_1 = require("graphai/lib/experimental_agent_filters/stream");
 const agents = __importStar(require("graphai/lib/experimental_agents"));
 const agentDictionary = agents;
+// express middleware
+// return agent list
+const agentsList = (hostName = "https://example.com", urlPath = "/agent") => {
+    return async (req, res) => {
+        const list = Object.keys(agentDictionary).map((agentName) => {
+            const agent = agentDictionary[agentName];
+            return {
+                agentId: agentName,
+                name: agent.name,
+                url: hostName + urlPath + "/" + agentName,
+                description: agent.description,
+                category: agent.category,
+                author: agent.author,
+                license: agent.license,
+                repository: agent.repository,
+            };
+        });
+        res.json({ agents: list });
+    };
+};
+exports.agentsList = agentsList;
+// express middleware
+// return agent detail info
 const agentDoc = (hostName = "https://example.com", urlPath = "/agent") => {
     return async (req, res) => {
         const { params } = req;
@@ -50,45 +75,66 @@ const agentDoc = (hostName = "https://example.com", urlPath = "/agent") => {
     };
 };
 exports.agentDoc = agentDoc;
-const agentDispatcher = async (req, res) => {
-    const { params } = req;
-    const { agentId } = params;
-    const { nodeId, retry, params: agentParams, inputs } = req.body;
-    const agent = agentDictionary[agentId];
-    if (agent === undefined) {
-        res.status(404).send("Not found");
-        return;
-    }
-    const result = await agent.agent({
-        params: agentParams,
-        inputs,
-        debugInfo: {
-            nodeId,
-            retry,
-            verbose: false,
-        },
-        agents,
-        filterParams: {},
-    });
-    res.json(result);
-};
-exports.agentDispatcher = agentDispatcher;
-const agentsList = (hostName = "https://example.com", urlPath = "/agent") => {
+// express middleware
+// run agent
+const agentDispatcher = (agentFilters = []) => {
     return async (req, res) => {
-        const list = Object.keys(agentDictionary).map((agentName) => {
-            const agent = agentDictionary[agentName];
-            return {
-                agentId: agentName,
-                name: agent.name,
-                url: hostName + urlPath + "/" + agentName,
-                description: agent.description,
-                category: agent.category,
-                author: agent.author,
-                license: agent.license,
-                repository: agent.repository,
-            };
-        });
-        res.json({ agents: list });
+        const dispatcher = agentDispatcherInternal(agentFilters);
+        const result = await dispatcher(req, res);
+        return res.json(result);
     };
 };
-exports.agentsList = agentsList;
+exports.agentDispatcher = agentDispatcher;
+// express middleware
+// run agent with streaming
+const streamAgentDispatcher = (agentFilters = []) => {
+    return async (req, res) => {
+        res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
+        res.setHeader("Cache-Control", "no-cache, no-transform");
+        res.setHeader("X-Accel-Buffering", "no");
+        const callback = (context, token) => {
+            if (token) {
+                res.write(token);
+            }
+        };
+        const streamAgentFilter = {
+            name: "streamAgentFilter",
+            agent: (0, stream_1.streamAgentFilterGenerator)(callback),
+        };
+        const filterList = [...agentFilters, streamAgentFilter];
+        const dispatcher = agentDispatcherInternal(filterList);
+        const result = await dispatcher(req, res);
+        const json_data = JSON.stringify(result);
+        res.write("___END___");
+        res.write(json_data);
+        return res.end();
+    };
+};
+exports.streamAgentDispatcher = streamAgentDispatcher;
+// dispatcher internal function
+const agentDispatcherInternal = (agentFilters = []) => {
+    return async (req, res) => {
+        const { params } = req;
+        const { agentId } = params;
+        const { nodeId, retry, params: agentParams, inputs } = req.body;
+        const agent = agentDictionary[agentId];
+        if (agent === undefined) {
+            res.status(404).send("Not found");
+            return;
+        }
+        const context = {
+            params: agentParams || {},
+            inputs,
+            debugInfo: {
+                nodeId,
+                retry,
+                verbose: false,
+            },
+            agents,
+            filterParams: {},
+        };
+        const agentFilterRunner = (0, test_utils_1.agentFilterRunnerBuilder)(agentFilters);
+        const result = await agentFilterRunner(context, agent.agent);
+        return result;
+    };
+};
