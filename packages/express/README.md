@@ -3,10 +3,10 @@
 
 ## Usage
 
-```
+```TypeScript
 
 import express from "express";
-import { agentDispatcher, agentsList, agentDoc } from "@/express";
+import { agentDispatcher, agentsList, agentDoc } from "@receptron/graphai_express";
 
 const hostName = "https://example.net";
 const apiPrefix = "/api/agents";
