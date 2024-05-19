@@ -1,3 +1,6 @@
+// echoAgent client.
+// npx ts-node -r tsconfig-paths/register test/client.ts
+
 import { AgentFunctionContext } from "graphai/lib/type";
 
 const streamingRequest = async (url: string, postData: AgentFunctionContext) => {

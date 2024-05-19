@@ -1,3 +1,4 @@
+// express server example
 import "dotenv/config";
 import express from "express";
 
