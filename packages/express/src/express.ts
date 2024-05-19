@@ -1,5 +1,4 @@
 import express from "express";
-import type { RequestHandler } from "express";
 
 import { AgentFunctionInfoDictonary, AgentFilterInfo, AgentFunctionContext } from "graphai/lib/type";
 import { agentFilterRunnerBuilder } from "graphai/lib/utils/test_utils";
