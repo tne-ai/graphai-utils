@@ -1,6 +1,12 @@
 
 ## GraphAI express middleware.
 
+## Install
+
+```
+yarn add @receptron/graphai_express
+```
+
 ## Usage
 
 ```TypeScript
