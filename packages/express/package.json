@@ -26,16 +26,14 @@
   "homepage": "https://github.com/receptron/graphai_utils/tree/main/packages/express#readme",
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/json-schema-generator": "^2.0.3",
     "@types/node": "^20.8.7",
-    "@types/yargs": "^17.0.32",
-    "eslint": "^9.2.0",
-    "prettier": "^3.0.3",
-    "ts-node": "^10.9.1",
+    "eslint": "^9.3.0",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.8",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.4.3",
-    "typescript-eslint": "^7.8.0"
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.9.0"
   },
   "dependencies": {
     "@inquirer/prompts": "^5.0.0",
@@ -45,14 +43,12 @@
     "express": "^4.19.2",
     "graphai": "0.4.2",
     "groq-sdk": "^0.3.3",
-    "json-schema-generator": "^2.0.6",
     "openai": "^4.12.4",
     "slashgpt": "^0.0.8",
     "tiktoken": "^1.0.14",
     "wikipedia": "^2.1.2",
     "xml2js": "^0.6.2",
-    "yaml": "^2.3.3",
-    "yargs": "^17.7.2"
+    "yaml": "^2.3.3"
   },
   "types": "./lib/express.d.ts",
   "directories": {
