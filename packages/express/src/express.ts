@@ -60,7 +60,7 @@ export const agentDoc = (hostName: string = "https://example.com", urlPath: stri
 export const agentDispatcher = (agentFilters: AgentFilterInfo[] = []) => {
   return async (req: express.Request, res: express.Response) => {
     const dispatcher = agentDispatcherInternal(agentFilters);
-    const result = dispatcher(req, res);
+    const result = await dispatcher(req, res);
     return res.json(result);
   };
 };
