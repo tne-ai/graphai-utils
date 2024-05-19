@@ -22,7 +22,7 @@ app.get(apiPrefix + "/:agentId", agentDoc(hostName, apiPrefix));
 app.get(apiPrefix + "/", agentsList(hostName, apiPrefix));
 
 //  stream
-app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher([]));
+app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher());
 
 const port = 8085;
 app.listen(port, () => {
