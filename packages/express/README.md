@@ -16,3 +16,12 @@ app.get(apiPrefix + "/:agentId", agentDoc(hostName, apiPrefix)); // each API(age
 app.get(apiPrefix + "/", agentsList(hostName, apiPrefix));  // API(agent) list
 
 ```
+
+
+### from curl.
+
+T.B.D.
+
+### from GraphAI Client
+
+T.B.D.
