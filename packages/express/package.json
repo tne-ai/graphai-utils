@@ -1,11 +1,8 @@
 {
-  "name": "@graphai/express_adapter",
+  "name": "@receptron/graphai_express",
   "version": "0.0.1",
   "description": "GraphAI express web server middleware.",
-  "main": "lib/index.js",
-  "bin": {
-    "graphai": "lib/index.js"
-  },
+  "main": "lib/express.js",
   "files": [
     "./lib"
   ],
@@ -57,7 +54,7 @@
     "yaml": "^2.3.3",
     "yargs": "^17.7.2"
   },
-  "types": "./lib/index.d.ts",
+  "types": "./lib/express.d.ts",
   "directories": {
     "lib": "lib"
   }

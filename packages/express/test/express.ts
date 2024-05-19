@@ -10,7 +10,7 @@ export const app = express();
 
 app.use(
   express.json({
-    type(req) {
+    type(__req) {
       return true;
     },
   }),

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { AgentFunctionInfoDictonary, AgentFunctionInfo } from "graphai/lib/type";
+import { AgentFunctionInfoDictonary } from "graphai/lib/type";
 import * as agents from "graphai/lib/experimental_agents";
 
 const agentDictionary: AgentFunctionInfoDictonary = agents;
