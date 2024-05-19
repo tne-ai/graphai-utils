@@ -12,6 +12,7 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "eslint": "eslint --fix",
+    "server": "ts-node -r tsconfig-paths/register test/express.ts",
     "format": "prettier --write '{src,test}/**/*.{yaml,ts,json}'",
     "test": "node --test  -r tsconfig-paths/register --require ts-node/register ./test/test_*.ts",
     "b": "yarn run format && yarn run eslint && yarn run build"
