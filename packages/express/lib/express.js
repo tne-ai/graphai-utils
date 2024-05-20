@@ -24,7 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.streamAgentDispatcher = exports.agentDispatcher = exports.agentDoc = exports.agentsList = void 0;
-const test_utils_1 = require("graphai/lib/utils/test_utils");
+const graphai_1 = require("graphai");
 const stream_1 = require("graphai/lib/experimental_agent_filters/stream");
 const agents = __importStar(require("graphai/lib/experimental_agents"));
 const agentDictionary = agents;
@@ -133,7 +133,7 @@ const agentDispatcherInternal = (agentFilters = []) => {
             agents,
             filterParams: {},
         };
-        const agentFilterRunner = (0, test_utils_1.agentFilterRunnerBuilder)(agentFilters);
+        const agentFilterRunner = (0, graphai_1.agentFilterRunnerBuilder)(agentFilters);
         const result = await agentFilterRunner(context, agent.agent);
         return result;
     };

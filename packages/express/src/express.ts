@@ -1,17 +1,17 @@
 import express from "express";
 
-import { AgentFunctionInfoDictonary, AgentFilterInfo, AgentFunctionContext } from "graphai/lib/type";
-import { agentFilterRunnerBuilder } from "graphai/lib/utils/test_utils";
+import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
+import { agentFilterRunnerBuilder } from "graphai";
 import { streamAgentFilterGenerator } from "graphai/lib/experimental_agent_filters/stream";
 import * as agents from "graphai/lib/experimental_agents";
 
-const agentDictionary: AgentFunctionInfoDictonary = agents;
+const agentDictionary: AgentFunctionInfoDictionary = agents;
 
 // express middleware
 // return agent list
 export const agentsList = (hostName: string = "https://example.com", urlPath: string = "/agent") => {
   return async (req: express.Request, res: express.Response) => {
-    const list = Object.keys(agentDictionary).map((agentName: keyof AgentFunctionInfoDictonary) => {
+    const list = Object.keys(agentDictionary).map((agentName: keyof AgentFunctionInfoDictionary) => {
       const agent = agentDictionary[agentName];
       return {
         agentId: agentName,
