@@ -11,8 +11,8 @@
     "eslint": "eslint --fix",
     "server": "ts-node -r tsconfig-paths/register test/express.ts",
     "test_stream":  "ts-node -r tsconfig-paths/register test/stream_client.ts",
+    "test":  "ts-node -r tsconfig-paths/register test/client.ts",
     "format": "prettier --write '{src,test}/**/*.{yaml,ts,json}'",
-    "test": "node --test  -r tsconfig-paths/register --require ts-node/register ./test/test_*.ts",
     "b": "yarn run format && yarn run eslint && yarn run build"
   },
   "repository": {
@@ -45,7 +45,7 @@
     "graphai": "0.4.3",
     "groq-sdk": "^0.3.3",
     "openai": "^4.12.4",
-    "slashgpt": "^0.0.8",
+    "slashgpt": "^0.1.1",
     "tiktoken": "^1.0.14",
     "wikipedia": "^2.1.2",
     "xml2js": "^0.6.2",
