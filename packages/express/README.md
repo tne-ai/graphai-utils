@@ -29,9 +29,11 @@ app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher());
 ```
 
 
-### from curl.
+### Test from curl
 
-T.B.D.
+```
+curl -X POST -H "Content-Type: application/json" -d '{"params": {"message" : "hello"}}' http://localhost:8085/api/agents/echoAgent
+```
 
 ### from GraphAI Client
 
