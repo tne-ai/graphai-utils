@@ -54,6 +54,21 @@ export const agentDoc = (agentDictionary: AgentFunctionInfoDictionary, hostName:
 // express middleware
 // run agent
 export const agentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
+  const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters);
+  const stream = streamAgentDispatcher(agentDictionary, agentFilters);
+  return async (req: express.Request, res: express.Response) => {
+    const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
+    console.log(isStreaming);
+    if (isStreaming) {
+      return await stream(req, res);
+    }
+    return await nonStram(req, res);
+  };
+};
+
+// express middleware
+// run agent
+export const nonStreamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
   return async (req: express.Request, res: express.Response) => {
     const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters);
     const result = await dispatcher(req, res);

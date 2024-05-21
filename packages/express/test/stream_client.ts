@@ -56,15 +56,31 @@ const streamingRequest = async (url: string, postData: AgentFunctionContext) => 
   }
 };
 
-streamingRequest("http://localhost:8085/api/agents/stream/streamMockAgent", {
-  params: {
-    message: "this is test",
-  },
-  inputs: [],
-  debugInfo: {
-    verbose: false,
-    nodeId: "123",
-    retry: 2,
-  },
-  filterParams: {},
-});
+const main = async () => {
+  await streamingRequest("http://localhost:8085/api/agents/stream/streamMockAgent", {
+    params: {
+      message: "this is test",
+    },
+    inputs: [],
+    debugInfo: {
+      verbose: false,
+      nodeId: "123",
+      retry: 2,
+    },
+    filterParams: {},
+  });
+  await streamingRequest("http://localhost:8085/api/agents/streamMockAgent", {
+    params: {
+      message: "this is test",
+    },
+    inputs: [],
+    debugInfo: {
+      verbose: false,
+      nodeId: "123",
+      retry: 2,
+    },
+    filterParams: {},
+  });
+};
+
+main();

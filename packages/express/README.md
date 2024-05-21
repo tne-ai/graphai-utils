@@ -13,7 +13,7 @@ yarn add @receptron/graphai_express
 
 import express from "express";
 import * as agents from "graphai/lib/experimental_agents";
-import { agentDispatcher, streamAgentDispatcher, agentsList, agentDoc } from "@receptron/graphai_express";
+import { agentDispatcher, nonStreamAgentDispatcher, streamAgentDispatcher, agentsList, agentDoc } from "@receptron/graphai_express";
 import { AgentFunctionInfoDictionary } from "graphai";
 
 const agentDictionary: AgentFunctionInfoDictionary = agents;
@@ -23,8 +23,11 @@ const apiPrefix = "/api/agents";
 app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix)); // each API(agent) document
 app.get(apiPrefix + "/", agentsList(agentDictionary, hostName, apiPrefix));  // API(agent) list
 
+// non stream and strwam
+app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
+
 //  non stream
-app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary)); // dispatch agents
+app.post(apiPrefix + "/nonstream/:agentId", nonStreamAgentDispatcher(agentDictionary));
 
 //  stream
 app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary));

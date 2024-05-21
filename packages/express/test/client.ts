@@ -3,7 +3,7 @@
 
 import { AgentFunctionContext } from "graphai/lib/type";
 
-const streamingRequest = async (url: string, postData: AgentFunctionContext) => {
+const request = async (url: string, postData: AgentFunctionContext) => {
   const { params, inputs, debugInfo, filterParams } = postData;
   const postBody = { params, inputs, debugInfo, filterParams };
 
@@ -18,15 +18,31 @@ const streamingRequest = async (url: string, postData: AgentFunctionContext) => 
   console.log(await result.json());
 };
 
-streamingRequest("http://localhost:8085/api/agents/echoAgent", {
-  params: {
-    message: "this is test",
-  },
-  inputs: [],
-  debugInfo: {
-    verbose: false,
-    nodeId: "123",
-    retry: 2,
-  },
-  filterParams: {},
-});
+const main = async () => {
+  await request("http://localhost:8085/api/agents/echoAgent", {
+    params: {
+      message: "this is test",
+    },
+    inputs: [],
+    debugInfo: {
+      verbose: false,
+      nodeId: "123",
+      retry: 2,
+    },
+    filterParams: {},
+  });
+  await request("http://localhost:8085/api/agents/nonstream/echoAgent", {
+    params: {
+      message: "this is test",
+    },
+    inputs: [],
+    debugInfo: {
+      verbose: false,
+      nodeId: "123",
+      retry: 2,
+    },
+    filterParams: {},
+  });
+};
+
+main();

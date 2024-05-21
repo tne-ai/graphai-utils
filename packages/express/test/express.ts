@@ -2,9 +2,11 @@
 import "dotenv/config";
 
 import express from "express";
+import type { AgentFunctionInfoDictionary } from "graphai";
+
 import * as agents from "graphai/lib/experimental_agents";
 
-import { agentDispatcher, streamAgentDispatcher, agentsList, agentDoc } from "@/express";
+import { agentDispatcher, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc } from "@/express";
 
 const agentDictionary: AgentFunctionInfoDictionary = agents;
 
@@ -21,11 +23,13 @@ app.use(
   }),
 );
 
-//  non stream
 app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
+
 app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix));
 app.get(apiPrefix + "/", agentsList(agentDictionary, hostName, apiPrefix));
 
+//  non stream
+app.post(apiPrefix + "/nonstream/:agentId", nonStreamAgentDispatcher(agentDictionary));
 //  stream
 app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary));
 

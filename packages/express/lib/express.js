@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.streamAgentDispatcher = exports.agentDispatcher = exports.agentDoc = exports.agentsList = void 0;
+exports.streamAgentDispatcher = exports.nonStreamAgentDispatcher = exports.agentDispatcher = exports.agentDoc = exports.agentsList = void 0;
 const graphai_1 = require("graphai");
 const stream_1 = require("graphai/lib/experimental_agent_filters/stream");
 // express middleware
@@ -53,13 +53,28 @@ exports.agentDoc = agentDoc;
 // express middleware
 // run agent
 const agentDispatcher = (agentDictionary, agentFilters = []) => {
+    const nonStram = (0, exports.nonStreamAgentDispatcher)(agentDictionary, agentFilters);
+    const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters);
+    return async (req, res) => {
+        const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
+        console.log(isStreaming);
+        if (isStreaming) {
+            return await stream(req, res);
+        }
+        return await nonStram(req, res);
+    };
+};
+exports.agentDispatcher = agentDispatcher;
+// express middleware
+// run agent
+const nonStreamAgentDispatcher = (agentDictionary, agentFilters = []) => {
     return async (req, res) => {
         const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters);
         const result = await dispatcher(req, res);
         return res.json(result);
     };
 };
-exports.agentDispatcher = agentDispatcher;
+exports.nonStreamAgentDispatcher = nonStreamAgentDispatcher;
 // express middleware
 // run agent with streaming
 const streamAgentDispatcher = (agentDictionary, agentFilters = []) => {
