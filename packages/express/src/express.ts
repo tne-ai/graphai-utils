@@ -4,14 +4,9 @@ import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext
 import { agentFilterRunnerBuilder } from "graphai";
 import { streamAgentFilterGenerator } from "graphai/lib/experimental_agent_filters/stream";
 
-
 // express middleware
 // return agent list
-export const agentsList = (
-  agentDictionary: AgentFunctionInfoDictionary,
-  hostName: string = "https://example.com",
-  urlPath: string = "/agent"
-) => {
+export const agentsList = (agentDictionary: AgentFunctionInfoDictionary, hostName: string = "https://example.com", urlPath: string = "/agent") => {
   return async (req: express.Request, res: express.Response) => {
     const list = Object.keys(agentDictionary).map((agentName: keyof AgentFunctionInfoDictionary) => {
       const agent = agentDictionary[agentName];
@@ -32,11 +27,7 @@ export const agentsList = (
 
 // express middleware
 // return agent detail info
-export const agentDoc = (
-  agentDictionary: AgentFunctionInfoDictionary,
-  hostName: string = "https://example.com",
-  urlPath: string = "/agent"
-) => {
+export const agentDoc = (agentDictionary: AgentFunctionInfoDictionary, hostName: string = "https://example.com", urlPath: string = "/agent") => {
   return async (req: express.Request, res: express.Response) => {
     const { params } = req;
     const { agentId } = params;
@@ -62,10 +53,7 @@ export const agentDoc = (
 
 // express middleware
 // run agent
-export const agentDispatcher = (
-  agentDictionary: AgentFunctionInfoDictionary,
-  agentFilters: AgentFilterInfo[] = []
-) => {
+export const agentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
   return async (req: express.Request, res: express.Response) => {
     const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters);
     const result = await dispatcher(req, res);
@@ -75,10 +63,7 @@ export const agentDispatcher = (
 
 // express middleware
 // run agent with streaming
-export const streamAgentDispatcher = (
-  agentDictionary: AgentFunctionInfoDictionary,
-  agentFilters: AgentFilterInfo[] = []
-) => {
+export const streamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
   return async (req: express.Request, res: express.Response) => {
     res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
     res.setHeader("Cache-Control", "no-cache, no-transform");
@@ -105,10 +90,7 @@ export const streamAgentDispatcher = (
 };
 
 // dispatcher internal function
-const agentDispatcherInternal = (
-  agentDictionary: AgentFunctionInfoDictionary,
-  agentFilters: AgentFilterInfo[] = []
-) => {
+const agentDispatcherInternal = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
   return async (req: express.Request, res: express.Response) => {
     const { params } = req;
     const { agentId } = params;
@@ -127,7 +109,7 @@ const agentDispatcherInternal = (
         retry,
         verbose: false,
       },
-      agents,
+      agents: agentDictionary,
       filterParams: {},
     };
 
