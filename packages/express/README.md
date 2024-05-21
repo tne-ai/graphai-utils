@@ -14,6 +14,7 @@ yarn add @receptron/graphai_express
 import express from "express";
 import * as agents from "graphai/lib/experimental_agents";
 import { agentDispatcher, streamAgentDispatcher, agentsList, agentDoc } from "@receptron/graphai_express";
+import { AgentFunctionInfoDictionary } from "graphai";
 
 const agentDictionary: AgentFunctionInfoDictionary = agents;
 const hostName = "https://example.net";
