@@ -3,13 +3,15 @@ import express from "express";
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
 import { agentFilterRunnerBuilder } from "graphai";
 import { streamAgentFilterGenerator } from "graphai/lib/experimental_agent_filters/stream";
-import * as agents from "graphai/lib/experimental_agents";
 
-const agentDictionary: AgentFunctionInfoDictionary = agents;
 
 // express middleware
 // return agent list
-export const agentsList = (hostName: string = "https://example.com", urlPath: string = "/agent") => {
+export const agentsList = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  hostName: string = "https://example.com",
+  urlPath: string = "/agent"
+) => {
   return async (req: express.Request, res: express.Response) => {
     const list = Object.keys(agentDictionary).map((agentName: keyof AgentFunctionInfoDictionary) => {
       const agent = agentDictionary[agentName];
@@ -30,7 +32,11 @@ export const agentsList = (hostName: string = "https://example.com", urlPath: st
 
 // express middleware
 // return agent detail info
-export const agentDoc = (hostName: string = "https://example.com", urlPath: string = "/agent") => {
+export const agentDoc = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  hostName: string = "https://example.com",
+  urlPath: string = "/agent"
+) => {
   return async (req: express.Request, res: express.Response) => {
     const { params } = req;
     const { agentId } = params;
@@ -56,9 +62,12 @@ export const agentDoc = (hostName: string = "https://example.com", urlPath: stri
 
 // express middleware
 // run agent
-export const agentDispatcher = (agentFilters: AgentFilterInfo[] = []) => {
+export const agentDispatcher = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  agentFilters: AgentFilterInfo[] = []
+) => {
   return async (req: express.Request, res: express.Response) => {
-    const dispatcher = agentDispatcherInternal(agentFilters);
+    const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters);
     const result = await dispatcher(req, res);
     return res.json(result);
   };
@@ -66,7 +75,10 @@ export const agentDispatcher = (agentFilters: AgentFilterInfo[] = []) => {
 
 // express middleware
 // run agent with streaming
-export const streamAgentDispatcher = (agentFilters: AgentFilterInfo[] = []) => {
+export const streamAgentDispatcher = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  agentFilters: AgentFilterInfo[] = []
+) => {
   return async (req: express.Request, res: express.Response) => {
     res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
     res.setHeader("Cache-Control", "no-cache, no-transform");
@@ -83,7 +95,7 @@ export const streamAgentDispatcher = (agentFilters: AgentFilterInfo[] = []) => {
     };
     const filterList = [...agentFilters, streamAgentFilter];
 
-    const dispatcher = agentDispatcherInternal(filterList);
+    const dispatcher = agentDispatcherInternal(agentDictionary, filterList);
     const result = await dispatcher(req, res);
     const json_data = JSON.stringify(result);
     res.write("___END___");
@@ -93,7 +105,10 @@ export const streamAgentDispatcher = (agentFilters: AgentFilterInfo[] = []) => {
 };
 
 // dispatcher internal function
-const agentDispatcherInternal = (agentFilters: AgentFilterInfo[] = []) => {
+const agentDispatcherInternal = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  agentFilters: AgentFilterInfo[] = []
+) => {
   return async (req: express.Request, res: express.Response) => {
     const { params } = req;
     const { agentId } = params;

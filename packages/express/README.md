@@ -12,19 +12,21 @@ yarn add @receptron/graphai_express
 ```TypeScript
 
 import express from "express";
+import * as agents from "graphai/lib/experimental_agents";
 import { agentDispatcher, streamAgentDispatcher, agentsList, agentDoc } from "@receptron/graphai_express";
 
+const agentDictionary: AgentFunctionInfoDictionary = agents;
 const hostName = "https://example.net";
 const apiPrefix = "/api/agents";
 
-app.get(apiPrefix + "/:agentId", agentDoc(hostName, apiPrefix)); // each API(agent) document
-app.get(apiPrefix + "/", agentsList(hostName, apiPrefix));  // API(agent) list
+app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix)); // each API(agent) document
+app.get(apiPrefix + "/", agentsList(agentDictionary, hostName, apiPrefix));  // API(agent) list
 
 //  non stream
-app.post(apiPrefix + "/:agentId", agentDispatcher()); // dispatch agents
+app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary)); // dispatch agents
 
 //  stream
-app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher());
+app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary));
 
 ```
 
