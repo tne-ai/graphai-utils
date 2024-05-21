@@ -58,7 +58,6 @@ export const agentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, ag
   const stream = streamAgentDispatcher(agentDictionary, agentFilters);
   return async (req: express.Request, res: express.Response) => {
     const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
-    console.log(isStreaming);
     if (isStreaming) {
       return await stream(req, res);
     }
