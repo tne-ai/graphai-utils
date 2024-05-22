@@ -1,6 +1,6 @@
 {
   "name": "@receptron/graphai_express",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "GraphAI express web server middleware.",
   "main": "lib/express.js",
   "files": [
@@ -45,7 +45,7 @@
     "graphai": "^0.4.4",
     "groq-sdk": "^0.3.3",
     "openai": "^4.12.4",
-    "slashgpt": "^0.1.1",
+    "slashgpt": "^0.1.2",
     "tiktoken": "^1.0.14",
     "wikipedia": "^2.1.2",
     "xml2js": "^0.6.2",

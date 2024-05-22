@@ -57,7 +57,6 @@ const agentDispatcher = (agentDictionary, agentFilters = []) => {
     const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters);
     return async (req, res) => {
         const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
-        console.log(isStreaming);
         if (isStreaming) {
             return await stream(req, res);
         }

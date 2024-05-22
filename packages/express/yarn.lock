@@ -1905,10 +1905,10 @@ slash@^3.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
-slashgpt@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/slashgpt/-/slashgpt-0.1.1.tgz#9d7968f3354258015fcea253fc20019ee6b1f0ea"
-  integrity sha512-hMeijC/Hhq0y+um2Y3ZWneE87hYjWxpKbsE+29VkfZPLywtaJ5hnWLV2StSDjXBCZsWm9GSBHglSgPw4pFB33g==
+slashgpt@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/slashgpt/-/slashgpt-0.1.2.tgz#a773a0164461eccf247d8c9624b9b3d22ee5d614"
+  integrity sha512-jYTWnWoOCImg54xqC69QUgoAB8A9nJQ/EG5c+M35LbnNIm/JOUDIACvWg0enTA5PAr14qWaQhXSSi6cs4e00Bw==
   dependencies:
     "@anthropic-ai/sdk" "^0.20.1"
     "@huggingface/inference" "^2.7.0"
