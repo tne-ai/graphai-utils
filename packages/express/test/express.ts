@@ -4,7 +4,7 @@ import "dotenv/config";
 import express from "express";
 import type { AgentFunctionInfoDictionary } from "graphai";
 
-import * as agents from "graphai/lib/experimental_agents";
+import * as agents from "@graphai/agents";
 
 import { agentDispatcher, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc } from "@/express";
 
