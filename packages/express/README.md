@@ -12,7 +12,7 @@ yarn add @receptron/graphai_express
 ```TypeScript
 
 import express from "express";
-import * as agents from "graphai/lib/experimental_agents";
+import * as agents from "@graphai/agents";
 import { agentDispatcher, nonStreamAgentDispatcher, streamAgentDispatcher, agentsList, agentDoc } from "@receptron/graphai_express";
 import { AgentFunctionInfoDictionary } from "graphai";
 
