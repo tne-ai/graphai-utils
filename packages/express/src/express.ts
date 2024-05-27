@@ -2,7 +2,7 @@ import express from "express";
 
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
 import { agentFilterRunnerBuilder } from "graphai";
-import { streamAgentFilterGenerator } from "graphai/lib/experimental_agent_filters/stream";
+import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
 // express middleware
 // return agent list

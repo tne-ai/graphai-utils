@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.streamAgentDispatcher = exports.nonStreamAgentDispatcher = exports.agentDispatcher = exports.agentDoc = exports.agentsList = void 0;
 const graphai_1 = require("graphai");
-const stream_1 = require("graphai/lib/experimental_agent_filters/stream");
+const agent_filters_1 = require("@graphai/agent_filters");
 // express middleware
 // return agent list
 const agentsList = (agentDictionary, hostName = "https://example.com", urlPath = "/agent") => {
@@ -88,7 +88,7 @@ const streamAgentDispatcher = (agentDictionary, agentFilters = []) => {
         };
         const streamAgentFilter = {
             name: "streamAgentFilter",
-            agent: (0, stream_1.streamAgentFilterGenerator)(callback),
+            agent: (0, agent_filters_1.streamAgentFilterGenerator)(callback),
         };
         const filterList = [...agentFilters, streamAgentFilter];
         const dispatcher = agentDispatcherInternal(agentDictionary, filterList);

@@ -1,6 +1,6 @@
 {
   "name": "@receptron/graphai_express",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "GraphAI express web server middleware.",
   "main": "lib/express.js",
   "files": [
@@ -10,8 +10,8 @@
     "build": "tsc && tsc-alias",
     "eslint": "eslint --fix",
     "server": "ts-node -r tsconfig-paths/register test/express.ts",
-    "test_stream":  "ts-node -r tsconfig-paths/register test/stream_client.ts",
-    "test":  "ts-node -r tsconfig-paths/register test/client.ts",
+    "test_stream": "ts-node -r tsconfig-paths/register test/stream_client.ts",
+    "test": "ts-node -r tsconfig-paths/register test/client.ts",
     "format": "prettier --write '{src,test}/**/*.{yaml,ts,json}'",
     "b": "yarn run format && yarn run eslint && yarn run build"
   },
