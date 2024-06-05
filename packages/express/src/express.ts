@@ -56,50 +56,58 @@ export const agentDoc = (agentDictionary: AgentFunctionInfoDictionary, hostName:
 export const agentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
   const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters);
   const stream = streamAgentDispatcher(agentDictionary, agentFilters);
-  return async (req: express.Request, res: express.Response) => {
+  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
     if (isStreaming) {
-      return await stream(req, res);
+      return await stream(req, res, next);
     }
-    return await nonStram(req, res);
+    return await nonStram(req, res, next);
   };
 };
 
 // express middleware
 // run agent
 export const nonStreamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
-  return async (req: express.Request, res: express.Response) => {
-    const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters);
-    const result = await dispatcher(req, res);
-    return res.json(result);
+  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    try {
+      const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters);
+      const result = await dispatcher(req, res);
+      return res.json(result);
+    } catch (e) {
+      next(e);
+    }
   };
 };
 
 // express middleware
 // run agent with streaming
 export const streamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
-  return async (req: express.Request, res: express.Response) => {
-    res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
-    res.setHeader("Cache-Control", "no-cache, no-transform");
-    res.setHeader("X-Accel-Buffering", "no");
+  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    try {
+      res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
+      res.setHeader("Cache-Control", "no-cache, no-transform");
+      res.setHeader("X-Accel-Buffering", "no");
 
-    const callback = (context: AgentFunctionContext, token: string) => {
-      if (token) {
-        res.write(token);
-      }
-    };
-    const streamAgentFilter = {
-      name: "streamAgentFilter",
-      agent: streamAgentFilterGenerator<string>(callback),
-    };
-    const filterList = [...agentFilters, streamAgentFilter];
+      const callback = (context: AgentFunctionContext, token: string) => {
+        if (token) {
+          res.write(token);
+        }
+      };
+      const streamAgentFilter = {
+        name: "streamAgentFilter",
+        agent: streamAgentFilterGenerator<string>(callback),
+      };
+      const filterList = [...agentFilters, streamAgentFilter];
 
-    const dispatcher = agentDispatcherInternal(agentDictionary, filterList);
-    const result = await dispatcher(req, res);
-    const json_data = JSON.stringify(result);
-    res.write("___END___");
-    res.write(json_data);
-    return res.end();
+      const dispatcher = agentDispatcherInternal(agentDictionary, filterList);
+      const result = await dispatcher(req, res);
+      const json_data = JSON.stringify(result);
+      res.write("___END___");
+      res.write(json_data);
+      return res.end();
+    } catch (e) {
+      next(e);
+    }
   };
 };
 
