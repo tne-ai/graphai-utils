@@ -76,7 +76,6 @@ const nonStreamAgentDispatcher = (agentDictionary, agentFilters = []) => {
         catch (e) {
             next(e);
         }
-        ;
     };
 };
 exports.nonStreamAgentDispatcher = nonStreamAgentDispatcher;
