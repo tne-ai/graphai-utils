@@ -131,17 +131,17 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
   return { elements };
 };
 
-export const useCytoscope = (selectedGraph: ComputedRef<GraphData> | Ref<GraphData>) => {
+export const useCytoscape = (selectedGraph: ComputedRef<GraphData> | Ref<GraphData>) => {
   let cy: null | Core = null;
 
-  const cytoscopeData = ref(cytoscapeFromGraph(selectedGraph.value));
-  const cytoscopeRef = ref();
+  const cytoscapeData = ref(cytoscapeFromGraph(selectedGraph.value));
+  const cytoscapeRef = ref();
 
-  const updateCytoscope = async (nodeId: string, state: NodeState) => {
+  const updateCytoscape = async (nodeId: string, state: NodeState) => {
     if (state === NodeState.Completed || state === NodeState.Waiting) {
       await sleep(100);
     }
-    const elements = cytoscopeData.value.elements;
+    const elements = cytoscapeData.value.elements;
     elements.map[nodeId].data.color = colorMap[state];
     const graph = selectedGraph.value;
     const nodeData = graph.nodes[nodeId];
@@ -155,18 +155,18 @@ export const useCytoscope = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
       }
     }
 
-    cytoscopeData.value = { elements };
+    cytoscapeData.value = { elements };
     if (state === NodeState.Injected) {
       await sleep(100);
       elements.map[nodeId].data.color = colorStatic;
-      cytoscopeData.value = { elements };
+      cytoscapeData.value = { elements };
     }
   };
 
-  const createCytoscope = () => {
+  const createCytoscape = () => {
     try {
       cy = cytoscape({
-        container: cytoscopeRef.value,
+        container: cytoscapeRef.value,
         style: cyStyle,
         layout: {
           name: layout,
@@ -189,8 +189,8 @@ export const useCytoscope = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
   const updateGraphData = async () => {
     if (cy) {
       cy.elements().remove();
-      cy.add(cytoscopeData.value.elements);
-      const name = cytoscopeData.value.elements.nodes.reduce((prevName: string, node: NodeDefinition) => {
+      cy.add(cytoscapeData.value.elements);
+      const name = cytoscapeData.value.elements.nodes.reduce((prevName: string, node: NodeDefinition) => {
         if (node.position) {
           return "preset";
         }
@@ -212,39 +212,39 @@ export const useCytoscope = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
       cy.nodes().forEach((cynode: NodeSingular) => {
         const id = cynode.id();
         const pos = cynode.position();
-        const node = cytoscopeData.value.elements.map[id];
+        const node = cytoscapeData.value.elements.map[id];
         node.position = pos;
       });
     }
   };
 
-  const resetCytoscope = () => {
-    const elements = cytoscopeData.value.elements;
+  const resetCytoscape = () => {
+    const elements = cytoscapeData.value.elements;
     Object.keys(elements.map).forEach((nodeId) => {
       const graph = selectedGraph.value;
       const nodeData = graph.nodes[nodeId];
       elements.map[nodeId].data.color = "value" in nodeData ? colorStatic : colorMap[NodeState.Waiting];
     });
-    cytoscopeData.value = { elements };
+    cytoscapeData.value = { elements };
   };
 
-  watch(cytoscopeData, () => {
+  watch(cytoscapeData, () => {
     console.log("updated");
     updateGraphData();
   });
 
   watch(selectedGraph, () => {
-    cytoscopeData.value = cytoscapeFromGraph(selectedGraph.value);
+    cytoscapeData.value = cytoscapeFromGraph(selectedGraph.value);
   });
 
   onMounted(() => {
-    createCytoscope();
+    createCytoscape();
     updateGraphData();
   });
 
   return {
-    cytoscopeRef,
-    updateCytoscope,
-    resetCytoscope,
+    cytoscapeRef,
+    updateCytoscape,
+    resetCytoscape,
   };
 };

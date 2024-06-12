@@ -1,13 +1,13 @@
 {
-  "name": "@receptron/graphai_vue_cytoscope",
+  "name": "@receptron/graphai_vue_cytoscape",
   "version": "0.0.3",
-  "main": "lib/cytoscope.js",
+  "main": "lib/cytoscape.js",
   "files": [
     "./lib"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc --esModuleInterop --declaration --outDir lib/ src/composables/cytoscope.ts",
+    "build": "tsc --esModuleInterop --declaration --outDir lib/ src/composables/cytoscape.ts",
     "build_old": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -42,7 +42,7 @@
     "vite": "^5.2.13",
     "vue-tsc": "^2.0.11"
   },
-  "types": "./lib/cytoscope.d.ts",
+  "types": "./lib/cytoscape.d.ts",
   "directories": {
     "lib": "lib"
   }

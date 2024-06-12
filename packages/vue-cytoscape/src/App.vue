@@ -3,7 +3,7 @@
   
   <div class="h-screen w-full">
     <div class="w-10/12 h-1/2 bg-white rounded-md mt-4 mx-auto border-2">
-      <div ref="cytoscopeRef" class="w-full h-full" />
+      <div ref="cytoscapeRef" class="w-full h-full" />
     </div>
     <div>
       a
@@ -20,18 +20,18 @@ import { streamMockAgent } from "@graphai/vanilla";
 
 import { graphData } from "./data";
 
-import { useCytoscope } from "./composables/cytoscope";
+import { useCytoscape } from "./composables/cytoscape";
 
 export default defineComponent({
   setup() {
     const selectdGraph = ref(graphData)
-    const { updateCytoscope, cytoscopeRef, resetCytoscope } = useCytoscope(selectdGraph);
+    const { updateCytoscape, cytoscapeRef, resetCytoscape } = useCytoscape(selectdGraph);
     
     const run = async () => {
       const graphai = new GraphAI(graphData, { streamMockAgent });
       graphai.onLogCallback = async ({ nodeId, state, inputs, result, errorMessage }) => {
         // logs.value.push({ nodeId, state, inputs, result, errorMessage });
-        updateCytoscope(nodeId, state);
+        updateCytoscape(nodeId, state);
         console.log(nodeId, state);
       };
       const results = await graphai.run();
@@ -39,7 +39,7 @@ export default defineComponent({
     run();
 
     return {
-      cytoscopeRef
+      cytoscapeRef
     };
   }
 });
