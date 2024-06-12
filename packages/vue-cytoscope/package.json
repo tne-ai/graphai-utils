@@ -1,13 +1,13 @@
 {
-  "name": "@receptron/graphai_cytoscope",
-  "version": "0.0.1",
+  "name": "@receptron/graphai_vue_cytoscope",
+  "version": "0.0.2",
   "main": "lib/cytoscope.js",
   "files": [
     "./lib"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc --declaration --outDir lib/ src/composables/cytoscope.ts",
+    "build": "tsc --esModuleInterop --declaration --outDir lib/ src/composables/cytoscope.ts",
     "build_old": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
