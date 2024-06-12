@@ -68,6 +68,7 @@ const colorMap = {
   [NodeState.Waiting]: "#888",
   [NodeState.Completed]: "#000",
   [NodeState.Executing]: "#0f0",
+  ["executing-server"]: "#FFC0CB",
   [NodeState.Queued]: "#ff0",
   [NodeState.Injected]: "#00f",
   [NodeState.TimedOut]: "#f0f",
@@ -137,7 +138,7 @@ export const useCytoscope = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
   const cytoscopeRef = ref();
 
   const updateCytoscope = async (nodeId: string, state: NodeState) => {
-    if (state === NodeState.Completed) {
+    if (state === NodeState.Completed || state === NodeState.Waiting) {
       await sleep(100);
     }
     const elements = cytoscopeData.value.elements;

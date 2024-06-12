@@ -1,6 +1,6 @@
 {
   "name": "@receptron/graphai_vue_cytoscope",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "lib/cytoscope.js",
   "files": [
     "./lib"
