@@ -105,6 +105,7 @@ var colorMap = (_a = {},
     _a[graphai_1.NodeState.Waiting] = "#888",
     _a[graphai_1.NodeState.Completed] = "#000",
     _a[graphai_1.NodeState.Executing] = "#0f0",
+    _a["executing-server"] = "#FFC0CB",
     _a[graphai_1.NodeState.Queued] = "#ff0",
     _a[graphai_1.NodeState.Injected] = "#00f",
     _a[graphai_1.NodeState.TimedOut] = "#f0f",
@@ -171,7 +172,7 @@ var useCytoscope = function (selectedGraph) {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    if (!(state === graphai_1.NodeState.Completed)) return [3 /*break*/, 2];
+                    if (!(state === graphai_1.NodeState.Completed || state === graphai_1.NodeState.Waiting)) return [3 /*break*/, 2];
                     return [4 /*yield*/, (0, graphai_1.sleep)(100)];
                 case 1:
                     _b.sent();
