@@ -115,7 +115,7 @@ const agentDispatcherInternal = (agentDictionary, agentFilters = []) => {
     return async (req, res) => {
         const { params } = req;
         const { agentId } = params;
-        const { nodeId, retry, params: agentParams, inputs } = req.body;
+        const { nodeId, retry, params: agentParams, inputs, namedInputs } = req.body;
         const agent = agentDictionary[agentId];
         if (agent === undefined) {
             res.status(404).send("Not found");
@@ -124,6 +124,7 @@ const agentDispatcherInternal = (agentDictionary, agentFilters = []) => {
         const context = {
             params: agentParams || {},
             inputs,
+            namedInputs,
             debugInfo: {
                 nodeId,
                 retry,
