@@ -1,11 +1,14 @@
 {
-  "name": "vue-graphai-cytoscope",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
+  "name": "@receptron/graphai_cytoscope",
+  "version": "0.0.1",
+  "main": "lib/cytoscope.js",
+  "files": [
+    "./lib"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "tsc --declaration --outDir lib/ src/composables/cytoscope.ts",
+    "build_old": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
@@ -13,13 +16,14 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@graphai/vanilla": "^0.0.3",
     "cytoscape": "^3.29.2",
-    "cytoscape-klay": "^3.1.4",
-    "graphai": "^0.5.1",
-    "vue": "^3.4.21"
+    "cytoscape-klay": "^3.1.4"
   },
   "devDependencies": {
+    "graphai": "^0.5.1",
+    "vue": "^3.4.21",
+    "@graphai/vanilla": "^0.0.3",
+    "@babel/types": "^7.24.7",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^20.12.5",
@@ -37,5 +41,9 @@
     "typescript": "~5.4.0",
     "vite": "^5.2.13",
     "vue-tsc": "^2.0.11"
+  },
+  "types": "./lib/cytoscope.d.ts",
+  "directories": {
+    "lib": "lib"
   }
 }
