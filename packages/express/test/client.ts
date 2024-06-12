@@ -29,6 +29,7 @@ const main = async () => {
       nodeId: "123",
       retry: 2,
     },
+    namedInputs: {},
     filterParams: {},
   });
   await request("http://localhost:8085/api/agents/nonstream/echoAgent", {
@@ -41,6 +42,7 @@ const main = async () => {
       nodeId: "123",
       retry: 2,
     },
+    namedInputs: {},
     filterParams: {},
   });
 };

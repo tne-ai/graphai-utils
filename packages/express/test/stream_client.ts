@@ -67,6 +67,7 @@ const main = async () => {
       nodeId: "123",
       retry: 2,
     },
+    namedInputs: {},
     filterParams: {},
   });
   await streamingRequest("http://localhost:8085/api/agents/streamMockAgent", {
@@ -79,6 +80,7 @@ const main = async () => {
       nodeId: "123",
       retry: 2,
     },
+    namedInputs: {},
     filterParams: {},
   });
 };

@@ -1,6 +1,6 @@
 {
   "name": "@receptron/graphai_express",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "GraphAI express web server middleware.",
   "main": "lib/express.js",
   "files": [
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/receptron/graphai_utils/tree/main/packages/express#readme",
   "devDependencies": {
-    "@graphai/agents": "^0.0.5",
+    "@graphai/agents": "^0.0.9",
     "@types/express": "^4.17.21",
     "@types/node": "^20.8.7",
     "eslint": "^9.3.0",
@@ -38,10 +38,10 @@
     "typescript-eslint": "^7.9.0"
   },
   "dependencies": {
-    "@graphai/agent_filters": "^0.0.1",
+    "@graphai/agent_filters": "^0.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "graphai": "^0.4.6"
+    "graphai": "^0.5.1"
   },
   "types": "./lib/express.d.ts",
   "directories": {
