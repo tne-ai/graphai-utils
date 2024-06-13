@@ -10,7 +10,7 @@ yarn add @receptron/graphai_vue_cytoscape
 ### Usage
 
 
-```
+```typescript
 import { defineComponent, ref } from "vue";
 
 import { GraphAI } from "graphai";
