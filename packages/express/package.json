@@ -1,6 +1,6 @@
 {
   "name": "@receptron/graphai_express",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "GraphAI express web server middleware.",
   "main": "lib/express.js",
   "files": [

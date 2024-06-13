@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.streamAgentDispatcher = exports.nonStreamAgentDispatcher = exports.agentDispatcher = exports.agentDoc = exports.agentsList = void 0;
-const graphai_1 = require("graphai");
 const agent_filters_1 = require("@graphai/agent_filters");
 // express middleware
 // return agent list
@@ -133,7 +132,7 @@ const agentDispatcherInternal = (agentDictionary, agentFilters = []) => {
             agents: agentDictionary,
             filterParams: {},
         };
-        const agentFilterRunner = (0, graphai_1.agentFilterRunnerBuilder)(agentFilters);
+        const agentFilterRunner = (0, agent_filters_1.agentFilterRunnerBuilder)(agentFilters);
         const result = await agentFilterRunner(context, agent.agent);
         return result;
     };
