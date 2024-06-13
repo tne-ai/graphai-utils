@@ -1,5 +1,5 @@
 
 # GraphAI utilities
 
-[express middleware](./packages/express/)
-[vue cytoscape plugin](./packages/vue-cytoscape/)
+- [express middleware](./packages/express/)
+- [vue cytoscape plugin](./packages/vue-cytoscape/)
