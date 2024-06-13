@@ -6,7 +6,7 @@
       <div ref="cytoscapeRef" class="w-full h-full" />
     </div>
     <div>
-      a
+
     </div>
   </div>
 </main>

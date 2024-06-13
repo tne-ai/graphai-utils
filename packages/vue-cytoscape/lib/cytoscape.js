@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useCytoscope = void 0;
+exports.useCytoscape = void 0;
 var vue_1 = require("vue");
 var graphai_1 = require("graphai");
 var cytoscape_1 = __importDefault(require("cytoscape"));
@@ -162,11 +162,11 @@ var cytoscapeFromGraph = function (graph_data) {
     }, { nodes: [], edges: [], map: {} });
     return { elements: elements };
 };
-var useCytoscope = function (selectedGraph) {
+var useCytoscape = function (selectedGraph) {
     var cy = null;
-    var cytoscopeData = (0, vue_1.ref)(cytoscapeFromGraph(selectedGraph.value));
-    var cytoscopeRef = (0, vue_1.ref)();
-    var updateCytoscope = function (nodeId, state) { return __awaiter(void 0, void 0, void 0, function () {
+    var cytoscapeData = (0, vue_1.ref)(cytoscapeFromGraph(selectedGraph.value));
+    var cytoscapeRef = (0, vue_1.ref)();
+    var updateCytoscape = function (nodeId, state) { return __awaiter(void 0, void 0, void 0, function () {
         var elements, graph, nodeData;
         var _a;
         return __generator(this, function (_b) {
@@ -178,7 +178,7 @@ var useCytoscope = function (selectedGraph) {
                     _b.sent();
                     _b.label = 2;
                 case 2:
-                    elements = cytoscopeData.value.elements;
+                    elements = cytoscapeData.value.elements;
                     elements.map[nodeId].data.color = colorMap[state];
                     graph = selectedGraph.value;
                     nodeData = graph.nodes[nodeId];
@@ -192,22 +192,22 @@ var useCytoscope = function (selectedGraph) {
                             elements.map[nodeId].data.color = colorStatic;
                         }
                     }
-                    cytoscopeData.value = { elements: elements };
+                    cytoscapeData.value = { elements: elements };
                     if (!(state === graphai_1.NodeState.Injected)) return [3 /*break*/, 4];
                     return [4 /*yield*/, (0, graphai_1.sleep)(100)];
                 case 3:
                     _b.sent();
                     elements.map[nodeId].data.color = colorStatic;
-                    cytoscopeData.value = { elements: elements };
+                    cytoscapeData.value = { elements: elements };
                     _b.label = 4;
                 case 4: return [2 /*return*/];
             }
         });
     }); };
-    var createCytoscope = function () {
+    var createCytoscape = function () {
         try {
             cy = (0, cytoscape_1.default)({
-                container: cytoscopeRef.value,
+                container: cytoscapeRef.value,
                 style: cyStyle,
                 layout: {
                     name: layout,
@@ -235,8 +235,8 @@ var useCytoscope = function (selectedGraph) {
                 case 0:
                     if (!cy) return [3 /*break*/, 2];
                     cy.elements().remove();
-                    cy.add(cytoscopeData.value.elements);
-                    name_1 = cytoscopeData.value.elements.nodes.reduce(function (prevName, node) {
+                    cy.add(cytoscapeData.value.elements);
+                    name_1 = cytoscapeData.value.elements.nodes.reduce(function (prevName, node) {
                         if (node.position) {
                             return "preset";
                         }
@@ -261,35 +261,35 @@ var useCytoscope = function (selectedGraph) {
             cy.nodes().forEach(function (cynode) {
                 var id = cynode.id();
                 var pos = cynode.position();
-                var node = cytoscopeData.value.elements.map[id];
+                var node = cytoscapeData.value.elements.map[id];
                 node.position = pos;
             });
         }
     };
-    var resetCytoscope = function () {
-        var elements = cytoscopeData.value.elements;
+    var resetCytoscape = function () {
+        var elements = cytoscapeData.value.elements;
         Object.keys(elements.map).forEach(function (nodeId) {
             var graph = selectedGraph.value;
             var nodeData = graph.nodes[nodeId];
             elements.map[nodeId].data.color = "value" in nodeData ? colorStatic : colorMap[graphai_1.NodeState.Waiting];
         });
-        cytoscopeData.value = { elements: elements };
+        cytoscapeData.value = { elements: elements };
     };
-    (0, vue_1.watch)(cytoscopeData, function () {
+    (0, vue_1.watch)(cytoscapeData, function () {
         console.log("updated");
         updateGraphData();
     });
     (0, vue_1.watch)(selectedGraph, function () {
-        cytoscopeData.value = cytoscapeFromGraph(selectedGraph.value);
+        cytoscapeData.value = cytoscapeFromGraph(selectedGraph.value);
     });
     (0, vue_1.onMounted)(function () {
-        createCytoscope();
+        createCytoscape();
         updateGraphData();
     });
     return {
-        cytoscopeRef: cytoscopeRef,
-        updateCytoscope: updateCytoscope,
-        resetCytoscope: resetCytoscope,
+        cytoscapeRef: cytoscapeRef,
+        updateCytoscape: updateCytoscape,
+        resetCytoscape: resetCytoscape,
     };
 };
-exports.useCytoscope = useCytoscope;
+exports.useCytoscape = useCytoscape;
