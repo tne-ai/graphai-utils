@@ -85,7 +85,7 @@ const parseInput = (input: string) => {
 };
 
 const cytoscapeFromGraph = (graph_data: GraphData) => {
-  const elements = Object.keys(graph_data.nodes).reduce(
+  const elements = Object.keys(graph_data.nodes || {}).reduce(
     (tmp: { nodes: NodeDefinition[]; edges: EdgeDefinition[]; map: Record<string, NodeDefinition> }, nodeId) => {
       const node: NodeData = graph_data.nodes[nodeId];
       const isStatic = "value" in node;
@@ -134,7 +134,7 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
 export const useCytoscape = (selectedGraph: ComputedRef<GraphData> | Ref<GraphData>) => {
   let cy: null | Core = null;
 
-  const cytoscapeData = ref(cytoscapeFromGraph(selectedGraph.value));
+  const cytoscapeData = ref(cytoscapeFromGraph(selectedGraph.value ?? { nodes: {}}));
   const cytoscapeRef = ref();
 
   const updateCytoscape = async (nodeId: string, state: NodeState) => {
@@ -144,7 +144,7 @@ export const useCytoscape = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
     const elements = cytoscapeData.value.elements;
     elements.map[nodeId].data.color = colorMap[state];
     const graph = selectedGraph.value;
-    const nodeData = graph.nodes[nodeId];
+    const nodeData = (graph?.nodes ?? {})[nodeId] ?? [];
     if ("agent" in nodeData && state === NodeState.Queued && (nodeData.priority ?? 0) > 0) {
       // computed node
       elements.map[nodeId].data.color = colorPriority;

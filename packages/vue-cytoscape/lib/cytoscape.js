@@ -120,7 +120,7 @@ var parseInput = function (input) {
     return { source: source, label: label };
 };
 var cytoscapeFromGraph = function (graph_data) {
-    var elements = Object.keys(graph_data.nodes).reduce(function (tmp, nodeId) {
+    var elements = Object.keys(graph_data.nodes || {}).reduce(function (tmp, nodeId) {
         var node = graph_data.nodes[nodeId];
         var isStatic = "value" in node;
         var cyNode = {
@@ -163,26 +163,27 @@ var cytoscapeFromGraph = function (graph_data) {
     return { elements: elements };
 };
 var useCytoscape = function (selectedGraph) {
+    var _a;
     var cy = null;
-    var cytoscapeData = (0, vue_1.ref)(cytoscapeFromGraph(selectedGraph.value));
+    var cytoscapeData = (0, vue_1.ref)(cytoscapeFromGraph((_a = selectedGraph.value) !== null && _a !== void 0 ? _a : { nodes: {} }));
     var cytoscapeRef = (0, vue_1.ref)();
     var updateCytoscape = function (nodeId, state) { return __awaiter(void 0, void 0, void 0, function () {
         var elements, graph, nodeData;
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _a, _b, _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
                     if (!(state === graphai_1.NodeState.Completed || state === graphai_1.NodeState.Waiting)) return [3 /*break*/, 2];
                     return [4 /*yield*/, (0, graphai_1.sleep)(100)];
                 case 1:
-                    _b.sent();
-                    _b.label = 2;
+                    _d.sent();
+                    _d.label = 2;
                 case 2:
                     elements = cytoscapeData.value.elements;
                     elements.map[nodeId].data.color = colorMap[state];
                     graph = selectedGraph.value;
-                    nodeData = graph.nodes[nodeId];
-                    if ("agent" in nodeData && state === graphai_1.NodeState.Queued && ((_a = nodeData.priority) !== null && _a !== void 0 ? _a : 0) > 0) {
+                    nodeData = (_b = ((_a = graph === null || graph === void 0 ? void 0 : graph.nodes) !== null && _a !== void 0 ? _a : {})[nodeId]) !== null && _b !== void 0 ? _b : [];
+                    if ("agent" in nodeData && state === graphai_1.NodeState.Queued && ((_c = nodeData.priority) !== null && _c !== void 0 ? _c : 0) > 0) {
                         // computed node
                         elements.map[nodeId].data.color = colorPriority;
                     }
@@ -196,10 +197,10 @@ var useCytoscape = function (selectedGraph) {
                     if (!(state === graphai_1.NodeState.Injected)) return [3 /*break*/, 4];
                     return [4 /*yield*/, (0, graphai_1.sleep)(100)];
                 case 3:
-                    _b.sent();
+                    _d.sent();
                     elements.map[nodeId].data.color = colorStatic;
                     cytoscapeData.value = { elements: elements };
-                    _b.label = 4;
+                    _d.label = 4;
                 case 4: return [2 /*return*/];
             }
         });
