@@ -17,6 +17,9 @@ const agentsList = (agentDictionary, hostName = "https://example.com", urlPath =
                 author: agent.author,
                 license: agent.license,
                 repository: agent.repository,
+                samples: agent.samples,
+                inputs: agent.inputs,
+                output: agent.output,
             };
         });
         res.json({ agents: list });

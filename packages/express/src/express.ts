@@ -17,6 +17,9 @@ export const agentsList = (agentDictionary: AgentFunctionInfoDictionary, hostNam
         author: agent.author,
         license: agent.license,
         repository: agent.repository,
+        samples: agent.samples,
+        inputs: agent.inputs,
+        output: agent.output,
       };
     });
     res.json({ agents: list });
