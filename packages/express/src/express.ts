@@ -20,6 +20,7 @@ export const agentsList = (agentDictionary: AgentFunctionInfoDictionary, hostNam
         samples: agent.samples,
         inputs: agent.inputs,
         output: agent.output,
+        stream: agent.stream,
       };
     });
     res.json({ agents: list });
