@@ -1,5 +1,19 @@
 import express from "./express";
 import type { AgentFunctionInfoDictionary, AgentFilterInfo } from "graphai";
+export type ExpressAgentInfo = {
+    agentId: string;
+    name: string;
+    url: string;
+    description: string;
+    category: string[];
+    author: string;
+    license: string;
+    repository: string;
+    samples: any;
+    inputs: any;
+    output: any;
+    stream: boolean;
+};
 export declare const agentsList: (agentDictionary: AgentFunctionInfoDictionary, hostName?: string, urlPath?: string) => (req: express.Request, res: express.Response) => Promise<void>;
 export declare const agentDoc: (agentDictionary: AgentFunctionInfoDictionary, hostName?: string, urlPath?: string) => (req: express.Request, res: express.Response) => Promise<void>;
 export declare const agentDispatcher: (agentDictionary: AgentFunctionInfoDictionary, agentFilters?: AgentFilterInfo[]) => (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<express.Response<any, Record<string, any>> | undefined>;

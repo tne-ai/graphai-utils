@@ -20,7 +20,7 @@ const agentsList = (agentDictionary, hostName = "https://example.com", urlPath =
                 samples: agent.samples,
                 inputs: agent.inputs,
                 output: agent.output,
-                stream: agent.stream,
+                stream: agent.stream ?? false,
             };
         });
         res.json({ agents: list });

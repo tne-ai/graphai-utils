@@ -2,11 +2,26 @@ import express from "express";
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
 import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
 
+export type ExpressAgentInfo = {
+  agentId: string;
+  name: string;
+  url: string;
+  description: string;
+  category: string[];
+  author: string;
+  license: string;
+  repository: string;
+  samples: any, // TODO: AgentFunctionInfoSample from graph
+  inputs: any;
+  output: any;
+  stream: boolean;
+};
+
 // express middleware
 // return agent list
 export const agentsList = (agentDictionary: AgentFunctionInfoDictionary, hostName: string = "https://example.com", urlPath: string = "/agent") => {
   return async (req: express.Request, res: express.Response) => {
-    const list = Object.keys(agentDictionary).map((agentName: keyof AgentFunctionInfoDictionary) => {
+    const list: ExpressAgentInfo[] = Object.keys(agentDictionary).map((agentName: keyof AgentFunctionInfoDictionary) => {
       const agent = agentDictionary[agentName];
       return {
         agentId: agentName,
@@ -20,7 +35,7 @@ export const agentsList = (agentDictionary: AgentFunctionInfoDictionary, hostNam
         samples: agent.samples,
         inputs: agent.inputs,
         output: agent.output,
-        stream: agent.stream,
+        stream: agent.stream ?? false,
       };
     });
     res.json({ agents: list });
