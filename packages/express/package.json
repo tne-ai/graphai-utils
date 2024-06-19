@@ -2,7 +2,7 @@
   "name": "@receptron/graphai_express",
   "version": "0.0.23",
   "description": "GraphAI express web server middleware.",
-  "main": "lib/express.js",
+  "main": "lib/index.js",
   "files": [
     "./lib"
   ],
@@ -43,7 +43,7 @@
     "express": "^4.19.2",
     "graphai": "^0.5.1"
   },
-  "types": "./lib/express.d.ts",
+  "types": "./lib/index.d.ts",
   "directories": {
     "lib": "lib"
   }

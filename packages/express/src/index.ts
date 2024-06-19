@@ -1,4 +1,5 @@
 import express from "express";
+
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
 import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
 
@@ -37,6 +38,7 @@ export const agentsList = (agentDictionary: AgentFunctionInfoDictionary, hostNam
         output: agent.output,
         stream: agent.stream ?? false,
       };
+
     });
     res.json({ agents: list });
   };

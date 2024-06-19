@@ -1,4 +1,4 @@
-import express from "./express";
+import express from "express";
 import type { AgentFunctionInfoDictionary, AgentFilterInfo } from "graphai";
 export type ExpressAgentInfo = {
     agentId: string;

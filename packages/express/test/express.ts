@@ -6,7 +6,7 @@ import type { AgentFunctionInfoDictionary } from "graphai";
 
 import * as agents from "@graphai/agents";
 
-import { agentDispatcher, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc } from "@/express";
+import { agentDispatcher, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc } from "@/index";
 
 const agentDictionary: AgentFunctionInfoDictionary = agents;
 

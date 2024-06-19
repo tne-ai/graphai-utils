@@ -1,7 +1,7 @@
 // echoAgent client.
 // npx ts-node -r tsconfig-paths/register test/client.ts
 
-import { AgentFunctionContext } from "graphai/lib/type";
+import { AgentFunctionContext } from "graphai";
 
 const request = async (url: string, postData: AgentFunctionContext) => {
   const { params, inputs, debugInfo, filterParams } = postData;

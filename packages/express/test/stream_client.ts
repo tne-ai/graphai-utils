@@ -1,7 +1,7 @@
 // streamMockAgent client.
 // npx ts-node -r tsconfig-paths/register test/stream_client.ts
 
-import { AgentFunctionContext } from "graphai/lib/type";
+import { AgentFunctionContext } from "graphai";
 
 async function* streamChatCompletion(url: string, postData: AgentFunctionContext) {
   const { params, inputs, debugInfo, filterParams } = postData;
