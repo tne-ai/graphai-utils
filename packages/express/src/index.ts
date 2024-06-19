@@ -1,6 +1,6 @@
 import express from "express";
 
-import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
+import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext, AgentFunctionInfoSample } from "graphai";
 import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
 
 export type ExpressAgentInfo = {
@@ -12,7 +12,7 @@ export type ExpressAgentInfo = {
   author: string;
   license: string;
   repository: string;
-  samples: any, // TODO: AgentFunctionInfoSample from graph
+  samples: AgentFunctionInfoSample[],
   inputs: any;
   output: any;
   stream: boolean;

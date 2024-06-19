@@ -1,5 +1,5 @@
 import express from "express";
-import type { AgentFunctionInfoDictionary, AgentFilterInfo } from "graphai";
+import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionInfoSample } from "graphai";
 export type ExpressAgentInfo = {
     agentId: string;
     name: string;
@@ -9,7 +9,7 @@ export type ExpressAgentInfo = {
     author: string;
     license: string;
     repository: string;
-    samples: any;
+    samples: AgentFunctionInfoSample;
     inputs: any;
     output: any;
     stream: boolean;

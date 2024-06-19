@@ -74,24 +74,24 @@
   resolved "https://registry.yarnpkg.com/@google/generative-ai/-/generative-ai-0.11.4.tgz#ce38bcc451fe416f9244b005c359ee7aa08535c9"
   integrity sha512-hlw+E9Prv9aUIQISRnLSXi4rukFqKe5WhxPvzBccTvIvXjw2BHMFOJWSC/Gq7WE0W+L/qRHGmYxopmx9qjrB9w==
 
-"@graphai/agent_filters@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@graphai/agent_filters/-/agent_filters-0.0.5.tgz#dd26e72e200cb8c3a5f09a620fd6cf1df19bb7e3"
-  integrity sha512-wc6YC5KT2toms2q0dGVwkUExNYMK8CojpqkIf1k9bgf3Ii139bF4dXr7ZpBQXP+pYJWzp2eFCDdlx0iew787XA==
+"@graphai/agent_filters@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@graphai/agent_filters/-/agent_filters-0.0.6.tgz#fff30befb1c3c9ab0f053b300d5982e3e0a79411"
+  integrity sha512-7EGPDfc++YsioKzYKHZsCkvYRJp14d3t7UpmPlH711Gos5qJOfjUfTDVFUMLCJN+zzIILbZfPQ1SVjNM+XH+EQ==
   dependencies:
     ajv "^8.16.0"
 
-"@graphai/agents@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@graphai/agents/-/agents-0.0.9.tgz#9107967e0f22b60feca4437dbddc0132d1a61834"
-  integrity sha512-Nv5iaoKma+lcx6uIlBYkrwwtXmtfPVL4fe+UywsyGFk/N1XeIbZSDhU3cMXyb9jzATgwEqVqds1cj3NdMwYnPg==
+"@graphai/agents@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@graphai/agents/-/agents-0.0.14.tgz#e9c7ce44dc7549773054572f624b195c0b43331b"
+  integrity sha512-I6oO9AUAsZ6sBNKdXG7axKRIEDQ4u+4Wg+NS40h6G6L7NVgd6FwPk23v8oYDZWivG4rBmT7QtIAy8cy0qh/WOA==
   dependencies:
     "@graphai/data_agents" "^0.0.2"
     "@graphai/input_agents" "^0.0.3"
-    "@graphai/llm_agents" "^0.0.5"
+    "@graphai/llm_agents" "^0.0.6"
     "@graphai/service_agents" "^0.0.4"
     "@graphai/sleeper_agents" "^0.0.2"
-    "@graphai/vanilla" "^0.0.3"
+    "@graphai/vanilla" "^0.0.7"
 
 "@graphai/data_agents@^0.0.2":
   version "0.0.2"
@@ -107,16 +107,24 @@
   dependencies:
     "@inquirer/prompts" "^5.0.0"
 
-"@graphai/llm_agents@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@graphai/llm_agents/-/llm_agents-0.0.5.tgz#59dcd45aab8ccf655f67a5c1becaf72ef1c3ef05"
-  integrity sha512-hRnsMRXTaZ2rFCII9qsqMeKdJ429TqaWQmAaKfTzJLNVVrXQv4djsgRCiuN0kJ9ytD98XxytEf77bH0+FJHUXg==
+"@graphai/llm_agents@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@graphai/llm_agents/-/llm_agents-0.0.6.tgz#f255c4a1f1ecd66766226677d655076349ce5bfb"
+  integrity sha512-srU6mf6JFU5lzwoaB5jDBpgidx5a1ga7U7jd0cVnNHyohlnyO9RtJELUJCUwsKxqFDeahGB9n0wL/D6yS7/dOw==
   dependencies:
     "@anthropic-ai/sdk" "^0.21.0"
     "@google/generative-ai" "^0.11.4"
+    "@graphai/openai_agent" "0.0.1"
     groq-sdk "^0.3.3"
-    openai "^4.47.1"
     slashgpt "^0.0.9"
+    tiktoken "^1.0.14"
+
+"@graphai/openai_agent@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@graphai/openai_agent/-/openai_agent-0.0.1.tgz#4241d6d72cbaa9f9b8f2774c40591831db970bd4"
+  integrity sha512-bQF1VN8vPRLp7NcY72ofyhplf0HXOcb2Vkv4WddX3PhV1qpLB3b8WwcJhzGJ7Kbngl3YWxaW9d5clfetvORm9g==
+  dependencies:
+    openai "^4.47.1"
     tiktoken "^1.0.14"
 
 "@graphai/service_agents@^0.0.4":
@@ -136,10 +144,10 @@
   dependencies:
     deepmerge "^4.3.1"
 
-"@graphai/vanilla@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@graphai/vanilla/-/vanilla-0.0.3.tgz#c09449bfc96f54fd8c6b8809cb66c73dc1bbf199"
-  integrity sha512-lYimwhvoq1ULlQoVR7rocY3pqMt6qN6kTmaotKJrsOWtMXzSA6Ac6oQxjI7qblXkbk9BayDZLD+jniy/Krif5Q==
+"@graphai/vanilla@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@graphai/vanilla/-/vanilla-0.0.7.tgz#61a24fd9e29ba380f1fb58685617ab7b80298fdb"
+  integrity sha512-z2sDHeQseE94eI3KoVuDtkAkRZo94ZGAFxiR5hHA7KD4/+BgYpNpnTKX/ba42U3oDwSM8WvfkEd6IyDBH2LZOQ==
 
 "@graphql-typed-document-node/core@^3.2.0":
   version "3.2.0"
@@ -1293,10 +1301,10 @@ gopd@^1.0.1:
   dependencies:
     get-intrinsic "^1.1.3"
 
-graphai@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/graphai/-/graphai-0.5.1.tgz#ec68bd55273d1e58e90d286aa76d713d26719611"
-  integrity sha512-N+DNQv/J4M13RWyKx13CWuFLlku1PCpB9IjC58HSV8rHJDdl+IzXscJkJPWXy4vBCM3ZKmHEsTk0GP91Nn4FJA==
+graphai@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/graphai/-/graphai-0.5.2.tgz#765e268c9d4ff1dd1b94ed0a0227f9e776baba36"
+  integrity sha512-5Eu717joiBZldaBr/8ZxIb6aROhgMyaXslJ6kaoczgtD9XviTW+ldrklv6aLBRRipliYWi5LecICRiz27XrI4Q==
 
 graphemer@^1.4.0:
   version "1.4.0"
