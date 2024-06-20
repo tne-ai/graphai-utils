@@ -2,21 +2,8 @@ import express from "express";
 
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext, AgentFunctionInfoSample } from "graphai";
 import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
-
-export type ExpressAgentInfo = {
-  agentId: string;
-  name: string;
-  url: string;
-  description: string;
-  category: string[];
-  author: string;
-  license: string;
-  repository: string;
-  samples: AgentFunctionInfoSample[],
-  inputs: any;
-  output: any;
-  stream: boolean;
-};
+import { ExpressAgentInfo } from "./type";
+export { ExpressAgentInfo };
 
 // express middleware
 // return agent list
@@ -38,7 +25,6 @@ export const agentsList = (agentDictionary: AgentFunctionInfoDictionary, hostNam
         output: agent.output,
         stream: agent.stream ?? false,
       };
-
     });
     res.json({ agents: list });
   };
