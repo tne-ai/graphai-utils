@@ -3,9 +3,9 @@
 
 import { AgentFunctionContext } from "graphai";
 
-async function* streamChatCompletion(url: string, postData: AgentFunctionContext) {
-  const { params, inputs, debugInfo, filterParams } = postData;
-  const postBody = { params, inputs, debugInfo, filterParams };
+async function* streamChatCompletion(url: string, postData: AgentFunctionContext & { agentId?: string }) {
+  const { params, inputs, debugInfo, filterParams, agentId } = postData;
+  const postBody = { params, inputs, debugInfo, filterParams, agentId };
 
   const completion = await fetch(url, {
     headers: {
@@ -35,7 +35,7 @@ async function* streamChatCompletion(url: string, postData: AgentFunctionContext
   }
 }
 
-const streamingRequest = async (url: string, postData: AgentFunctionContext) => {
+const streamingRequest = async (url: string, postData: AgentFunctionContext & { agentId?: string }) => {
   const generator = streamChatCompletion(url, postData);
 
   const messages = [];
@@ -57,6 +57,7 @@ const streamingRequest = async (url: string, postData: AgentFunctionContext) => 
 };
 
 const main = async () => {
+  // stream dispatcher
   await streamingRequest("http://localhost:8085/api/agents/stream/streamMockAgent", {
     params: {
       message: "this is test",
@@ -70,7 +71,24 @@ const main = async () => {
     namedInputs: {},
     filterParams: {},
   });
+  // dispatcher
   await streamingRequest("http://localhost:8085/api/agents/streamMockAgent", {
+    params: {
+      message: "this is test",
+    },
+    inputs: [],
+    debugInfo: {
+      verbose: false,
+      nodeId: "123",
+      retry: 2,
+    },
+    namedInputs: {},
+    filterParams: {},
+  });
+
+  // runner
+  await streamingRequest("http://localhost:8085/api/agents", {
+    agentId: "streamMockAgent",
     params: {
       message: "this is test",
     },

@@ -6,7 +6,7 @@ import type { AgentFunctionInfoDictionary } from "graphai";
 
 import * as agents from "@graphai/agents";
 
-import { agentDispatcher, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc } from "@/index";
+import { agentDispatcher, agentRunner, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc } from "@/index";
 
 const agentDictionary: AgentFunctionInfoDictionary = agents;
 
@@ -27,6 +27,8 @@ app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
 
 app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix));
 app.get(apiPrefix + "/", agentsList(agentDictionary, hostName, apiPrefix));
+
+app.post(apiPrefix + "/", agentRunner(agentDictionary));
 
 //  non stream
 app.post(apiPrefix + "/nonstream/:agentId", nonStreamAgentDispatcher(agentDictionary));

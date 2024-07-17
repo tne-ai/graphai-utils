@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.streamAgentDispatcher = exports.nonStreamAgentDispatcher = exports.agentDispatcher = exports.agentDoc = exports.agentsList = void 0;
+exports.streamAgentDispatcher = exports.nonStreamAgentDispatcher = exports.agentRunner = exports.agentDispatcher = exports.agentDoc = exports.agentsList = void 0;
 const agent_filters_1 = require("@graphai/agent_filters");
 // express middleware
 // return agent list
@@ -54,10 +54,11 @@ const agentDoc = (agentDictionary, hostName = "https://example.com", urlPath = "
 };
 exports.agentDoc = agentDoc;
 // express middleware
-// run agent
+// dispatch and run agent
+// app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
 const agentDispatcher = (agentDictionary, agentFilters = []) => {
-    const nonStram = (0, exports.nonStreamAgentDispatcher)(agentDictionary, agentFilters);
-    const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters);
+    const nonStram = (0, exports.nonStreamAgentDispatcher)(agentDictionary, agentFilters, true);
+    const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters, true);
     return async (req, res, next) => {
         const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
         if (isStreaming) {
@@ -69,10 +70,25 @@ const agentDispatcher = (agentDictionary, agentFilters = []) => {
 exports.agentDispatcher = agentDispatcher;
 // express middleware
 // run agent
-const nonStreamAgentDispatcher = (agentDictionary, agentFilters = []) => {
+// app.post(agentPrefix, agentRunner(agentDictionary));
+const agentRunner = (agentDictionary, agentFilters = []) => {
+    const nonStram = (0, exports.nonStreamAgentDispatcher)(agentDictionary, agentFilters, false);
+    const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters, false);
+    return async (req, res, next) => {
+        const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
+        if (isStreaming) {
+            return await stream(req, res, next);
+        }
+        return await nonStram(req, res, next);
+    };
+};
+exports.agentRunner = agentRunner;
+// express middleware
+// run agent
+const nonStreamAgentDispatcher = (agentDictionary, agentFilters = [], isDispatch = true) => {
     return async (req, res, next) => {
         try {
-            const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters);
+            const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters, isDispatch);
             const result = await dispatcher(req, res);
             return res.json(result);
         }
@@ -84,7 +100,7 @@ const nonStreamAgentDispatcher = (agentDictionary, agentFilters = []) => {
 exports.nonStreamAgentDispatcher = nonStreamAgentDispatcher;
 // express middleware
 // run agent with streaming
-const streamAgentDispatcher = (agentDictionary, agentFilters = []) => {
+const streamAgentDispatcher = (agentDictionary, agentFilters = [], isDispatch = true) => {
     return async (req, res, next) => {
         try {
             res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
@@ -100,7 +116,7 @@ const streamAgentDispatcher = (agentDictionary, agentFilters = []) => {
                 agent: (0, agent_filters_1.streamAgentFilterGenerator)(callback),
             };
             const filterList = [...agentFilters, streamAgentFilter];
-            const dispatcher = agentDispatcherInternal(agentDictionary, filterList);
+            const dispatcher = agentDispatcherInternal(agentDictionary, filterList, isDispatch);
             const result = await dispatcher(req, res);
             const json_data = JSON.stringify(result);
             res.write("___END___");
@@ -114,10 +130,11 @@ const streamAgentDispatcher = (agentDictionary, agentFilters = []) => {
 };
 exports.streamAgentDispatcher = streamAgentDispatcher;
 // dispatcher internal function
-const agentDispatcherInternal = (agentDictionary, agentFilters = []) => {
+const agentDispatcherInternal = (agentDictionary, agentFilters = [], isDispatch = true) => {
     return async (req, res) => {
         const { params } = req;
-        const { agentId } = params;
+        const { agentId } = isDispatch ? params : req.body;
+        console.log(agentId);
         const { nodeId, retry, params: agentParams, inputs, namedInputs } = req.body;
         const agent = agentDictionary[agentId];
         if (agent === undefined) {

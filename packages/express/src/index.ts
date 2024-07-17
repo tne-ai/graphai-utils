@@ -57,10 +57,12 @@ export const agentDoc = (agentDictionary: AgentFunctionInfoDictionary, hostName:
 };
 
 // express middleware
-// run agent
+// dispatch and run agent
+// app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
+
 export const agentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
-  const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters);
-  const stream = streamAgentDispatcher(agentDictionary, agentFilters);
+  const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters, true);
+  const stream = streamAgentDispatcher(agentDictionary, agentFilters, true);
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
     if (isStreaming) {
@@ -72,10 +74,26 @@ export const agentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, ag
 
 // express middleware
 // run agent
-export const nonStreamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
+// app.post(agentPrefix, agentRunner(agentDictionary));
+
+export const agentRunner = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
+  const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters, false);
+  const stream = streamAgentDispatcher(agentDictionary, agentFilters, false);
+  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
+    if (isStreaming) {
+      return await stream(req, res, next);
+    }
+    return await nonStram(req, res, next);
+  };
+};
+
+// express middleware
+// run agent
+export const nonStreamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = [], isDispatch: boolean = true) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
-      const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters);
+      const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters, isDispatch);
       const result = await dispatcher(req, res);
       return res.json(result);
     } catch (e) {
@@ -86,7 +104,7 @@ export const nonStreamAgentDispatcher = (agentDictionary: AgentFunctionInfoDicti
 
 // express middleware
 // run agent with streaming
-export const streamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
+export const streamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = [], isDispatch: boolean = true) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
@@ -104,7 +122,7 @@ export const streamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictiona
       };
       const filterList = [...agentFilters, streamAgentFilter];
 
-      const dispatcher = agentDispatcherInternal(agentDictionary, filterList);
+      const dispatcher = agentDispatcherInternal(agentDictionary, filterList, isDispatch);
       const result = await dispatcher(req, res);
       const json_data = JSON.stringify(result);
       res.write("___END___");
@@ -117,10 +135,11 @@ export const streamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictiona
 };
 
 // dispatcher internal function
-const agentDispatcherInternal = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
+const agentDispatcherInternal = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = [], isDispatch: boolean = true) => {
   return async (req: express.Request, res: express.Response) => {
     const { params } = req;
-    const { agentId } = params;
+    const { agentId } = isDispatch ? params : req.body;
+    console.log(agentId);
     const { nodeId, retry, params: agentParams, inputs, namedInputs } = req.body;
     const agent = agentDictionary[agentId];
     if (agent === undefined) {
