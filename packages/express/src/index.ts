@@ -1,6 +1,6 @@
 import express from "express";
 
-import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext, AgentFunctionInfoSample } from "graphai";
+import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
 import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
 import { ExpressAgentInfo } from "./type";
 export { ExpressAgentInfo };
@@ -139,7 +139,7 @@ const agentDispatcherInternal = (agentDictionary: AgentFunctionInfoDictionary, a
   return async (req: express.Request, res: express.Response) => {
     const { params } = req;
     const { agentId } = isDispatch ? params : req.body;
-    console.log(agentId);
+
     const { nodeId, retry, params: agentParams, inputs, namedInputs } = req.body;
     const agent = agentDictionary[agentId];
     if (agent === undefined) {

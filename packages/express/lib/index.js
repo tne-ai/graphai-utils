@@ -134,7 +134,6 @@ const agentDispatcherInternal = (agentDictionary, agentFilters = [], isDispatch 
     return async (req, res) => {
         const { params } = req;
         const { agentId } = isDispatch ? params : req.body;
-        console.log(agentId);
         const { nodeId, retry, params: agentParams, inputs, namedInputs } = req.body;
         const agent = agentDictionary[agentId];
         if (agent === undefined) {
