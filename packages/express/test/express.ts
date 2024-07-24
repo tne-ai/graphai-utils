@@ -6,12 +6,13 @@ import type { AgentFunctionInfoDictionary } from "graphai";
 
 import * as agents from "@graphai/agents";
 
-import { agentDispatcher, agentRunner, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc } from "@/index";
+import { agentDispatcher, agentRunner, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc, graphRunner } from "@/index";
 
 const agentDictionary: AgentFunctionInfoDictionary = agents;
 
 const hostName = "https://example.net";
 const apiPrefix = "/api/agents";
+const apiGraphPrefix = "/api/graph";
 
 export const app = express();
 
@@ -34,6 +35,8 @@ app.post(apiPrefix + "/", agentRunner(agentDictionary));
 app.post(apiPrefix + "/nonstream/:agentId", nonStreamAgentDispatcher(agentDictionary));
 //  stream
 app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary));
+
+app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
 
 const port = 8085;
 app.listen(port, () => {

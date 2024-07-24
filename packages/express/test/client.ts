@@ -18,6 +18,18 @@ const request = async (url: string, postData: AgentFunctionContext) => {
   console.log(await result.json());
 };
 
+const request2 = async (url: string, postData: any) => {
+  const result = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(postData),
+  });
+
+  console.log(await result.json());
+};
+
 const main = async () => {
   await request("http://localhost:8085/api/agents/echoAgent", {
     params: {
@@ -44,6 +56,20 @@ const main = async () => {
     },
     namedInputs: {},
     filterParams: {},
+  });
+
+  await request2("http://localhost:8085/api/graph/", {
+    graphData: {
+      version: 0.5,
+      nodes: {
+        echo: {
+          agent: "echoAgent",
+          params: {
+            message: "hello",
+          },
+        },
+      },
+    },
   });
 };
 

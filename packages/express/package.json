@@ -11,6 +11,7 @@
     "eslint": "eslint --fix",
     "server": "ts-node -r tsconfig-paths/register test/express.ts",
     "test_stream": "ts-node -r tsconfig-paths/register test/stream_client.ts",
+    "test_stream2": "ts-node -r tsconfig-paths/register test/stream_graph.ts",
     "test": "ts-node -r tsconfig-paths/register test/client.ts",
     "format": "prettier --write '{src,test}/**/*.{yaml,ts,json}'",
     "ci": "yarn run format && yarn run eslint && yarn run build"
