@@ -39,6 +39,12 @@ app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
 
 ```
 
+### Run Test server
+
+```
+yarn run server
+```
+
 
 ### Test from curl
 
@@ -48,8 +54,9 @@ curl -X POST -H "Content-Type: application/json" -d '{"params": {"message" : "he
 
 ### from GraphAI Client
 
-T.B.D.
-
+```
+npx ts-node  test/stream_graph.ts
+```
 
 ### for this middleware development
 
