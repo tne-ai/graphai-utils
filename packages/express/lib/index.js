@@ -12,4 +12,3 @@ var graph_1 = require("./graph");
 Object.defineProperty(exports, "graphRunner", { enumerable: true, get: function () { return graph_1.graphRunner; } });
 Object.defineProperty(exports, "streamGraphRunner", { enumerable: true, get: function () { return graph_1.streamGraphRunner; } });
 Object.defineProperty(exports, "nonStreamGraphRunner", { enumerable: true, get: function () { return graph_1.nonStreamGraphRunner; } });
-;

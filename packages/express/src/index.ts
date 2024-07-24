@@ -1,6 +1,4 @@
-
 export { agentsList, agentDoc, agentDispatcher, agentRunner, nonStreamAgentDispatcher, streamAgentDispatcher } from "./agents";
 export { graphRunner, streamGraphRunner, nonStreamGraphRunner } from "./graph";
 
-export { ExpressAgentInfo } from "./type";;
-
+export { ExpressAgentInfo } from "./type";

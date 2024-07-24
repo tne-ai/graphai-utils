@@ -2,7 +2,7 @@ import { GraphAI } from "graphai";
 import express from "express";
 
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
-import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
+import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
 export const graphRunner = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
   const stream = streamGraphRunner(agentDictionary, agentFilters);
@@ -62,7 +62,7 @@ export const nonStreamGraphRunner = (agentDictionary: AgentFunctionInfoDictionar
 
 // internal function
 const streamGraphRunnerInternal = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
-  return async (req: express.Request, res: express.Response) => {
+  return async (req: express.Request, __res: express.Response) => {
     const { graphData } = req.body;
 
     const graphai = new GraphAI(graphData, agentDictionary, { agentFilters });
@@ -70,5 +70,3 @@ const streamGraphRunnerInternal = (agentDictionary: AgentFunctionInfoDictionary,
     return result;
   };
 };
-
-
