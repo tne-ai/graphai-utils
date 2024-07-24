@@ -13,24 +13,29 @@ yarn add @receptron/graphai_express
 
 import express from "express";
 import * as agents from "@graphai/agents";
-import { agentDispatcher, nonStreamAgentDispatcher, streamAgentDispatcher, agentsList, agentDoc } from "@receptron/graphai_express";
+import { agentDispatcher, nonStreamAgentDispatcher, streamAgentDispatcher, agentsList, agentDoc, graphRunner} from "@receptron/graphai_express";
 import { AgentFunctionInfoDictionary } from "graphai";
 
 const agentDictionary: AgentFunctionInfoDictionary = agents;
 const hostName = "https://example.net";
-const apiPrefix = "/api/agents";
+const apiAgentPrefix = "/api/agents";
+const apiGraphPrefix = "/api/graph";
 
-app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix)); // each API(agent) document
-app.get(apiPrefix + "/", agentsList(agentDictionary, hostName, apiPrefix));  // API(agent) list
+app.get(apiAgentPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiAgentPrefix)); // each API(agent) document
+app.get(apiAgentPrefix + "/", agentsList(agentDictionary, hostName, apiAgentPrefix));  // API(agent) list
 
-// non stream and strwam
-app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
+// non stream and stream agent server
+app.post(apiAgentPrefix + "/:agentId", agentDispatcher(agentDictionary));
 
-//  non stream
-app.post(apiPrefix + "/nonstream/:agentId", nonStreamAgentDispatcher(agentDictionary));
+// non stream agent server
+app.post(apiAgentPrefix + "/nonstream/:agentId", nonStreamAgentDispatcher(agentDictionary));
 
-//  stream
-app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary));
+// stream agent server
+app.post(apiAgentPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary));
+
+// non stream and stream agent server
+app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
+
 
 ```
 
