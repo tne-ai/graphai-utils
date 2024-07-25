@@ -54,6 +54,12 @@ app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
 
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback));
 
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error(err.stack);
+  res.status(500);
+  res.json({});
+});
+
 const port = 8085;
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

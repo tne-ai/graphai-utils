@@ -14,7 +14,6 @@ const request = async (url: string, postData: AgentFunctionContext) => {
     method: "POST",
     body: JSON.stringify(postBody),
   });
-
   console.log(await result.json());
 };
 
@@ -27,7 +26,12 @@ const request2 = async (url: string, postData: any) => {
     body: JSON.stringify(postData),
   });
 
-  console.log(await result.json());
+  if (result.status === 200) {
+    console.log(await result.json());
+  } else {
+    console.log(result.status);
+    console.log(await result.text());
+  }
 };
 
 const main = async () => {
@@ -70,6 +74,39 @@ const main = async () => {
         },
       },
     },
+  });
+
+  // 404
+  await request2("http://localhost:8085/api/gra/", {
+    graphData: {
+      version: 0.5,
+      nodes: {
+        echo: {
+          agent: "echoAgent",
+          params: {
+            message: "hello",
+          },
+        },
+      },
+    },
+  });
+
+  await request2("http://localhost:8085/api/graph/", {
+    graph: {
+      version: 0.5,
+      nodes: {
+        echo: {
+          agent: "echoAgent",
+          params: {
+            message: "hello",
+          },
+        },
+      },
+    },
+  });
+
+  await request2("http://localhost:8085/api/graph/", {
+    graphData: 123,
   });
 };
 
