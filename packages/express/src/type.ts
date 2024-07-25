@@ -1,4 +1,4 @@
-import type { AgentFunctionInfoSample } from "graphai";
+import type { AgentFunctionInfoSample, AgentFunctionContext } from "graphai";
 
 export type ExpressAgentInfo = {
   agentId: string;
@@ -14,3 +14,5 @@ export type ExpressAgentInfo = {
   output: any;
   stream: boolean;
 };
+
+export type StreamChunkCallback = (context: AgentFunctionContext, token: string) => void;

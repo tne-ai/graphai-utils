@@ -1,11 +1,13 @@
 import { GraphAI } from "graphai";
 import express from "express";
 
-import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
-import { streamAgentFilterGenerator } from "@graphai/agent_filters";
+import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext, AgentFunctionInfoSample } from "graphai";
+import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
 
-export const graphRunner = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
-  const stream = streamGraphRunner(agentDictionary, agentFilters);
+import { StreamChunkCallback } from "./type";
+
+export const graphRunner = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = [], streamChunkCallback?: StreamChunkCallback) => {
+  const stream = streamGraphRunner(agentDictionary, agentFilters, streamChunkCallback);
   const nonStream = nonStreamGraphRunner(agentDictionary, agentFilters);
 
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -17,21 +19,29 @@ export const graphRunner = (agentDictionary: AgentFunctionInfoDictionary, agentF
   };
 };
 
-export const streamGraphRunner = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
+export const streamGraphRunner = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  agentFilters: AgentFilterInfo[] = [],
+  streamChunkCallback?: StreamChunkCallback,
+) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
       res.setHeader("Cache-Control", "no-cache, no-transform");
       res.setHeader("X-Accel-Buffering", "no");
 
-      const callback = (context: AgentFunctionContext, token: string) => {
+      const streamCallback = (context: AgentFunctionContext, token: string) => {
         if (token) {
-          res.write(token);
+          if (streamChunkCallback) {
+            res.write(streamChunkCallback(context, token));
+          } else {
+            res.write(token);
+          }
         }
       };
       const streamAgentFilter = {
         name: "streamAgentFilter",
-        agent: streamAgentFilterGenerator<string>(callback),
+        agent: streamAgentFilterGenerator<string>(streamCallback),
       };
       const filterList = [...agentFilters, streamAgentFilter];
 
@@ -62,10 +72,11 @@ export const nonStreamGraphRunner = (agentDictionary: AgentFunctionInfoDictionar
 
 // internal function
 const streamGraphRunnerInternal = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
-  return async (req: express.Request, __res: express.Response) => {
+  return async (req: express.Request & { config?: Record<string, unknown> }, res: express.Response) => {
     const { graphData } = req.body;
+    const { config } = req;
 
-    const graphai = new GraphAI(graphData, agentDictionary, { agentFilters });
+    const graphai = new GraphAI(graphData, agentDictionary, { agentFilters, config: config ?? {} });
     const result = await graphai.run(true);
     return result;
   };

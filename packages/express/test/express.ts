@@ -6,7 +6,7 @@ import type { AgentFunctionInfoDictionary } from "graphai";
 
 import * as agents from "@graphai/agents";
 
-import { agentDispatcher, agentRunner, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc, graphRunner } from "@/index";
+import { agentDispatcher, agentRunner, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc, graphRunner, StreamChunkCallback } from "@/index";
 
 const agentDictionary: AgentFunctionInfoDictionary = agents;
 
@@ -24,19 +24,35 @@ app.use(
   }),
 );
 
-app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
+const streamChunkCallback: StreamChunkCallback = (context, token) => {
+  const data = {
+    nodeId: context.debugInfo.nodeId,
+    agentId: context.debugInfo.agentId,
+    token,
+  };
+  return JSON.stringify(data);
+};
 
 app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix));
 app.get(apiPrefix + "/", agentsList(agentDictionary, hostName, apiPrefix));
 
+// agent
 app.post(apiPrefix + "/", agentRunner(agentDictionary));
 
-//  non stream
+// agent
+app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
+
+app.post(apiPrefix + "/:agentId/stream", agentDispatcher(agentDictionary, [], streamChunkCallback));
+
+// agent non stream
 app.post(apiPrefix + "/nonstream/:agentId", nonStreamAgentDispatcher(agentDictionary));
-//  stream
+// agent stream
 app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary));
 
+// graph
 app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
+
+app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback));
 
 const port = 8085;
 app.listen(port, () => {

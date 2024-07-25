@@ -4,6 +4,8 @@ import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext
 import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
 import { ExpressAgentInfo } from "./type";
 
+import { StreamChunkCallback } from "./type";
+
 // express middleware
 // return agent list
 export const agentsList = (agentDictionary: AgentFunctionInfoDictionary, hostName: string = "https://example.com", urlPath: string = "/agent") => {
@@ -59,9 +61,13 @@ export const agentDoc = (agentDictionary: AgentFunctionInfoDictionary, hostName:
 // dispatch and run agent
 // app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
 
-export const agentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
+export const agentDispatcher = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  agentFilters: AgentFilterInfo[] = [],
+  streamChunkCallback?: StreamChunkCallback,
+) => {
   const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters, true);
-  const stream = streamAgentDispatcher(agentDictionary, agentFilters, true);
+  const stream = streamAgentDispatcher(agentDictionary, agentFilters, true, streamChunkCallback);
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
     if (isStreaming) {
@@ -75,9 +81,9 @@ export const agentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, ag
 // run agent
 // app.post(agentPrefix, agentRunner(agentDictionary));
 
-export const agentRunner = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
+export const agentRunner = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = [], streamChunkCallback?: StreamChunkCallback) => {
   const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters, false);
-  const stream = streamAgentDispatcher(agentDictionary, agentFilters, false);
+  const stream = streamAgentDispatcher(agentDictionary, agentFilters, false, streamChunkCallback);
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
     if (isStreaming) {
@@ -103,7 +109,12 @@ export const nonStreamAgentDispatcher = (agentDictionary: AgentFunctionInfoDicti
 
 // express middleware
 // run agent with streaming
-export const streamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = [], isDispatch: boolean = true) => {
+export const streamAgentDispatcher = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  agentFilters: AgentFilterInfo[] = [],
+  isDispatch: boolean = true,
+  streamChunkCallback?: StreamChunkCallback,
+) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
@@ -112,7 +123,11 @@ export const streamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictiona
 
       const callback = (context: AgentFunctionContext, token: string) => {
         if (token) {
-          res.write(token);
+          if (streamChunkCallback) {
+            res.write(streamChunkCallback(context, token));
+          } else {
+            res.write(token);
+          }
         }
       };
       const streamAgentFilter = {

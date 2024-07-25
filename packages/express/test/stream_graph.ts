@@ -66,6 +66,20 @@ const main = async () => {
       },
     },
   });
+
+  await streamingRequest("http://localhost:8085/api/graph/stream", {
+    graphData: {
+      version: 0.5,
+      nodes: {
+        echo: {
+          agent: "streamMockAgent",
+          params: {
+            message: "hello",
+          },
+        },
+      },
+    },
+  });
 };
 
 main();

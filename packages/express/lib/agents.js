@@ -56,9 +56,9 @@ exports.agentDoc = agentDoc;
 // express middleware
 // dispatch and run agent
 // app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
-const agentDispatcher = (agentDictionary, agentFilters = []) => {
+const agentDispatcher = (agentDictionary, agentFilters = [], streamChunkCallback) => {
     const nonStram = (0, exports.nonStreamAgentDispatcher)(agentDictionary, agentFilters, true);
-    const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters, true);
+    const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters, true, streamChunkCallback);
     return async (req, res, next) => {
         const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
         if (isStreaming) {
@@ -71,9 +71,9 @@ exports.agentDispatcher = agentDispatcher;
 // express middleware
 // run agent
 // app.post(agentPrefix, agentRunner(agentDictionary));
-const agentRunner = (agentDictionary, agentFilters = []) => {
+const agentRunner = (agentDictionary, agentFilters = [], streamChunkCallback) => {
     const nonStram = (0, exports.nonStreamAgentDispatcher)(agentDictionary, agentFilters, false);
-    const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters, false);
+    const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters, false, streamChunkCallback);
     return async (req, res, next) => {
         const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
         if (isStreaming) {
@@ -100,7 +100,7 @@ const nonStreamAgentDispatcher = (agentDictionary, agentFilters = [], isDispatch
 exports.nonStreamAgentDispatcher = nonStreamAgentDispatcher;
 // express middleware
 // run agent with streaming
-const streamAgentDispatcher = (agentDictionary, agentFilters = [], isDispatch = true) => {
+const streamAgentDispatcher = (agentDictionary, agentFilters = [], isDispatch = true, streamChunkCallback) => {
     return async (req, res, next) => {
         try {
             res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
@@ -108,7 +108,12 @@ const streamAgentDispatcher = (agentDictionary, agentFilters = [], isDispatch = 
             res.setHeader("X-Accel-Buffering", "no");
             const callback = (context, token) => {
                 if (token) {
-                    res.write(token);
+                    if (streamChunkCallback) {
+                        res.write(streamChunkCallback(context, token));
+                    }
+                    else {
+                        res.write(token);
+                    }
                 }
             };
             const streamAgentFilter = {

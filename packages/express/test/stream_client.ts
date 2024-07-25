@@ -86,6 +86,21 @@ const main = async () => {
     filterParams: {},
   });
 
+  // dispatcher
+  await streamingRequest("http://localhost:8085/api/agents/streamMockAgent/stream", {
+    params: {
+      message: "this is test",
+    },
+    inputs: [],
+    debugInfo: {
+      verbose: false,
+      nodeId: "123",
+      retry: 2,
+    },
+    namedInputs: {},
+    filterParams: {},
+  });
+
   // runner
   await streamingRequest("http://localhost:8085/api/agents", {
     agentId: "streamMockAgent",
