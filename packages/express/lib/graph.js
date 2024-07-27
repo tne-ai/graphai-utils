@@ -68,7 +68,7 @@ const streamGraphRunnerInternal = (agentDictionary, agentFilters = []) => {
         const { graphData } = req.body;
         const { config } = req;
         const graphai = new graphai_1.GraphAI(graphData, agentDictionary, { agentFilters, config: config ?? {} });
-        const result = await graphai.run(true);
+        const result = await graphai.run();
         return result;
     };
 };
