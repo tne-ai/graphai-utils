@@ -1,6 +1,9 @@
 // streamMockAgent client.
 // npx ts-node -r tsconfig-paths/register test/stream_client.ts
 
+import test from "node:test";
+import assert from "node:assert";
+
 async function* streamChatCompletion(url: string, postData: any) {
   const completion = await fetch(url, {
     headers: {
@@ -51,7 +54,7 @@ const streamingRequest = async (url: string, postData: any) => {
   }
 };
 
-const main = async () => {
+test("test stream echo agent", async () => {
   // stream dispatcher
   await streamingRequest("http://localhost:8085/api/graph", {
     graphData: {
@@ -80,6 +83,4 @@ const main = async () => {
       },
     },
   });
-};
-
-main();
+});

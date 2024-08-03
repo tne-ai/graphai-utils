@@ -1,6 +1,9 @@
 // streamMockAgent client.
 // npx ts-node -r tsconfig-paths/register test/stream_client.ts
 
+import test from "node:test";
+import assert from "node:assert";
+
 import { AgentFunctionContext } from "graphai";
 
 async function* streamChatCompletion(url: string, postData: AgentFunctionContext & { agentId?: string }) {
@@ -56,7 +59,7 @@ const streamingRequest = async (url: string, postData: AgentFunctionContext & { 
   }
 };
 
-const main = async () => {
+test("test stream echo agent", async () => {
   // stream dispatcher
   await streamingRequest("http://localhost:8085/api/agents/stream/streamMockAgent", {
     params: {
@@ -116,6 +119,5 @@ const main = async () => {
     namedInputs: {},
     filterParams: {},
   });
-};
+});
 
-main();
