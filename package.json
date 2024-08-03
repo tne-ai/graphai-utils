@@ -1,0 +1,19 @@
+{
+  "name": "graphai-utils",
+  "version": "0.0.1",
+  "description": "Monorepo for the graphai ",
+  "scripts": {
+    "test": "yarn workspaces run test",
+    "build": "yarn workspaces run build",
+    "eslint": "yarn workspaces run eslint",
+    "format": "yarn workspaces run format"
+  },
+  "private": true,
+  "devDependencies": {
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "",
+  "license": "MIT"
+}
