@@ -37,7 +37,7 @@ const streamGraphRunner = (agentDictionary, agentFilters = [], streamChunkCallba
             };
             const filterList = [...agentFilters, streamAgentFilter];
             const dispatcher = streamGraphRunnerInternal(agentDictionary, filterList);
-            const result = await dispatcher(req, res);
+            const result = await dispatcher(req);
             const json_data = JSON.stringify(result);
             res.write("___END___");
             res.write(json_data);
@@ -53,7 +53,7 @@ const nonStreamGraphRunner = (agentDictionary, agentFilters = []) => {
     return async (req, res, next) => {
         try {
             const dispatcher = streamGraphRunnerInternal(agentDictionary, agentFilters);
-            const result = await dispatcher(req, res);
+            const result = await dispatcher(req);
             return res.json(result);
         }
         catch (e) {
@@ -64,7 +64,7 @@ const nonStreamGraphRunner = (agentDictionary, agentFilters = []) => {
 exports.nonStreamGraphRunner = nonStreamGraphRunner;
 // internal function
 const streamGraphRunnerInternal = (agentDictionary, agentFilters = []) => {
-    return async (req, res) => {
+    return async (req) => {
         const { graphData } = req.body;
         const { config } = req;
         const graphai = new graphai_1.GraphAI(graphData, agentDictionary, { agentFilters, config: config ?? {} });

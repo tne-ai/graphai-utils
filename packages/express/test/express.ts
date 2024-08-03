@@ -54,7 +54,7 @@ app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
 
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback));
 
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);
   res.status(500);
   res.json({});

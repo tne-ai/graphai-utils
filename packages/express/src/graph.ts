@@ -1,8 +1,8 @@
 import { GraphAI } from "graphai";
 import express from "express";
 
-import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext, AgentFunctionInfoSample } from "graphai";
-import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
+import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
+import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
 import { StreamChunkCallback } from "./type";
 
@@ -46,7 +46,7 @@ export const streamGraphRunner = (
       const filterList = [...agentFilters, streamAgentFilter];
 
       const dispatcher = streamGraphRunnerInternal(agentDictionary, filterList);
-      const result = await dispatcher(req, res);
+      const result = await dispatcher(req);
 
       const json_data = JSON.stringify(result);
       res.write("___END___");
@@ -62,7 +62,7 @@ export const nonStreamGraphRunner = (agentDictionary: AgentFunctionInfoDictionar
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const dispatcher = streamGraphRunnerInternal(agentDictionary, agentFilters);
-      const result = await dispatcher(req, res);
+      const result = await dispatcher(req);
       return res.json(result);
     } catch (e) {
       next(e);
@@ -72,7 +72,7 @@ export const nonStreamGraphRunner = (agentDictionary: AgentFunctionInfoDictionar
 
 // internal function
 const streamGraphRunnerInternal = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = []) => {
-  return async (req: express.Request & { config?: Record<string, unknown> }, res: express.Response) => {
+  return async (req: express.Request & { config?: Record<string, unknown> }) => {
     const { graphData } = req.body;
     const { config } = req;
 
