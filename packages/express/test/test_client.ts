@@ -3,6 +3,9 @@
 
 import { AgentFunctionContext } from "graphai";
 
+import test from "node:test";
+import assert from "node:assert";
+
 const request = async (url: string, postData: AgentFunctionContext) => {
   const { params, inputs, debugInfo, filterParams } = postData;
   const postBody = { params, inputs, debugInfo, filterParams };
@@ -14,7 +17,7 @@ const request = async (url: string, postData: AgentFunctionContext) => {
     method: "POST",
     body: JSON.stringify(postBody),
   });
-  console.log(await result.json());
+  return await result.json();
 };
 
 const request2 = async (url: string, postData: any) => {
@@ -27,15 +30,15 @@ const request2 = async (url: string, postData: any) => {
   });
 
   if (result.status === 200) {
-    console.log(await result.json());
+    return await result.json();
   } else {
-    console.log(result.status);
-    console.log(await result.text());
+    return result.status;
+    // return await result.text();
   }
 };
 
-const main = async () => {
-  await request("http://localhost:8085/api/agents/echoAgent", {
+test("test stream echo agent", async () => {
+  const res = await request("http://localhost:8085/api/agents/echoAgent", {
     params: {
       message: "this is test",
     },
@@ -48,25 +51,33 @@ const main = async () => {
     namedInputs: {},
     filterParams: {},
   });
-  await request("http://localhost:8085/api/agents/nonstream/echoAgent", {
-    params: {
-      message: "this is test",
-    },
-    inputs: [],
-    debugInfo: {
-      verbose: false,
-      nodeId: "123",
-      retry: 2,
-    },
-    namedInputs: {},
-    filterParams: {},
-  });
+  assert.deepStrictEqual(res, { message: "this is test" });
+});
 
-  await request2("http://localhost:8085/api/graph/", {
+test("test nonstream echo agent", async () => {
+  const res = await request("http://localhost:8085/api/agents/nonstream/echoAgent", {
+    params: {
+      message: "this is test",
+    },
+    inputs: [],
+    debugInfo: {
+      verbose: false,
+      nodeId: "123",
+      retry: 2,
+    },
+    namedInputs: {},
+    filterParams: {},
+  });
+  assert.deepStrictEqual(res, { message: "this is test" });
+});
+
+test("test graph", async () => {
+  const res = await request2("http://localhost:8085/api/graph/", {
     graphData: {
       version: 0.5,
       nodes: {
         echo: {
+          isResult: true,
           agent: "echoAgent",
           params: {
             message: "hello",
@@ -75,9 +86,12 @@ const main = async () => {
       },
     },
   });
+  assert.deepStrictEqual(res, { echo: { message: "hello" } });
+});
 
+test("test 404", async () => {
   // 404
-  await request2("http://localhost:8085/api/gra/", {
+  const res = await request2("http://localhost:8085/api/gra/", {
     graphData: {
       version: 0.5,
       nodes: {
@@ -90,24 +104,12 @@ const main = async () => {
       },
     },
   });
+  assert.equal(res, 404);
+});
 
-  await request2("http://localhost:8085/api/graph/", {
-    graph: {
-      version: 0.5,
-      nodes: {
-        echo: {
-          agent: "echoAgent",
-          params: {
-            message: "hello",
-          },
-        },
-      },
-    },
-  });
-
-  await request2("http://localhost:8085/api/graph/", {
+test("test 500", async () => {
+  const res = await request2("http://localhost:8085/api/graph/", {
     graphData: 123,
   });
-};
-
-main();
+  assert.equal(res, 500);
+});
