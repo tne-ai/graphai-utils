@@ -11,6 +11,9 @@
   "private": true,
   "devDependencies": {
   },
+  "resolutions": {
+    "string-width": "4.2.3"
+  },
   "workspaces": [
     "packages/*"
   ],
