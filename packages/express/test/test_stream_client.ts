@@ -2,7 +2,7 @@
 // npx ts-node -r tsconfig-paths/register test/stream_client.ts
 
 import test from "node:test";
-import assert from "node:assert";
+// import assert from "node:assert";
 
 import { AgentFunctionContext } from "graphai";
 
@@ -120,4 +120,3 @@ test("test stream echo agent", async () => {
     filterParams: {},
   });
 });
-

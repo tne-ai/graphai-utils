@@ -1,7 +1,7 @@
 import { GraphAI } from "graphai";
 import express from "express";
 
-import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
+import type { AgentFunctionInfoDictionary, AgentFilterInfo } from "graphai";
 import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
 import { StreamChunkCallback } from "./type";
@@ -30,7 +30,7 @@ export const streamGraphRunner = (
       res.setHeader("Cache-Control", "no-cache, no-transform");
       res.setHeader("X-Accel-Buffering", "no");
 
-      const streamCallback = (context: AgentFunctionContext, token: string) => {
+      const streamCallback: StreamChunkCallback = (context, token) => {
         if (token) {
           if (streamChunkCallback) {
             res.write(streamChunkCallback(context, token));
