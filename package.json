@@ -10,6 +10,9 @@
   },
   "private": true,
   "devDependencies": {
+    "@types/node": "^20.12.5",
+    "eslint": "^9.7.0",
+    "prettier": "^3.3.3"
   },
   "resolutions": {
     "string-width": "4.2.3"
