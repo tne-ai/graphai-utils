@@ -46,7 +46,6 @@ export const graphData = {
     data2speech: {
       inputs: [":RAG", ":talkAnalysis", ":onpremiseApi"],
       agent: "streamMockAgent",
-
     },
     responseToCustomer: {
       agent: "streamMockAgent",

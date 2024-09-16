@@ -1,15 +1,12 @@
 <template>
-<main>
-  
-  <div class="h-screen w-full">
-    <div class="w-10/12 h-1/2 bg-white rounded-md mt-4 mx-auto border-2">
-      <div ref="cytoscapeRef" class="w-full h-full" />
+  <main>
+    <div class="h-screen w-full">
+      <div class="w-10/12 h-1/2 bg-white rounded-md mt-4 mx-auto border-2">
+        <div ref="cytoscapeRef" class="w-full h-full" />
+      </div>
+      <div></div>
     </div>
-    <div>
-
-    </div>
-  </div>
-</main>
+  </main>
 </template>
 
 <script lang="ts">
@@ -24,9 +21,9 @@ import { useCytoscape } from "./composables/cytoscape";
 
 export default defineComponent({
   setup() {
-    const selectdGraph = ref(graphData)
+    const selectdGraph = ref(graphData);
     const { updateCytoscape, cytoscapeRef, resetCytoscape } = useCytoscape(selectdGraph);
-    
+
     const run = async () => {
       const graphai = new GraphAI(graphData, { streamMockAgent });
       graphai.onLogCallback = async ({ nodeId, state, inputs, result, errorMessage }) => {
@@ -35,20 +32,19 @@ export default defineComponent({
         console.log(nodeId, state);
       };
       const results = await graphai.run();
-    }
+    };
     run();
 
     return {
-      cytoscapeRef
+      cytoscapeRef,
     };
-  }
+  },
 });
 </script>
 
-
 <style scoped>
 header {
-    line-height: 1.5;
+  line-height: 1.5;
 }
 
 .logo {

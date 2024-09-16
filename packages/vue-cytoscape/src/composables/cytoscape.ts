@@ -1,4 +1,4 @@
-import { Ref, ref, onMounted, watch, ComputedRef,  } from "vue";
+import { Ref, ref, onMounted, watch, ComputedRef } from "vue";
 import { GraphData, NodeState, NodeData, sleep } from "graphai";
 
 import cytoscape, { Core, NodeSingular, NodeDefinition, EdgeDefinition, EdgeSingular } from "cytoscape";
@@ -86,7 +86,14 @@ const parseInput = (input: string) => {
 
 const cytoscapeFromGraph = (graph_data: GraphData) => {
   const elements = Object.keys(graph_data.nodes || {}).reduce(
-    (tmp: { nodes: NodeDefinition[]; edges: EdgeDefinition[]; map: Record<string, NodeDefinition> }, nodeId) => {
+    (
+      tmp: {
+        nodes: NodeDefinition[];
+        edges: EdgeDefinition[];
+        map: Record<string, NodeDefinition>;
+      },
+      nodeId,
+    ) => {
       const node: NodeData = graph_data.nodes[nodeId];
       const isStatic = "value" in node;
       const cyNode = {
@@ -134,7 +141,7 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
 export const useCytoscape = (selectedGraph: ComputedRef<GraphData> | Ref<GraphData>) => {
   let cy: null | Core = null;
 
-  const cytoscapeData = ref(cytoscapeFromGraph(selectedGraph.value ?? { nodes: {}}));
+  const cytoscapeData = ref(cytoscapeFromGraph(selectedGraph.value ?? { nodes: {} }));
   const cytoscapeRef = ref();
 
   const updateCytoscape = async (nodeId: string, state: NodeState) => {
