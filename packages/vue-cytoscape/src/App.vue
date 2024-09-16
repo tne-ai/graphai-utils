@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, ComputedRef } from "vue";
+import { defineComponent, ref } from "vue";
 
 import { GraphAI } from "graphai";
 import { streamMockAgent } from "@graphai/vanilla";
@@ -22,16 +22,16 @@ import { useCytoscape } from "./composables/cytoscape";
 export default defineComponent({
   setup() {
     const selectdGraph = ref(graphData);
-    const { updateCytoscape, cytoscapeRef, resetCytoscape } = useCytoscape(selectdGraph);
+    const { updateCytoscape, cytoscapeRef } = useCytoscape(selectdGraph);
 
     const run = async () => {
       const graphai = new GraphAI(graphData, { streamMockAgent });
-      graphai.onLogCallback = async ({ nodeId, state, inputs, result, errorMessage }) => {
+      graphai.onLogCallback = async ({ nodeId, state }) => {
         // logs.value.push({ nodeId, state, inputs, result, errorMessage });
         updateCytoscape(nodeId, state);
         console.log(nodeId, state);
       };
-      const results = await graphai.run();
+      await graphai.run();
     };
     run();
 
