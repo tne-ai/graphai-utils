@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/receptron/graphai_utils/tree/main/packages/express#readme",
   "devDependencies": {
-    "sinon": "^18.0.0",
+    "sinon": "^19.0.2",
     "sinon-express-mock": "^2.2.1"
   },
   "dependencies": {
