@@ -7,7 +7,8 @@
     "./lib"
   ],
   "scripts": {
-    "build": "cp ../express/lib/type.* lib/"
+    "build": "cp ../express/lib/type.* lib/",
+    "eslint": "echo nothing"
   },
   "repository": {
     "type": "git",
