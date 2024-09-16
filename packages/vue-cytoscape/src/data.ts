@@ -1,5 +1,5 @@
 export const graphData = {
-  version: 0.3,
+  version: 0.5,
   nodes: {
     customerPhoneAudioLog: {
       agent: "streamMockAgent",
