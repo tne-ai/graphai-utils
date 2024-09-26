@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.nonStreamGraphRunner = exports.streamGraphRunner = exports.graphRunner = void 0;
 const graphai_1 = require("graphai");
 const agent_filters_1 = require("@graphai/agent_filters");
-const graphRunner = (agentDictionary, agentFilters = [], streamChunkCallback) => {
-    const stream = (0, exports.streamGraphRunner)(agentDictionary, agentFilters, streamChunkCallback);
-    const nonStream = (0, exports.nonStreamGraphRunner)(agentDictionary, agentFilters);
+const graphRunner = (agentDictionary, agentFilters = [], streamChunkCallback, onLogCallback = (__log, __isUpdate) => { }) => {
+    const stream = (0, exports.streamGraphRunner)(agentDictionary, agentFilters, streamChunkCallback, onLogCallback);
+    const nonStream = (0, exports.nonStreamGraphRunner)(agentDictionary, agentFilters, onLogCallback);
     return async (req, res, next) => {
         const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
         if (isStreaming) {
@@ -15,7 +15,7 @@ const graphRunner = (agentDictionary, agentFilters = [], streamChunkCallback) =>
     };
 };
 exports.graphRunner = graphRunner;
-const streamGraphRunner = (agentDictionary, agentFilters = [], streamChunkCallback) => {
+const streamGraphRunner = (agentDictionary, agentFilters = [], streamChunkCallback, onLogCallback = (__log, __isUpdate) => { }) => {
     return async (req, res, next) => {
         try {
             res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
@@ -36,7 +36,7 @@ const streamGraphRunner = (agentDictionary, agentFilters = [], streamChunkCallba
                 agent: (0, agent_filters_1.streamAgentFilterGenerator)(streamCallback),
             };
             const filterList = [...agentFilters, streamAgentFilter];
-            const dispatcher = streamGraphRunnerInternal(agentDictionary, filterList);
+            const dispatcher = streamGraphRunnerInternal(agentDictionary, filterList, onLogCallback);
             const result = await dispatcher(req);
             const json_data = JSON.stringify(result);
             res.write("___END___");
@@ -49,10 +49,10 @@ const streamGraphRunner = (agentDictionary, agentFilters = [], streamChunkCallba
     };
 };
 exports.streamGraphRunner = streamGraphRunner;
-const nonStreamGraphRunner = (agentDictionary, agentFilters = []) => {
+const nonStreamGraphRunner = (agentDictionary, agentFilters = [], onLogCallback = (__log, __isUpdate) => { }) => {
     return async (req, res, next) => {
         try {
-            const dispatcher = streamGraphRunnerInternal(agentDictionary, agentFilters);
+            const dispatcher = streamGraphRunnerInternal(agentDictionary, agentFilters, onLogCallback);
             const result = await dispatcher(req);
             return res.json(result);
         }
@@ -63,11 +63,12 @@ const nonStreamGraphRunner = (agentDictionary, agentFilters = []) => {
 };
 exports.nonStreamGraphRunner = nonStreamGraphRunner;
 // internal function
-const streamGraphRunnerInternal = (agentDictionary, agentFilters = []) => {
+const streamGraphRunnerInternal = (agentDictionary, agentFilters = [], onLogCallback = (__log, __isUpdate) => { }) => {
     return async (req) => {
         const { graphData } = req.body;
         const { config } = req;
         const graphai = new graphai_1.GraphAI(graphData, agentDictionary, { agentFilters, config: config ?? {} });
+        graphai.onLogCallback = onLogCallback;
         const result = await graphai.run();
         return result;
     };

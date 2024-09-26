@@ -2,7 +2,7 @@
 import "dotenv/config";
 
 import express from "express";
-import type { AgentFunctionInfoDictionary } from "graphai";
+import type { AgentFunctionInfoDictionary, TransactionLog } from "graphai";
 
 import * as agents from "@graphai/agents";
 
@@ -33,6 +33,10 @@ const streamChunkCallback: StreamChunkCallback = (context, token) => {
   return JSON.stringify(data);
 };
 
+const onLogCallback = (log: TransactionLog, __isUpdate: boolean) => {
+  console.log(log);
+};
+
 app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix));
 app.get(apiPrefix + "/", agentsList(agentDictionary, hostName, apiPrefix));
 
@@ -52,7 +56,7 @@ app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary))
 // graph
 app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
 
-app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback));
+app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, onLogCallback));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);
