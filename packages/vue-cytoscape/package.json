@@ -27,22 +27,22 @@
   },
   "homepage": "https://github.com/receptron/graphai_utils/tree/main/packages/vue-cytoscape#readme",
   "dependencies": {
-    "cytoscape": "^3.29.2",
+    "cytoscape": "^3.30.2",
     "cytoscape-klay": "^3.1.4"
   },
   "devDependencies": {
     "@babel/types": "^7.25.6",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
-    "@vitejs/plugin-vue": "^5.1.3",
+    "@vitejs/plugin-vue": "^5.1.4",
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.4.19",
     "npm-run-all2": "^6.2.3",
     "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.11",
+    "tailwindcss": "^3.4.13",
     "typescript": "~5.6.2",
-    "vite": "^5.4.6",
-    "vue": "^3.5.6",
+    "vite": "^5.4.8",
+    "vue": "^3.5.9",
     "vue-tsc": "^2.1.6"
   },
   "types": "./lib/cytoscape.d.ts",
