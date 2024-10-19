@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 
 import { graphData } from "./data";
+//const graphData = {nodes: {}};
 import { useCytoscape } from "./cytoscape";
 
 import { GraphAI } from "graphai";
@@ -11,6 +12,7 @@ import { streamMockAgent } from "@graphai/vanilla";
 
 function App() {
   const [count, setCount] = useState(0);
+
   const { cytoscapeRef, updateCytoscape } = useCytoscape(graphData);
 
   const run = async () => {

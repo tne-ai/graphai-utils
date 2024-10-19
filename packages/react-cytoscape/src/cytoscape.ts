@@ -82,39 +82,43 @@ const parseInput = (input: string) => {
 };
 
 const cytoscapeFromGraph = (graph_data: GraphData) => {
-  const elements = Object.keys(graph_data.nodes || {}).reduce(
-    (tmp, nodeId) => {
-      const node: NodeData = graph_data.nodes[nodeId];
-      const isStatic = "value" in node;
-      const cyNode = {
-        data: {
-          id: nodeId,
-          color: isStatic ? colorStatic : colorMap[NodeState.Waiting],
-          isStatic,
-        },
-      };
-      tmp.nodes.push(cyNode);
-      tmp.map[nodeId] = cyNode;
-      if ("inputs" in node) {
-        const inputs = Array.isArray(node.inputs) ? node.inputs : Object.values(node.inputs || {});
-        inputs.forEach((input: string) => {
-          const { source, label } = parseInput(input);
-          tmp.edges.push({
-            data: { source, target: nodeId, label },
+  try {
+    const elements = Object.keys(graph_data.nodes || {}).reduce(
+      (tmp, nodeId) => {
+        const node: NodeData = graph_data.nodes[nodeId];
+        const isStatic = "value" in node;
+        const cyNode = {
+          data: {
+            id: nodeId,
+            color: isStatic ? colorStatic : colorMap[NodeState.Waiting],
+            isStatic,
+          },
+        };
+        tmp.nodes.push(cyNode);
+        tmp.map[nodeId] = cyNode;
+        if ("inputs" in node) {
+          const inputs = Array.isArray(node.inputs) ? node.inputs : Object.values(node.inputs || {});
+          inputs.forEach((input: string) => {
+            const { source, label } = parseInput(input);
+            tmp.edges.push({
+              data: { source, target: nodeId, label },
+            });
           });
-        });
-      }
-      if ("update" in node && node.update) {
-        const { source, label } = parseInput(node.update);
-        tmp.edges.push({
-          data: { source, target: nodeId, isUpdate: true, label },
-        });
-      }
-      return tmp;
-    },
-    { nodes: [], edges: [], map: {} },
-  );
-  return { elements };
+        }
+        if ("update" in node && node.update) {
+          const { source, label } = parseInput(node.update);
+          tmp.edges.push({
+            data: { source, target: nodeId, isUpdate: true, label },
+          });
+        }
+        return tmp;
+      },
+      { nodes: [], edges: [], map: {} },
+    );
+    return { elements };
+  } catch (e) {
+    return { elements: { nodes: [], edges: [], map: {} } };
+  }
 };
 
 export const useCytoscape = (selectedGraph: GraphData) => {
@@ -218,6 +222,7 @@ export const useCytoscape = (selectedGraph: GraphData) => {
 
   useEffect(() => {
     if (selectedGraph) {
+      console.log(cytoscapeFromGraph(selectedGraph));
       setCytoscapeData(cytoscapeFromGraph(selectedGraph));
     }
   }, [selectedGraph]);
