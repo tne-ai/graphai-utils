@@ -1,11 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import cytoscape, {
-  Core,
-  NodeSingular,
-  NodeDefinition,
-  EdgeDefinition,
-  EdgeSingular,
-} from "cytoscape";
+import cytoscape, { Core, NodeSingular, NodeDefinition, EdgeDefinition, EdgeSingular } from "cytoscape";
 import klay from "cytoscape-klay";
 import { GraphData, NodeState, NodeData, sleep } from "graphai";
 
@@ -26,8 +20,7 @@ const cyStyle = [
     style: {
       "background-color": "data(color)",
       label: "data(id)",
-      shape: (ele: NodeSingular) =>
-        ele.data("isStatic") ? "rectangle" : "roundrectangle",
+      shape: (ele: NodeSingular) => (ele.data("isStatic") ? "rectangle" : "roundrectangle"),
       width: (ele: EdgeSingular) => calcNodeWidth(ele.data("id")),
       color: "#fff",
       height: "30px",
@@ -103,9 +96,7 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
       tmp.nodes.push(cyNode);
       tmp.map[nodeId] = cyNode;
       if ("inputs" in node) {
-        const inputs = Array.isArray(node.inputs)
-          ? node.inputs
-          : Object.values(node.inputs || {});
+        const inputs = Array.isArray(node.inputs) ? node.inputs : Object.values(node.inputs || {});
         inputs.forEach((input: string) => {
           const { source, label } = parseInput(input);
           tmp.edges.push({
@@ -127,11 +118,11 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
 };
 
 export const useCytoscape = (selectedGraph: GraphData) => {
-  const [cytoscapeData, setCytoscapeData] = useState(() =>
-    cytoscapeFromGraph(selectedGraph ?? { nodes: {} }),
-  );
-  const cytoscapeRef = useRef(null);
+  // const [cy, setCy] = useState<Core | null>(0);
   let cy: Core | null = null;
+
+  const [cytoscapeData, setCytoscapeData] = useState(() => cytoscapeFromGraph(selectedGraph ?? { nodes: {} }));
+  const cytoscapeRef = useRef(null);
 
   const updateCytoscape = useCallback(
     async (nodeId: string, state: NodeState) => {
@@ -141,13 +132,11 @@ export const useCytoscape = (selectedGraph: GraphData) => {
       const elements = cytoscapeData.elements;
       elements.map[nodeId].data.color = colorMap[state];
       const nodeData = selectedGraph.nodes[nodeId] ?? {};
-      if (
-        "agent" in nodeData &&
-        state === NodeState.Queued &&
-        (nodeData.priority ?? 0) > 0
-      ) {
+      if ("agent" in nodeData && state === NodeState.Queued && (nodeData.priority ?? 0) > 0) {
+        // computed node
         elements.map[nodeId].data.color = colorPriority;
       } else if ("value" in nodeData && state === NodeState.Waiting) {
+        // static node
         elements.map[nodeId].data.color = colorStatic;
       }
 
@@ -182,9 +171,7 @@ export const useCytoscape = (selectedGraph: GraphData) => {
     if (cy) {
       cy.elements().remove();
       cy.add(cytoscapeData.elements);
-      const name = cytoscapeData.elements.nodes.some((node) => node.position)
-        ? "preset"
-        : layout;
+      const name = cytoscapeData.elements.nodes.some((node) => node.position) ? "preset" : layout;
       cy.layout({ name }).run();
       cy.fit();
       if (name === layout) {
@@ -209,8 +196,7 @@ export const useCytoscape = (selectedGraph: GraphData) => {
     const elements = cytoscapeData.elements;
     Object.keys(elements.map).forEach((nodeId) => {
       const nodeData = selectedGraph.nodes[nodeId];
-      elements.map[nodeId].data.color =
-        "value" in nodeData ? colorStatic : colorMap[NodeState.Waiting];
+      elements.map[nodeId].data.color = "value" in nodeData ? colorStatic : colorMap[NodeState.Waiting];
     });
     setCytoscapeData({ elements });
   }, [cytoscapeData, selectedGraph]);
@@ -220,7 +206,7 @@ export const useCytoscape = (selectedGraph: GraphData) => {
       createCytoscape();
       updateGraphData();
     }
-  }, [createCytoscape, updateGraphData, cytoscapeRef]);
+  }, [createCytoscape, updateGraphData]);
 
   useEffect(() => {
     if (selectedGraph) {
