@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc --esModuleInterop --declaration --outDir lib/ src/cytoscape.ts",
+    "build_old": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write src/",
     "preview": "vite preview"

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import cytoscape, { Core, NodeSingular, NodeDefinition, EdgeDefinition, EdgeSingular } from "cytoscape";
+import cytoscape, { Core, NodeSingular, EdgeSingular } from "cytoscape";
 import klay from "cytoscape-klay";
 import { GraphData, NodeState, NodeData, sleep } from "graphai";
 
@@ -116,14 +116,13 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
       { nodes: [], edges: [], map: {} },
     );
     return { elements };
-  } catch (e) {
+  } catch (__error) {
     return { elements: { nodes: [], edges: [], map: {} } };
   }
 };
 
 export const useCytoscape = (selectedGraph: GraphData) => {
   const [cyto, setCyto] = useState<Core | null>(0);
-  let cy: Core | null = null;
 
   const [cytoscapeData, setCytoscapeData] = useState(() => cytoscapeFromGraph(selectedGraph ?? { nodes: {} }));
   const cytoscapeRef = useRef(null);
@@ -135,7 +134,7 @@ export const useCytoscape = (selectedGraph: GraphData) => {
       }
       const elements = cytoscapeData.elements;
       elements.map[nodeId].data.color = colorMap[state];
-      const nodeData = selectedGraph.nodes[nodeId] ?? {};
+      const nodeData = selectedGraph.nodes[nodeId];
       if ("agent" in nodeData && state === NodeState.Queued && (nodeData.priority ?? 0) > 0) {
         // computed node
         elements.map[nodeId].data.color = colorPriority;
@@ -157,7 +156,7 @@ export const useCytoscape = (selectedGraph: GraphData) => {
 
   const createCytoscape = () => {
     try {
-      if (!cyto) {
+      if (!cyto && cytoscapeRef.current) {
         setCyto(
           cytoscape({
             container: cytoscapeRef.current,
@@ -173,7 +172,6 @@ export const useCytoscape = (selectedGraph: GraphData) => {
 
   useEffect(() => {
     if (cyto) {
-      console.log(cyto);
       cyto.on("mouseup", storePositions);
       cyto.on("touchend", storePositions);
     }
@@ -215,14 +213,19 @@ export const useCytoscape = (selectedGraph: GraphData) => {
 
   useEffect(() => {
     if (cytoscapeRef.current) {
-      createCytoscape();
       updateGraphData();
     }
-  }, [createCytoscape, updateGraphData, cytoscapeRef]);
+  }, [updateGraphData, cytoscapeRef]);
+
+  useEffect(() => {
+    if (cytoscapeRef.current) {
+      createCytoscape();
+    }
+  }, [createCytoscape, cytoscapeRef]);
+
 
   useEffect(() => {
     if (selectedGraph) {
-      console.log(cytoscapeFromGraph(selectedGraph));
       setCytoscapeData(cytoscapeFromGraph(selectedGraph));
     }
   }, [selectedGraph]);

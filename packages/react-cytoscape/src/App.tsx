@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 
 import { graphData } from "./data";
@@ -11,12 +9,11 @@ import { GraphAI } from "graphai";
 import { streamMockAgent } from "@graphai/vanilla";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  const { cytoscapeRef, updateCytoscape } = useCytoscape(graphData);
+  const [selectedGraph, __setSelectedGraph] = useState(graphData);
+  const { cytoscapeRef, updateCytoscape } = useCytoscape(selectedGraph);
 
   const run = async () => {
-    const graphai = new GraphAI(graphData, { streamMockAgent });
+    const graphai = new GraphAI(selectedGraph, { streamMockAgent });
     graphai.onLogCallback = async ({ nodeId, state }) => {
       // logs.value.push({ nodeId, state, inputs, result, errorMessage });
       updateCytoscape(nodeId, state);
