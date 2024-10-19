@@ -118,7 +118,7 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
 };
 
 export const useCytoscape = (selectedGraph: GraphData) => {
-  // const [cy, setCy] = useState<Core | null>(0);
+  const [cyto, setCyto] = useState<Core | null>(0);
   let cy: Core | null = null;
 
   const [cytoscapeData, setCytoscapeData] = useState(() => cytoscapeFromGraph(selectedGraph ?? { nodes: {} }));
@@ -161,6 +161,7 @@ export const useCytoscape = (selectedGraph: GraphData) => {
         });
         cy.on("mouseup", storePositions);
         cy.on("touchend", storePositions);
+        setCyto(cy);
       }
     } catch (error) {
       console.error(error);
@@ -168,12 +169,12 @@ export const useCytoscape = (selectedGraph: GraphData) => {
   }, []);
 
   const updateGraphData = useCallback(async () => {
-    if (cy) {
-      cy.elements().remove();
-      cy.add(cytoscapeData.elements);
+    if (cyto) {
+      cyto.elements().remove();
+      cyto.add(cytoscapeData.elements);
       const name = cytoscapeData.elements.nodes.some((node) => node.position) ? "preset" : layout;
-      cy.layout({ name }).run();
-      cy.fit();
+      cyto.layout({ name }).run();
+      cyto.fit();
       if (name === layout) {
         await sleep(400);
         storePositions();
@@ -182,15 +183,15 @@ export const useCytoscape = (selectedGraph: GraphData) => {
   }, [cytoscapeData]);
 
   const storePositions = useCallback(() => {
-    if (cy) {
-      cy.nodes().forEach((cynode: NodeSingular) => {
+    if (cyto) {
+      cyto.nodes().forEach((cynode: NodeSingular) => {
         const id = cynode.id();
         const pos = cynode.position();
         const node = cytoscapeData.elements.map[id];
         node.position = pos;
       });
     }
-  }, [cy, cytoscapeData]);
+  }, [cyto, cytoscapeData]);
 
   const resetCytoscape = useCallback(() => {
     const elements = cytoscapeData.elements;
