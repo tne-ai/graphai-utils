@@ -54,7 +54,7 @@ const streamingRequest = async (url: string, postData: any) => {
   }
 };
 
-test("test stream echo agent", async () => {
+test("test stream echo agent graph 1", async () => {
   // stream dispatcher
   await streamingRequest("http://localhost:8085/api/graph", {
     graphData: {
@@ -69,7 +69,9 @@ test("test stream echo agent", async () => {
       },
     },
   });
+});
 
+test("test stream echo agent graph 2", async () => {
   await streamingRequest("http://localhost:8085/api/graph/stream", {
     graphData: {
       version: 0.5,
