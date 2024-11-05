@@ -72,7 +72,7 @@ app.post(apiPrefix + "/nonstream/:agentId", nonStreamAgentDispatcher(agentDictio
 app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary));
 
 // graph
-app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
+app.post(apiGraphPrefix + "/", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, ""));
 
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
 

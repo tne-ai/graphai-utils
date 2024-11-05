@@ -5,6 +5,7 @@ import test from "node:test";
 import assert from "node:assert";
 
 import { DefaultEndOfStreamDelimiter } from "@/type";
+import { ChunkParser } from "./parser";
 
 async function* streamChatCompletion(url: string, postData: any) {
   const completion = await fetch(url, {
@@ -35,10 +36,9 @@ async function* streamChatCompletion(url: string, postData: any) {
   }
 }
 
-const streamingRequest = async (url: string, postData: any) => {
+const streamingRequest = async (url: string, postData: any, messages: string[]) => {
   const generator = streamChatCompletion(url, postData);
 
-  const messages = [];
   for await (const token of generator) {
     // callback to stream filter
     if (token) {
@@ -66,35 +66,74 @@ const streamingRequest = async (url: string, postData: any) => {
 
 test("test stream echo agent graph 1", async () => {
   // stream dispatcher
-  await streamingRequest("http://localhost:8085/api/graph", {
-    graphData: {
-      version: 0.5,
-      nodes: {
-        echo: {
-          agent: "streamMockAgent",
-          params: {
-            message: "hello",
+  const messages: string[] = [];
+  await streamingRequest(
+    "http://localhost:8085/api/graph",
+    {
+      graphData: {
+        version: 0.5,
+        nodes: {
+          echo: {
+            agent: "streamMockAgent",
+            params: {
+              message: "hello",
+            },
           },
         },
       },
     },
-  });
+    messages,
+  );
 });
 
 test("test stream echo agent graph 2", async () => {
-  const content = await streamingRequest("http://localhost:8085/api/graph/stream", {
-    graphData: {
-      version: 0.5,
-      nodes: {
-        echo: {
-          isResult: true,
-          agent: "streamMockAgent",
-          params: {
-            message: "hello",
+  const messages: string[] = [];
+  const content = await streamingRequest(
+    "http://localhost:8085/api/graph/stream",
+    {
+      graphData: {
+        version: 0.5,
+        nodes: {
+          echo: {
+            isResult: true,
+            agent: "streamMockAgent",
+            params: {
+              message: "hello",
+            },
+          },
+          echo2: {
+            isResult: true,
+            agent: "streamMockAgent",
+            params: {
+              message: "thank you!",
+            },
           },
         },
       },
     },
-  });
-  assert.deepStrictEqual(content, { echo: { message: "hello" } });
+    messages,
+  );
+
+  const result: Record<string, string> = {
+    echo: "",
+    echo2: "",
+  };
+  const parser = new ChunkParser();
+  messages
+    .map(parser.read)
+    .flat(2)
+    .forEach((response) => {
+      if (response.type === "agent") {
+        const nodeId = response.nodeId as string;
+        result[nodeId] = (result[nodeId] ?? "") + response?.token;
+      }
+      if (response.type === "content") {
+        assert.deepStrictEqual(response, {
+          type: "content",
+          data: { echo: { message: "hello" }, echo2: { message: "thank you!" } },
+        });
+      }
+    });
+  assert.deepStrictEqual(result, { echo: "hello", echo2: "thank you!" });
+  assert.deepStrictEqual(content, { echo: { message: "hello" }, echo2: { message: "thank you!" } });
 });
