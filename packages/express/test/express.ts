@@ -4,8 +4,6 @@ import "dotenv/config";
 import express from "express";
 import type { AgentFunctionInfoDictionary, TransactionLog } from "graphai";
 
-import { DefaultEndOfStreamDelimiter } from "@/type";
-
 import * as agents from "@graphai/agents";
 
 import {
