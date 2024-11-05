@@ -2,16 +2,21 @@ import { GraphAI } from "graphai";
 import express from "express";
 import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
+import { DefaultEndOfStreamDelimiter } from "./type";
+import { defaultContentCallback } from "./utils";
+
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, TransactionLog } from "graphai";
-import type { StreamChunkCallback } from "./type";
+import type { StreamChunkCallback, ContentCallback } from "./type";
 
 export const graphRunner = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
+  contentCallback: ContentCallback = defaultContentCallback,
+  endOfStreamDelimiter: string = DefaultEndOfStreamDelimiter,
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
-  const stream = streamGraphRunner(agentDictionary, agentFilters, streamChunkCallback, onLogCallback);
+  const stream = streamGraphRunner(agentDictionary, agentFilters, streamChunkCallback, contentCallback, endOfStreamDelimiter, onLogCallback);
   const nonStream = nonStreamGraphRunner(agentDictionary, agentFilters, onLogCallback);
 
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -27,6 +32,8 @@ export const streamGraphRunner = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
+  contentCallback: ContentCallback = defaultContentCallback,
+  endOfStreamDelimiter: string = DefaultEndOfStreamDelimiter,
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -53,9 +60,10 @@ export const streamGraphRunner = (
       const dispatcher = streamGraphRunnerInternal(agentDictionary, filterList, onLogCallback);
       const result = await dispatcher(req);
 
-      const json_data = JSON.stringify(result);
-      res.write("___END___");
-      res.write(json_data);
+      if (endOfStreamDelimiter !== "") {
+        res.write(endOfStreamDelimiter);
+      }
+      res.write(contentCallback(result));
       return res.end();
     } catch (e) {
       next(e);

@@ -15,4 +15,8 @@ export type ExpressAgentInfo = {
   stream: boolean;
 };
 
-export type StreamChunkCallback = (context: AgentFunctionContext, token: string | Record<string, string>) => void;
+export type StreamChunkCallback = <T = string | Record<string, string>>(context: AgentFunctionContext, token: T) => void;
+
+export type ContentCallback = <T = string | Record<string, string>>(token: T) => void;
+
+export const DefaultEndOfStreamDelimiter = "___END___";
