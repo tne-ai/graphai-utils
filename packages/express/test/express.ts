@@ -4,9 +4,11 @@ import "dotenv/config";
 import express from "express";
 import type { AgentFunctionInfoDictionary, TransactionLog } from "graphai";
 
+import { DefaultEndOfStreamDelimiter } from "@/type";
+
 import * as agents from "@graphai/agents";
 
-import { agentDispatcher, agentRunner, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc, graphRunner, StreamChunkCallback } from "@/index";
+import { agentDispatcher, agentRunner, streamAgentDispatcher, nonStreamAgentDispatcher, agentsList, agentDoc, graphRunner, StreamChunkCallback, ContentCallback } from "@/index";
 
 const agentDictionary: AgentFunctionInfoDictionary = agents;
 
@@ -33,6 +35,10 @@ const streamChunkCallback: StreamChunkCallback = (context, token) => {
   return JSON.stringify(data);
 };
 
+const contentCallback: ContentCallback = (data) => {
+  return JSON.stringify(data);
+};
+
 const onLogCallback = (log: TransactionLog, __isUpdate: boolean) => {
   console.log(log);
 };
@@ -56,7 +62,7 @@ app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary))
 // graph
 app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
 
-app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, onLogCallback));
+app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, DefaultEndOfStreamDelimiter, onLogCallback));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);

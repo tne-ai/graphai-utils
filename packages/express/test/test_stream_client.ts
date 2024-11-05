@@ -6,6 +6,8 @@ import test from "node:test";
 
 import { AgentFunctionContext } from "graphai";
 
+import { DefaultEndOfStreamDelimiter } from "@/type";
+
 async function* streamChatCompletion(url: string, postData: AgentFunctionContext & { agentId?: string }) {
   const { params, inputs, debugInfo, filterParams, agentId } = postData;
   const postBody = { params, inputs, debugInfo, filterParams, agentId };
@@ -46,20 +48,20 @@ const streamingRequest = async (url: string, postData: AgentFunctionContext & { 
     // callback to stream filter
     if (token) {
       messages.push(token);
-      if (messages.join("").indexOf("___END___") === -1) {
+      if (messages.join("").indexOf(DefaultEndOfStreamDelimiter) === -1) {
         console.log(token);
       }
     }
   }
 
-  const payload_data = messages.join("").split("___END___")[1];
+  const payload_data = messages.join("").split(DefaultEndOfStreamDelimiter)[1];
   if (payload_data) {
     const data = JSON.parse(payload_data);
     console.log(data);
   }
 };
 
-test("test stream echo agent", async () => {
+test("test stream echo agent/client 1", async () => {
   // stream dispatcher
   await streamingRequest("http://localhost:8085/api/agents/stream/streamMockAgent", {
     params: {
@@ -74,6 +76,9 @@ test("test stream echo agent", async () => {
     namedInputs: {},
     filterParams: {},
   });
+});
+
+test("test stream echo agent/client 2", async () => {
   // dispatcher
   await streamingRequest("http://localhost:8085/api/agents/streamMockAgent", {
     params: {
@@ -88,7 +93,9 @@ test("test stream echo agent", async () => {
     namedInputs: {},
     filterParams: {},
   });
+});
 
+test("test stream echo agent/client 3", async () => {
   // dispatcher
   await streamingRequest("http://localhost:8085/api/agents/streamMockAgent/stream", {
     params: {
@@ -103,7 +110,9 @@ test("test stream echo agent", async () => {
     namedInputs: {},
     filterParams: {},
   });
+});
 
+test("test stream echo agent/client 4", async () => {
   // runner
   await streamingRequest("http://localhost:8085/api/agents", {
     agentId: "streamMockAgent",

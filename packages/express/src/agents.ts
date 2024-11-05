@@ -2,7 +2,9 @@ import express from "express";
 
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
 import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
-import { ExpressAgentInfo, StreamChunkCallback } from "./type";
+import { ExpressAgentInfo, StreamChunkCallback, ContentCallback } from "./type";
+
+import { DefaultEndOfStreamDelimiter } from "./type";
 
 // express middleware
 // return agent list
@@ -55,6 +57,25 @@ export const agentDoc = (agentDictionary: AgentFunctionInfoDictionary, hostName:
   };
 };
 
+
+const __agentDispatcher = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  agentFilters: AgentFilterInfo[] = [],
+  streamChunkCallback?: StreamChunkCallback,
+  contentCallback?: ContentCallback,
+  isDispatch: boolean = true,
+) => {
+  const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters, isDispatch);
+  const stream = streamAgentDispatcher(agentDictionary, agentFilters, isDispatch, streamChunkCallback, contentCallback);
+  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
+    if (isStreaming) {
+      return await stream(req, res, next);
+    }
+    return await nonStram(req, res, next);
+  };
+}
+
 // express middleware
 // dispatch and run agent
 // app.post(apiPrefix + "/:agentId", agentDispatcher(agentDictionary));
@@ -63,32 +84,22 @@ export const agentDispatcher = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
+  contentCallback?: ContentCallback,
 ) => {
-  const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters, true);
-  const stream = streamAgentDispatcher(agentDictionary, agentFilters, true, streamChunkCallback);
-  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
-    if (isStreaming) {
-      return await stream(req, res, next);
-    }
-    return await nonStram(req, res, next);
-  };
+  return __agentDispatcher(agentDictionary, agentFilters, streamChunkCallback, contentCallback, true);
 };
 
 // express middleware
 // run agent
 // app.post(agentPrefix, agentRunner(agentDictionary));
 
-export const agentRunner = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = [], streamChunkCallback?: StreamChunkCallback) => {
-  const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters, false);
-  const stream = streamAgentDispatcher(agentDictionary, agentFilters, false, streamChunkCallback);
-  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
-    if (isStreaming) {
-      return await stream(req, res, next);
-    }
-    return await nonStram(req, res, next);
-  };
+export const agentRunner = (
+  agentDictionary: AgentFunctionInfoDictionary,
+  agentFilters: AgentFilterInfo[] = [],
+  streamChunkCallback?: StreamChunkCallback,
+  contentCallback?: ContentCallback,
+) => {
+  return __agentDispatcher(agentDictionary, agentFilters, streamChunkCallback, contentCallback, false);
 };
 
 // express middleware
@@ -112,6 +123,8 @@ export const streamAgentDispatcher = (
   agentFilters: AgentFilterInfo[] = [],
   isDispatch: boolean = true,
   streamChunkCallback?: StreamChunkCallback,
+  contentCallback?: ContentCallback,
+  endOfStreamDelimiter: string = DefaultEndOfStreamDelimiter,
 ) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
@@ -136,9 +149,16 @@ export const streamAgentDispatcher = (
 
       const dispatcher = agentDispatcherInternal(agentDictionary, filterList, isDispatch);
       const result = await dispatcher(req, res);
-      const json_data = JSON.stringify(result);
-      res.write("___END___");
-      res.write(json_data);
+
+      if (endOfStreamDelimiter !== "") {
+        res.write(endOfStreamDelimiter);
+      }
+      if (contentCallback) {
+        res.write(contentCallback(result));
+      } else {
+        const json_data = JSON.stringify(result);
+        res.write(json_data);
+      }
       return res.end();
     } catch (e) {
       next(e);
