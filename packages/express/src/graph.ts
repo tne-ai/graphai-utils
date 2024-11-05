@@ -3,6 +3,7 @@ import express from "express";
 import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
 import { DefaultEndOfStreamDelimiter } from "./type";
+import { defaultContentCallback } from "./utils";
 
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, TransactionLog } from "graphai";
 import type { StreamChunkCallback, ContentCallback } from "./type";
@@ -11,7 +12,7 @@ export const graphRunner = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
-  contentCallback?: ContentCallback,
+  contentCallback: ContentCallback = defaultContentCallback,
   endOfStreamDelimiter: string = DefaultEndOfStreamDelimiter,
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
@@ -31,7 +32,7 @@ export const streamGraphRunner = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
-  contentCallback?: ContentCallback,
+  contentCallback: ContentCallback = defaultContentCallback,
   endOfStreamDelimiter: string = DefaultEndOfStreamDelimiter,
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
@@ -62,12 +63,7 @@ export const streamGraphRunner = (
       if (endOfStreamDelimiter !== "") {
         res.write(endOfStreamDelimiter);
       }
-      if (contentCallback) {
-        res.write(contentCallback(result));
-      } else {
-        const json_data = JSON.stringify(result);
-        res.write(json_data);
-      }
+      res.write(contentCallback(result));
       return res.end();
     } catch (e) {
       next(e);

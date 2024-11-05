@@ -4,7 +4,8 @@ exports.nonStreamGraphRunner = exports.streamGraphRunner = exports.graphRunner =
 const graphai_1 = require("graphai");
 const agent_filters_1 = require("@graphai/agent_filters");
 const type_1 = require("./type");
-const graphRunner = (agentDictionary, agentFilters = [], streamChunkCallback, contentCallback, endOfStreamDelimiter = type_1.DefaultEndOfStreamDelimiter, onLogCallback = (__log, __isUpdate) => { }) => {
+const utils_1 = require("./utils");
+const graphRunner = (agentDictionary, agentFilters = [], streamChunkCallback, contentCallback = utils_1.defaultContentCallback, endOfStreamDelimiter = type_1.DefaultEndOfStreamDelimiter, onLogCallback = (__log, __isUpdate) => { }) => {
     const stream = (0, exports.streamGraphRunner)(agentDictionary, agentFilters, streamChunkCallback, contentCallback, endOfStreamDelimiter, onLogCallback);
     const nonStream = (0, exports.nonStreamGraphRunner)(agentDictionary, agentFilters, onLogCallback);
     return async (req, res, next) => {
@@ -16,7 +17,7 @@ const graphRunner = (agentDictionary, agentFilters = [], streamChunkCallback, co
     };
 };
 exports.graphRunner = graphRunner;
-const streamGraphRunner = (agentDictionary, agentFilters = [], streamChunkCallback, contentCallback, endOfStreamDelimiter = type_1.DefaultEndOfStreamDelimiter, onLogCallback = (__log, __isUpdate) => { }) => {
+const streamGraphRunner = (agentDictionary, agentFilters = [], streamChunkCallback, contentCallback = utils_1.defaultContentCallback, endOfStreamDelimiter = type_1.DefaultEndOfStreamDelimiter, onLogCallback = (__log, __isUpdate) => { }) => {
     return async (req, res, next) => {
         try {
             res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
@@ -42,13 +43,7 @@ const streamGraphRunner = (agentDictionary, agentFilters = [], streamChunkCallba
             if (endOfStreamDelimiter !== "") {
                 res.write(endOfStreamDelimiter);
             }
-            if (contentCallback) {
-                res.write(contentCallback(result));
-            }
-            else {
-                const json_data = JSON.stringify(result);
-                res.write(json_data);
-            }
+            res.write(contentCallback(result));
             return res.end();
         }
         catch (e) {

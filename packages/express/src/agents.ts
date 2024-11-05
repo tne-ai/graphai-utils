@@ -5,6 +5,7 @@ import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/a
 import { ExpressAgentInfo, StreamChunkCallback, ContentCallback } from "./type";
 
 import { DefaultEndOfStreamDelimiter } from "./type";
+import { defaultContentCallback } from "./utils";
 
 // express middleware
 // return agent list
@@ -57,12 +58,11 @@ export const agentDoc = (agentDictionary: AgentFunctionInfoDictionary, hostName:
   };
 };
 
-
 const __agentDispatcher = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
-  contentCallback?: ContentCallback,
+  contentCallback: ContentCallback = defaultContentCallback,
   isDispatch: boolean = true,
 ) => {
   const nonStram = nonStreamAgentDispatcher(agentDictionary, agentFilters, isDispatch);
@@ -74,7 +74,7 @@ const __agentDispatcher = (
     }
     return await nonStram(req, res, next);
   };
-}
+};
 
 // express middleware
 // dispatch and run agent
@@ -84,7 +84,7 @@ export const agentDispatcher = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
-  contentCallback?: ContentCallback,
+  contentCallback: ContentCallback = defaultContentCallback,
 ) => {
   return __agentDispatcher(agentDictionary, agentFilters, streamChunkCallback, contentCallback, true);
 };
@@ -97,7 +97,7 @@ export const agentRunner = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
-  contentCallback?: ContentCallback,
+  contentCallback: ContentCallback = defaultContentCallback,
 ) => {
   return __agentDispatcher(agentDictionary, agentFilters, streamChunkCallback, contentCallback, false);
 };
@@ -123,7 +123,7 @@ export const streamAgentDispatcher = (
   agentFilters: AgentFilterInfo[] = [],
   isDispatch: boolean = true,
   streamChunkCallback?: StreamChunkCallback,
-  contentCallback?: ContentCallback,
+  contentCallback: ContentCallback = defaultContentCallback,
   endOfStreamDelimiter: string = DefaultEndOfStreamDelimiter,
 ) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -153,12 +153,7 @@ export const streamAgentDispatcher = (
       if (endOfStreamDelimiter !== "") {
         res.write(endOfStreamDelimiter);
       }
-      if (contentCallback) {
-        res.write(contentCallback(result));
-      } else {
-        const json_data = JSON.stringify(result);
-        res.write(json_data);
-      }
+      res.write(contentCallback(result));
       return res.end();
     } catch (e) {
       next(e);
