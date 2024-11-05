@@ -2,7 +2,9 @@
 // npx ts-node -r tsconfig-paths/register test/stream_client.ts
 
 import test from "node:test";
-// import assert from "node:assert";
+import assert from "node:assert";
+
+import { DefaultEndOfStreamDelimiter } from "@/type";
 
 async function* streamChatCompletion(url: string, postData: any) {
   const completion = await fetch(url, {
@@ -41,16 +43,24 @@ const streamingRequest = async (url: string, postData: any) => {
     // callback to stream filter
     if (token) {
       messages.push(token);
-      if (messages.join("").indexOf("___END___") === -1) {
+      if (messages.join("").indexOf(DefaultEndOfStreamDelimiter) === -1) {
         console.log(token);
       }
     }
   }
+  const last = messages[messages.length - 1] as any;
+  if (last && last.indexOf(DefaultEndOfStreamDelimiter) === -1) {
+    const lastData = JSON.parse(last);
+    if (lastData.type && lastData.type === "content") {
+      return lastData.data;
+    }
+  }
 
-  const payload_data = messages.join("").split("___END___")[1];
+  const payload_data = messages.join("").split(DefaultEndOfStreamDelimiter)[1];
   if (payload_data) {
     const data = JSON.parse(payload_data);
     console.log(data);
+    return data;
   }
 };
 
@@ -72,11 +82,12 @@ test("test stream echo agent graph 1", async () => {
 });
 
 test("test stream echo agent graph 2", async () => {
-  await streamingRequest("http://localhost:8085/api/graph/stream", {
+  const content = await streamingRequest("http://localhost:8085/api/graph/stream", {
     graphData: {
       version: 0.5,
       nodes: {
         echo: {
+          isResult: true,
           agent: "streamMockAgent",
           params: {
             message: "hello",
@@ -85,4 +96,5 @@ test("test stream echo agent graph 2", async () => {
       },
     },
   });
+  assert.deepStrictEqual(content, { echo: { message: "hello" } });
 });

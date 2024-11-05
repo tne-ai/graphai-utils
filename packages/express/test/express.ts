@@ -38,6 +38,7 @@ app.use(
 
 const streamChunkCallback: StreamChunkCallback = (context, token) => {
   const data = {
+    type: "agent",
     nodeId: context.debugInfo.nodeId,
     agentId: context.debugInfo.agentId,
     token,
@@ -46,7 +47,10 @@ const streamChunkCallback: StreamChunkCallback = (context, token) => {
 };
 
 const contentCallback: ContentCallback = (data) => {
-  return JSON.stringify(data);
+  return JSON.stringify({
+    type: "content",
+    data,
+  });
 };
 
 const onLogCallback = (log: TransactionLog, __isUpdate: boolean) => {
@@ -72,7 +76,7 @@ app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary))
 // graph
 app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
 
-app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, DefaultEndOfStreamDelimiter, onLogCallback));
+app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);

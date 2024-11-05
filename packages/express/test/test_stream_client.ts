@@ -57,6 +57,7 @@ const streamingRequest = async (url: string, postData: AgentFunctionContext & { 
   const payload_data = messages.join("").split(DefaultEndOfStreamDelimiter)[1];
   if (payload_data) {
     const data = JSON.parse(payload_data);
+
     console.log(data);
   }
 };
