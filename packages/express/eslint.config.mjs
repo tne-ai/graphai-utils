@@ -28,6 +28,7 @@ export default [
         {
           argsIgnorePattern: "^__",
           varsIgnorePattern: "^__",
+          caughtErrorsIgnorePattern: "^__",
         },
       ],
       "linebreak-style": ["error", "unix"],
