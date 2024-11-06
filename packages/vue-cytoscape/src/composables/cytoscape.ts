@@ -145,7 +145,7 @@ export const useCytoscape = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
   const cytoscapeRef = ref();
 
   const updateCytoscape = async (nodeId: string, state: NodeState) => {
-    if (state === NodeState.Completed || state === NodeState.Waiting) {
+    if ([NodeState.Completed, NodeState.Waiting].includes(state)) {
       await sleep(100);
     }
     const elements = cytoscapeData.value.elements;
@@ -155,11 +155,9 @@ export const useCytoscape = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
     if ("agent" in nodeData && state === NodeState.Queued && (nodeData.priority ?? 0) > 0) {
       // computed node
       elements.map[nodeId].data.color = colorPriority;
-    } else {
-      if ("value" in nodeData && state === NodeState.Waiting) {
-        // static node
-        elements.map[nodeId].data.color = colorStatic;
-      }
+    } else if ("value" in nodeData && state === NodeState.Waiting) {
+      // static node
+      elements.map[nodeId].data.color = colorStatic;
     }
 
     cytoscapeData.value = { elements };
