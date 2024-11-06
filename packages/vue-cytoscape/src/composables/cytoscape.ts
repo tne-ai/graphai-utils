@@ -1,5 +1,7 @@
 import { Ref, ref, onMounted, watch, ComputedRef } from "vue";
-import { GraphData, NodeState, NodeData, sleep } from "graphai";
+import { GraphData, NodeState, NodeData, sleep, isObject } from "graphai";
+
+import { DataSource } from "graphai";
 
 import cytoscape, { Core, NodeSingular, NodeDefinition, EdgeDefinition, EdgeSingular } from "cytoscape";
 import klay from "cytoscape-klay";
@@ -78,10 +80,27 @@ const colorMap = {
 
 const parseInput = (input: string) => {
   // WARNING: Assuming the first character is always ":"
+  console.log(input);
   const ids = input.slice(1).split(".");
   const source = ids.shift() || "";
   const label = ids.length ? ids.join(".") : undefined;
   return { source, label };
+};
+
+export const inputs2dataSources = (inputs: any): DataSource[] => {
+  if (Array.isArray(inputs)) {
+    return inputs.map((inp) => inputs2dataSources(inp)).flat();
+  }
+  if (isObject(inputs)) {
+    return Object.values(inputs)
+      .map((input) => inputs2dataSources(input))
+      .flat();
+  }
+  return inputs;
+};
+
+export const dataSourceNodeIds = (sources: DataSource[]): string[] => {
+  return sources.filter((source: DataSource) => source.nodeId).map((source) => source.nodeId!);
 };
 
 const cytoscapeFromGraph = (graph_data: GraphData) => {
@@ -107,8 +126,7 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
       tmp.map[nodeId] = cyNode;
       if ("inputs" in node) {
         // computed node
-        const inputs = Array.isArray(node.inputs) ? node.inputs : Object.values(node.inputs || {});
-        (inputs ?? []).forEach((input: string) => {
+        inputs2dataSources(node.inputs).forEach((input: string) => {
           const { source, label } = parseInput(input);
           tmp.edges.push({
             data: {

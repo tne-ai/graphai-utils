@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/receptron/graphai_utils/tree/main/packages/vue-cytoscape#readme",
   "dependencies": {
-    "cytoscape": "^3.30.2",
+    "cytoscape": "^3.30.3",
     "cytoscape-klay": "^3.1.4"
   },
   "devDependencies": {
