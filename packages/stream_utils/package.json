@@ -21,7 +21,7 @@
   "bugs": {
     "url": "git+https://github.com/receptron/graphai_utils/issues"
   },
-  "homepage": "https://github.com/isamu/ts-template#readme",
+  "homepage": "https://github.com/receptron/graphai-utils/tree/main/packages/stream_utils",
   "devDependencies": {},
   "types": "./lib/index.d.ts",
   "directories": {
