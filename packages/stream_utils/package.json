@@ -1,0 +1,23 @@
+{
+  "name": "@receptron/stream_utils",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "eslint": "eslint src --fix",
+    "format": "prettier --write '{src,tests}/**/*.ts'",
+    "test": "node --test --require ts-node/register ./tests/test_*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/receptron/graphai_utils"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "git+https://github.com/receptron/graphai_utils/issues"
+  },
+  "homepage": "https://github.com/isamu/ts-template#readme",
+  "devDependencies": {}
+}
