@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "src/index.js",
+  "files": [
+    "./lib"
+  ],
   "scripts": {
     "build": "tsc && tsc-alias",
     "eslint": "eslint src --fix",
@@ -19,5 +22,9 @@
     "url": "git+https://github.com/receptron/graphai_utils/issues"
   },
   "homepage": "https://github.com/isamu/ts-template#readme",
-  "devDependencies": {}
+  "devDependencies": {},
+  "types": "./lib/index.d.ts",
+  "directories": {
+    "lib": "lib"
+  }
 }
