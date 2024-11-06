@@ -1,7 +1,7 @@
 import { Ref, ref, onMounted, watch, ComputedRef } from "vue";
 import { GraphData, NodeState, NodeData, sleep, isObject } from "graphai";
 
-import { DataSource } from "graphai";
+import { DataSource } from "graphai/lib/type";
 
 import cytoscape, { Core, NodeSingular, NodeDefinition, EdgeDefinition, EdgeSingular } from "cytoscape";
 import klay from "cytoscape-klay";
@@ -87,7 +87,7 @@ const parseInput = (input: string) => {
   return { source, label };
 };
 
-export const inputs2dataSources = (inputs: any): DataSource[] => {
+export const inputs2dataSources = (inputs: any): string[] => {
   if (Array.isArray(inputs)) {
     return inputs.map((inp) => inputs2dataSources(inp)).flat();
   }

@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useCytoscape = void 0;
+exports.useCytoscape = exports.dataSourceNodeIds = exports.inputs2dataSources = void 0;
 var vue_1 = require("vue");
 var graphai_1 = require("graphai");
 var cytoscape_1 = __importDefault(require("cytoscape"));
@@ -114,11 +114,28 @@ var colorMap = (_a = {},
     _a);
 var parseInput = function (input) {
     // WARNING: Assuming the first character is always ":"
+    console.log(input);
     var ids = input.slice(1).split(".");
     var source = ids.shift() || "";
     var label = ids.length ? ids.join(".") : undefined;
     return { source: source, label: label };
 };
+var inputs2dataSources = function (inputs) {
+    if (Array.isArray(inputs)) {
+        return inputs.map(function (inp) { return (0, exports.inputs2dataSources)(inp); }).flat();
+    }
+    if ((0, graphai_1.isObject)(inputs)) {
+        return Object.values(inputs)
+            .map(function (input) { return (0, exports.inputs2dataSources)(input); })
+            .flat();
+    }
+    return inputs;
+};
+exports.inputs2dataSources = inputs2dataSources;
+var dataSourceNodeIds = function (sources) {
+    return sources.filter(function (source) { return source.nodeId; }).map(function (source) { return source.nodeId; });
+};
+exports.dataSourceNodeIds = dataSourceNodeIds;
 var cytoscapeFromGraph = function (graph_data) {
     var elements = Object.keys(graph_data.nodes || {}).reduce(function (tmp, nodeId) {
         var node = graph_data.nodes[nodeId];
@@ -134,8 +151,7 @@ var cytoscapeFromGraph = function (graph_data) {
         tmp.map[nodeId] = cyNode;
         if ("inputs" in node) {
             // computed node
-            var inputs = Array.isArray(node.inputs) ? node.inputs : Object.values(node.inputs || {});
-            (inputs !== null && inputs !== void 0 ? inputs : []).forEach(function (input) {
+            (0, exports.inputs2dataSources)(node.inputs).forEach(function (input) {
                 var _a = parseInput(input), source = _a.source, label = _a.label;
                 tmp.edges.push({
                     data: {
@@ -173,7 +189,7 @@ var useCytoscape = function (selectedGraph) {
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
-                    if (!(state === graphai_1.NodeState.Completed || state === graphai_1.NodeState.Waiting)) return [3 /*break*/, 2];
+                    if (![graphai_1.NodeState.Completed, graphai_1.NodeState.Waiting].includes(state)) return [3 /*break*/, 2];
                     return [4 /*yield*/, (0, graphai_1.sleep)(100)];
                 case 1:
                     _d.sent();
@@ -187,11 +203,9 @@ var useCytoscape = function (selectedGraph) {
                         // computed node
                         elements.map[nodeId].data.color = colorPriority;
                     }
-                    else {
-                        if ("value" in nodeData && state === graphai_1.NodeState.Waiting) {
-                            // static node
-                            elements.map[nodeId].data.color = colorStatic;
-                        }
+                    else if ("value" in nodeData && state === graphai_1.NodeState.Waiting) {
+                        // static node
+                        elements.map[nodeId].data.color = colorStatic;
                     }
                     cytoscapeData.value = { elements: elements };
                     if (!(state === graphai_1.NodeState.Injected)) return [3 /*break*/, 4];
