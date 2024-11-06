@@ -11,8 +11,8 @@
   },
   "private": true,
   "devDependencies": {
-    "@graphai/agents": "^0.0.28",
-    "@graphai/vanilla": "^0.0.14",
+    "@graphai/agents": "^0.1.5",
+    "@graphai/vanilla": "^0.1.6",
     "@types/express": "^4.17.21",
     "@types/node": "^22.9.0",
     "@types/sinon": "^17.0.3",

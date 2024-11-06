@@ -29,10 +29,10 @@
     node-fetch "^2.6.7"
     web-streams-polyfill "^3.2.1"
 
-"@anthropic-ai/sdk@^0.27.3":
-  version "0.27.3"
-  resolved "https://registry.npmjs.org/@anthropic-ai/sdk/-/sdk-0.27.3.tgz"
-  integrity sha512-IjLt0gd3L4jlOfilxVXTifn42FnVffMgDC04RJK1KDZpmkBWLv0XC92MVVmkxrFZNS/7l3xWgP/I3nqtX1sQHw==
+"@anthropic-ai/sdk@^0.30.1":
+  version "0.30.1"
+  resolved "https://registry.yarnpkg.com/@anthropic-ai/sdk/-/sdk-0.30.1.tgz#fbd13ae3d94525fb4453a07d07b2b94e168b33e7"
+  integrity sha512-nuKvp7wOIz6BFei8WrTdhmSsx5mwnArYyJgh4+vYu3V4J0Ltb8Xm3odPm51n1aSI0XxNCrDl7O88cxCtUdAkaw==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -437,10 +437,10 @@
   dependencies:
     levn "^0.4.1"
 
-"@google/generative-ai@^0.17.1":
-  version "0.17.2"
-  resolved "https://registry.npmjs.org/@google/generative-ai/-/generative-ai-0.17.2.tgz"
-  integrity sha512-TRKwCCqFe8JawNpvwk5FNcE9CQGUUjROiUxpH+uUR46sjLkgsR2v4+clu2axxnzEd9rnMpUNAJriUXeEu0zFBw==
+"@google/generative-ai@^0.21.0":
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/@google/generative-ai/-/generative-ai-0.21.0.tgz#a5011aab9e6082e706937b26ef23445933fa0d15"
+  integrity sha512-7XhUbtnlkSEZK15kN3t+tzIMxsbKm/dSkKBFalj+20NvPKe1kBY7mR2P7vuijEn+f06z5+A8bVGKO0v39cr6Wg==
 
 "@graphai/agent_filters@^0.0.6":
   version "0.0.6"
@@ -454,96 +454,96 @@
   resolved "https://registry.npmjs.org/@graphai/agent_utils/-/agent_utils-0.0.2.tgz"
   integrity sha512-pAB45O/YQ/vQQoIRNtlgWGTVNn1f1DrpzRj7WzdsAtTOim7gkr6Mjp5QR9Ue+U/xVdgNRDRws6qLm1CYin/VWw==
 
-"@graphai/agents@^0.0.28":
-  version "0.0.28"
-  resolved "https://registry.npmjs.org/@graphai/agents/-/agents-0.0.28.tgz"
-  integrity sha512-OGfQi1AzATHCvb7IJLZGyAwoqa9BeKPFFZ7MAz3INafw/blcD2gWuiLOB34Y1hf0BWYLnJ63MPbO4QIPdUiJ8w==
+"@graphai/agents@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@graphai/agents/-/agents-0.1.5.tgz#3266dde695fa5ac90ed8fee7f61303de4690e19e"
+  integrity sha512-TJnxEa+rLyeKWgifZvJql/UtJf7CnKwhRkkxgZpHCBCYxDVtWWn1/kSw6kwMYC2ScFDhC7rSgGhXtDyUqfc7tA==
   dependencies:
-    "@graphai/data_agents" "^0.0.2"
-    "@graphai/input_agents" "^0.0.3"
-    "@graphai/llm_agents" "^0.0.21"
-    "@graphai/service_agents" "^0.0.4"
-    "@graphai/sleeper_agents" "^0.0.2"
-    "@graphai/vanilla" "^0.0.14"
+    "@graphai/data_agents" "^0.1.0"
+    "@graphai/input_agents" "^0.1.1"
+    "@graphai/llm_agents" "^0.1.2"
+    "@graphai/service_agents" "^0.1.0"
+    "@graphai/sleeper_agents" "^0.1.0"
+    "@graphai/vanilla" "^0.1.6"
 
-"@graphai/anthropic_agent@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.npmjs.org/@graphai/anthropic_agent/-/anthropic_agent-0.0.7.tgz"
-  integrity sha512-nmcw9aqCyYKEBUPu5x9pGwPbQ9nXgxaySinJj8P3xdI6m/Gk16uhz4GcPBsPKAB4DuDncAE3P9nf5wYwTm0eEQ==
+"@graphai/anthropic_agent@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@graphai/anthropic_agent/-/anthropic_agent-0.1.1.tgz#0d299df3e1aad3364607f983d9b9b10cf2b27571"
+  integrity sha512-pnGtFGx/4IE34bHusfxVBJJzLqCAlTgNZEDs/ymcWdF9I4MV76lbeCEJXLbcULkwa2VM8bDp48qx2JDEad9XPQ==
   dependencies:
-    "@anthropic-ai/sdk" "^0.27.3"
+    "@anthropic-ai/sdk" "^0.30.1"
     "@graphai/llm_utils" "^0.0.2"
 
-"@graphai/data_agents@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/@graphai/data_agents/-/data_agents-0.0.2.tgz"
-  integrity sha512-7QTANNSzy2/GtFn4L6npkI5WJnHseYUgodgAzHbicWplLSoZStiKsLsa0eLy9cSwT4GW/0hKTX/Bo4R5RP2dJg==
+"@graphai/data_agents@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@graphai/data_agents/-/data_agents-0.1.0.tgz#4ef88ac06d5bab14d6a846b286417362b3e91bc4"
+  integrity sha512-G1c2gl+RQiz27tsJ/K9xWEjaV0yLntHln8m7BiEwH7hJ+vGSoBeVswaP5YzyZRkt6hvqTtm/EZij9FsRLYs+Mw==
   dependencies:
     deepmerge "^4.3.1"
 
-"@graphai/gemini_agent@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.npmjs.org/@graphai/gemini_agent/-/gemini_agent-0.0.5.tgz"
-  integrity sha512-t/cbJ5zet2Cz5et3hzs+60Gbf5HOaK+D3ZsS9KoCgqAc+QnRgQ7wDby5sTDlTZgBayBRHeIJMD8HS0G7sLvKGQ==
+"@graphai/gemini_agent@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@graphai/gemini_agent/-/gemini_agent-0.1.0.tgz#9948e8fa57dbf8e7d3ebf1e499100cea399af931"
+  integrity sha512-GVEbk/ZODiwa5nlXxUNnA+slNPi6nB/az9OHD67Jc1FUCCc9q9TXXi3XhQY9QBIz8j/iaB6KcE4bFKltnek+lA==
   dependencies:
-    "@google/generative-ai" "^0.17.1"
+    "@google/generative-ai" "^0.21.0"
     "@graphai/llm_utils" "^0.0.2"
 
-"@graphai/groq_agent@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.npmjs.org/@graphai/groq_agent/-/groq_agent-0.0.7.tgz"
-  integrity sha512-CFsdLNaZdq3em3eLGGtdLCL68ZpaCmX4NIFlNmrqfv4lnu0IHfraRo6C96O7sNhmyG9eIDKKXl4NnDdR2kY9JQ==
+"@graphai/groq_agent@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@graphai/groq_agent/-/groq_agent-0.1.2.tgz#dbddb98af2da7fdd7d1e282a2739518444a2d315"
+  integrity sha512-CNVSnXl/a3gOF7QUk7W4Z1kYHOath0ex0pESkdQ+dCIKCj1EVnGlbceEZ9BcSLHGNClIffRiKnfUPcy2nSpaSQ==
   dependencies:
     "@graphai/llm_utils" "^0.0.2"
     groq-sdk "^0.7.0"
 
-"@graphai/input_agents@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.npmjs.org/@graphai/input_agents/-/input_agents-0.0.3.tgz"
-  integrity sha512-6aEJ+lEpqK8j97HBfUV66EWkRDNOpLL9EzL/+QOtDN9bvWzv8reWdWmnGUcRklJoorqnP3mEYaHp42jb0X2CkA==
+"@graphai/input_agents@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@graphai/input_agents/-/input_agents-0.1.1.tgz#5f1356b8560fc2c7f6914311f1051a5068dc081c"
+  integrity sha512-5jt7LgREScAT9t7CFkDygZ6CIGgHbeTXHRY3+SFPwHMxrWTzcVoj1W3Sn31j7J6a4JxukFxK8CbX7fZAQLzXgg==
   dependencies:
     "@inquirer/prompts" "^5.0.0"
 
-"@graphai/llm_agents@^0.0.21":
-  version "0.0.21"
-  resolved "https://registry.npmjs.org/@graphai/llm_agents/-/llm_agents-0.0.21.tgz"
-  integrity sha512-WX15MyKTuDLZwp/UxMV9rEUf6XK3kLTJzJqD1fEqOyJ4F2q3OKiAOPYIq1MtkoiUd3l8YDFjrdWEjYHowqk7Iw==
+"@graphai/llm_agents@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@graphai/llm_agents/-/llm_agents-0.1.2.tgz#bc9c187a4f3f6534e3b963eb32c229f6adbfbbb2"
+  integrity sha512-QW/yYIijh9BkVCveekLO7dL6ymi9BFH5UslGoKsLx7iqgGR2/j1vLnEx01Xxwd0XiueZICNiyXqdc3a7VkY++Q==
   dependencies:
-    "@graphai/anthropic_agent" "^0.0.7"
-    "@graphai/gemini_agent" "^0.0.5"
-    "@graphai/groq_agent" "^0.0.7"
-    "@graphai/openai_agent" "^0.0.9"
-    "@graphai/replicate_agent" "^0.0.3"
+    "@graphai/anthropic_agent" "^0.1.1"
+    "@graphai/gemini_agent" "^0.1.0"
+    "@graphai/groq_agent" "^0.1.2"
+    "@graphai/openai_agent" "^0.1.2"
+    "@graphai/replicate_agent" "^0.1.0"
     "@graphai/slashgpt_agent" "^0.0.5"
-    tiktoken "^1.0.16"
+    tiktoken "^1.0.17"
 
 "@graphai/llm_utils@^0.0.2":
   version "0.0.2"
   resolved "https://registry.npmjs.org/@graphai/llm_utils/-/llm_utils-0.0.2.tgz"
   integrity sha512-V8mFEgPjnyS6PVdiIo5ug4WExgTh4qJcqkuqJ2iyFkRJgWL+R4IF/MRxt0BVgVjpOwjeXjzYkRYhJZ6GD6xIdg==
 
-"@graphai/openai_agent@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.npmjs.org/@graphai/openai_agent/-/openai_agent-0.0.9.tgz"
-  integrity sha512-wj0VmApfehBOF703BCm2mJPmJdNxRTQVMvmOyDiuW1mVK/3Ly9C4+ct0lc5aKZVbv3YmsUS2rGr+0uMlYAIMaQ==
+"@graphai/openai_agent@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@graphai/openai_agent/-/openai_agent-0.1.2.tgz#1259eb6726867344facd89f0ed40eedee2a6123e"
+  integrity sha512-/+b4Mkkez3iLbj2T6tU3TD/CbnRpTuTTlYUoGf/2mD898n+d07JYwYjRfJ5wwu1REQYH4J51awgi4xtOssYTrg==
   dependencies:
     "@graphai/llm_utils" "^0.0.2"
-    openai "^4.61.0"
-    tiktoken "^1.0.16"
+    openai "^4.70.2"
+    tiktoken "^1.0.17"
 
-"@graphai/replicate_agent@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.npmjs.org/@graphai/replicate_agent/-/replicate_agent-0.0.3.tgz"
-  integrity sha512-3bR8FCT2ZiI6jQ0xkdWs3B4t55b/ROBHQ0LhEiFjFjq4hVoFmBsZunPhL2koDOpYECVeQwx7wiEq5RMqvEAiMw==
+"@graphai/replicate_agent@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@graphai/replicate_agent/-/replicate_agent-0.1.0.tgz#2e4aa4ae1d96538050406e86c6a92662862ee16b"
+  integrity sha512-e4aaXpU+j8gcDWTw7ulnE8mAltDyfyzHnEcMIHipDI66ppJ0F8+V/3GVk/Kwd47JK79HQgBuzYwySv8GqFV38g==
   dependencies:
     "@graphai/llm_utils" "^0.0.2"
-    replicate "^0.32.1"
-    tiktoken "^1.0.16"
+    replicate "^1.0.1"
+    tiktoken "^1.0.17"
 
-"@graphai/service_agents@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.npmjs.org/@graphai/service_agents/-/service_agents-0.0.4.tgz"
-  integrity sha512-3A3kcBrugXvP5LzhqsPUsr5t+xtqgcjBRU7bcRnKj6XG/1YANXMNyCVUi2txUHON/lmRSQAPh2TSQQb2sFoZxw==
+"@graphai/service_agents@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@graphai/service_agents/-/service_agents-0.1.0.tgz#8b226dbea4ab4f850eb6db2968a2829140ef7016"
+  integrity sha512-W8SuOz2l5y/SWGPKKFNPYisjEcnPSQufZ3t5zRJ17wT9X6cqHSNo0gwBfnxBZGE4m93OHSvnStogUE64aM/luw==
   dependencies:
     "@types/xml2js" "^0.4.14"
     deepmerge "^4.3.1"
@@ -557,17 +557,17 @@
   dependencies:
     slashgpt "^0.1.4"
 
-"@graphai/sleeper_agents@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/@graphai/sleeper_agents/-/sleeper_agents-0.0.2.tgz"
-  integrity sha512-i1kUwGgGdCK0hUTuzgPdN9R3HyIp611KgnUjOn3Yuh8jcL5oPTGy45ROCGoiZsalAe3jrJYHb/LyhfCxGNq1ug==
+"@graphai/sleeper_agents@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@graphai/sleeper_agents/-/sleeper_agents-0.1.0.tgz#f5d2f1fae3b798648acbeccec87bf94ea96951b0"
+  integrity sha512-XC5IdgYsPuKRQGCF7bIp5iYjKL55EujZ/gvwDFkioA7V1ld/QGVi7/pW0sIveg5sWgRfDcMpGKvRixtKbkcjHw==
   dependencies:
     deepmerge "^4.3.1"
 
-"@graphai/vanilla@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.npmjs.org/@graphai/vanilla/-/vanilla-0.0.14.tgz"
-  integrity sha512-c/rvY3opbTx2kB4fr16iVPasYLRjDItq8ioTWLS5lNweYeUAvvRMxbUFN/kmCWhxBAeV0vQyGeqMVs8prfPSfw==
+"@graphai/vanilla@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@graphai/vanilla/-/vanilla-0.1.6.tgz#c98c91969c680218407b17b882b19a1986a58f34"
+  integrity sha512-6R/trMvEbbOf2sutc+QE6mGvc6vhrH037lY5nndXnT4I925w/X+XJ6qNjHtEnSb0E4ULuHvX94zwr1FQB6FMMw==
   dependencies:
     "@graphai/agent_utils" "0.0.2"
 
@@ -1124,10 +1124,18 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18.3.10":
+"@types/react@*":
   version "18.3.11"
   resolved "https://registry.npmjs.org/@types/react/-/react-18.3.11.tgz"
   integrity sha512-r6QZ069rFTjrEYgFdOck1gK7FLVsgJE7tTz0pQBczlBNUhBNk0MQH4UbnFSwjpQLMkLzgqvBBa+qGpLje16eTQ==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^3.0.2"
+
+"@types/react@^18.3.12":
+  version "18.3.12"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.12.tgz#99419f182ccd69151813b7ee24b792fe08774f60"
+  integrity sha512-D2wOSq/d6Agt28q7rSI3jhU7G6aiuzljDGZ2hTZHIkrTLUI+AF3WMeKkEZ9nN2fkBAlcktT6vcZjDFiIhMYEQw==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -1862,10 +1870,10 @@ cytoscape-klay@^3.1.4:
   dependencies:
     klayjs "^0.4.1"
 
-cytoscape@^3.30.2:
-  version "3.30.2"
-  resolved "https://registry.npmjs.org/cytoscape/-/cytoscape-3.30.2.tgz"
-  integrity sha512-oICxQsjW8uSaRmn4UK/jkczKOqTrVqt5/1WL0POiJUT2EKNc9STM4hYFHv917yu55aTBMFNRzymlJhVAiWPCxw==
+cytoscape@^3.30.3:
+  version "3.30.3"
+  resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.30.3.tgz#1b2726bbfa6673f643488a81147354841c252352"
+  integrity sha512-HncJ9gGJbVtw7YXtIs3+6YAFSSiKsom0amWc33Z7QbylbY2JGMrA0yz4EwrdTScZxnwclXeEZHzO5pxoy0ZE4g==
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -3066,10 +3074,10 @@ openai@^4.53.0:
     formdata-node "^4.3.2"
     node-fetch "^2.6.7"
 
-openai@^4.61.0:
-  version "4.65.0"
-  resolved "https://registry.npmjs.org/openai/-/openai-4.65.0.tgz"
-  integrity sha512-LfA4KUBpH/8rA3vjCQ74LZtdK/8wx9W6Qxq8MHqEdImPsN1XPQ2ompIuJWkKS6kXt5Cs5i8Eb65IIo4M7U+yeQ==
+openai@^4.70.2:
+  version "4.71.1"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.71.1.tgz#f26bf5db00d75703676d80bf0ae7cb7674e41eac"
+  integrity sha512-C6JNMaQ1eijM0lrjiRUL3MgThVP5RdwNAghpbJFdW0t11LzmyqON8Eh8MuUuEZ+CeD6bgYl2Fkn2BoptVxv9Ug==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -3380,10 +3388,10 @@ replicate@^0.31.1:
   optionalDependencies:
     readable-stream ">=4.0.0"
 
-replicate@^0.32.1:
-  version "0.32.1"
-  resolved "https://registry.npmjs.org/replicate/-/replicate-0.32.1.tgz"
-  integrity sha512-OmzyDVx3P9FXVXcFrzWft8XW8LjyGo65qRCwUPJwbjBZS4Z89pQFX+ZUfYlHwcfIHGtP4/Pf0uis+XJiznKacQ==
+replicate@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/replicate/-/replicate-1.0.1.tgz#c1f4bdd4fc29bbaf44af07662d23a858409421e9"
+  integrity sha512-EY+rK1YR5bKHcM9pd6WyaIbv6m2aRIvHfHDh51j/LahlHTLKemTYXF6ptif2sLa+YospupAsIoxw8Ndt5nI3vg==
   optionalDependencies:
     readable-stream ">=4.0.0"
 
@@ -3737,10 +3745,10 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-tiktoken@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.npmjs.org/tiktoken/-/tiktoken-1.0.16.tgz"
-  integrity sha512-hRcORIGF2YlAgWx3nzrGJOrKSJwLoc81HpXmMQk89632XAgURc7IeV2FgQ2iXo9z/J96fCvpsHg2kWoHcbj9fg==
+tiktoken@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/tiktoken/-/tiktoken-1.0.17.tgz#53b9b38b8b1a9c6996cded21f6ef0ff473fae265"
+  integrity sha512-UuFHqpy/DxOfNiC3otsqbx3oS6jr5uKdQhB/CvDEroZQbVHt+qAK+4JbIooabUWKU9g6PpsFylNu9Wcg4MxSGA==
 
 tmp@^0.0.33:
   version "0.0.33"
