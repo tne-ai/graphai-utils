@@ -5,7 +5,7 @@ import test from "node:test";
 import assert from "node:assert";
 
 import { DefaultEndOfStreamDelimiter } from "@/type";
-import { ChunkParser } from "./parser";
+import { ChunkParser } from "@receptron/stream_utils";
 
 async function* streamChatCompletion(url: string, postData: any) {
   const completion = await fetch(url, {
