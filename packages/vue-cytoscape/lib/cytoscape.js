@@ -129,6 +129,12 @@ var inputs2dataSources = function (inputs) {
             .map(function (input) { return (0, exports.inputs2dataSources)(input); })
             .flat();
     }
+    if (typeof inputs === "string") {
+        var templateMatch = Array.from(inputs.matchAll(/\${(:[^}]+)}/g)).map(function (m) { return m[1]; });
+        if (templateMatch.length > 0) {
+            return (0, exports.inputs2dataSources)(templateMatch);
+        }
+    }
     return inputs;
 };
 exports.inputs2dataSources = inputs2dataSources;

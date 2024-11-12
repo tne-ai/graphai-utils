@@ -97,7 +97,7 @@ export const inputs2dataSources = (inputs: any): string[] => {
       .flat();
   }
   if (typeof inputs === "string") {
-    const templateMatch = [...inputs.matchAll(/\${(:[^}]+)}/g)].map((m) => m[1]);
+    const templateMatch = Array.from(inputs.matchAll(/\${(:[^}]+)}/g)).map((m) => m[1]);
     if (templateMatch.length > 0) {
       return inputs2dataSources(templateMatch);
     }
