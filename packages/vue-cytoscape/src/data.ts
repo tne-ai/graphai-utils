@@ -49,7 +49,7 @@ export const graphData = {
     },
     responseToCustomer: {
       agent: "streamMockAgent",
-      inputs: { text: ":data2speech.data" },
+      inputs: { text: "${:data2speech.data}" },
       params: {
         message: "response",
       },
