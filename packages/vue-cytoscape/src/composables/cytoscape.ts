@@ -80,7 +80,6 @@ const colorMap = {
 
 const parseInput = (input: string) => {
   // WARNING: Assuming the first character is always ":"
-  console.log(input);
   const ids = input.slice(1).split(".");
   const source = ids.shift() || "";
   const label = ids.length ? ids.join(".") : undefined;
@@ -169,6 +168,7 @@ export const useCytoscape = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
 
   const cytoscapeData = ref(cytoscapeFromGraph(selectedGraph.value ?? { nodes: {} }));
   const cytoscapeRef = ref();
+  const zoomingEnabled = ref(true);
 
   const updateCytoscape = async (nodeId: string, state: NodeState) => {
     if ([NodeState.Completed, NodeState.Waiting].includes(state)) {
@@ -273,9 +273,48 @@ export const useCytoscape = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
     updateGraphData();
   });
 
+  const layoutCytoscape = (key: string) => {
+    if (cy) {
+      const positions = cy.nodes().map((node) => {
+        return {
+          id: node.id(),
+          position: node.position(),
+        };
+      });
+      console.log(JSON.stringify(positions));
+      localStorage.setItem("layoutData-" + key, JSON.stringify(positions));
+    }
+  };
+
+  const loadLayout = (key: string) => {
+    const savedLayoutData = localStorage.getItem("layoutData-" + key);
+    if (savedLayoutData) {
+      const positions = JSON.parse(savedLayoutData);
+      positions.forEach((data: { id: string; position: Position }) => {
+        if (cy) {
+          const node = cy.getElementById(data.id);
+          if (node) {
+            node.position(data.position);
+          }
+        }
+      });
+    }
+  };
+
+  watch(zoomingEnabled, (value) => {
+    if (cy) {
+      cy.zoomingEnabled(value);
+    }
+  });
+
   return {
     cytoscapeRef,
     updateCytoscape,
     resetCytoscape,
+
+    layoutCytoscape,
+    loadLayout,
+
+    zoomingEnabled,
   };
 };
