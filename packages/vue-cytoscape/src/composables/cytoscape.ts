@@ -3,7 +3,7 @@ import { GraphData, NodeState, NodeData, sleep, isObject } from "graphai";
 
 import { DataSource } from "graphai/lib/type";
 
-import cytoscape, { Core, NodeSingular, NodeDefinition, EdgeDefinition, EdgeSingular } from "cytoscape";
+import cytoscape, { Core, NodeSingular, NodeDefinition, EdgeDefinition, EdgeSingular, Position } from "cytoscape";
 import klay from "cytoscape-klay";
 
 cytoscape.use(klay);

@@ -7,4 +7,7 @@ export declare const useCytoscape: (selectedGraph: ComputedRef<GraphData> | Ref<
     cytoscapeRef: Ref<any, any>;
     updateCytoscape: (nodeId: string, state: NodeState) => Promise<void>;
     resetCytoscape: () => void;
+    layoutCytoscape: (key: string) => void;
+    loadLayout: (key: string) => void;
+    zoomingEnabled: Ref<boolean, boolean>;
 };

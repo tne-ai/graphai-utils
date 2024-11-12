@@ -114,7 +114,6 @@ var colorMap = (_a = {},
     _a);
 var parseInput = function (input) {
     // WARNING: Assuming the first character is always ":"
-    console.log(input);
     var ids = input.slice(1).split(".");
     var source = ids.shift() || "";
     var label = ids.length ? ids.join(".") : undefined;
@@ -191,6 +190,7 @@ var useCytoscape = function (selectedGraph) {
     var cy = null;
     var cytoscapeData = (0, vue_1.ref)(cytoscapeFromGraph((_a = selectedGraph.value) !== null && _a !== void 0 ? _a : { nodes: {} }));
     var cytoscapeRef = (0, vue_1.ref)();
+    var zoomingEnabled = (0, vue_1.ref)(true);
     var updateCytoscape = function (nodeId, state) { return __awaiter(void 0, void 0, void 0, function () {
         var elements, graph, nodeData;
         var _a, _b, _c;
@@ -309,10 +309,44 @@ var useCytoscape = function (selectedGraph) {
         createCytoscape();
         updateGraphData();
     });
+    var layoutCytoscape = function (key) {
+        if (cy) {
+            var positions = cy.nodes().map(function (node) {
+                return {
+                    id: node.id(),
+                    position: node.position(),
+                };
+            });
+            console.log(JSON.stringify(positions));
+            localStorage.setItem("layoutData-" + key, JSON.stringify(positions));
+        }
+    };
+    var loadLayout = function (key) {
+        var savedLayoutData = localStorage.getItem("layoutData-" + key);
+        if (savedLayoutData) {
+            var positions = JSON.parse(savedLayoutData);
+            positions.forEach(function (data) {
+                if (cy) {
+                    var node = cy.getElementById(data.id);
+                    if (node) {
+                        node.position(data.position);
+                    }
+                }
+            });
+        }
+    };
+    (0, vue_1.watch)(zoomingEnabled, function (value) {
+        if (cy) {
+            cy.zoomingEnabled(value);
+        }
+    });
     return {
         cytoscapeRef: cytoscapeRef,
         updateCytoscape: updateCytoscape,
         resetCytoscape: resetCytoscape,
+        layoutCytoscape: layoutCytoscape,
+        loadLayout: loadLayout,
+        zoomingEnabled: zoomingEnabled,
     };
 };
 exports.useCytoscape = useCytoscape;
