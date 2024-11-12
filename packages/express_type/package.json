@@ -23,7 +23,7 @@
   "homepage": "https://github.com/receptron/graphai_utils/tree/main/packages/express#readme",
   "devDependencies": {},
   "dependencies": {
-    "graphai": "^0.5.14"
+    "graphai": "^0.5.16"
   },
   "types": "./lib/type.d.ts",
   "directories": {
