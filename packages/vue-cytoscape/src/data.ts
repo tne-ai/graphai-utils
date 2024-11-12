@@ -65,7 +65,6 @@ export const graphData = {
   },
 };
 
-
 export const graphChat = {
   version: 0.5,
   loop: {

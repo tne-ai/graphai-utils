@@ -158,14 +158,16 @@ var cytoscapeFromGraph = function (graph_data) {
         if ("inputs" in node) {
             // computed node
             (0, exports.inputs2dataSources)(node.inputs).forEach(function (input) {
-                var _a = parseInput(input), source = _a.source, label = _a.label;
-                tmp.edges.push({
-                    data: {
-                        source: source,
-                        target: nodeId,
-                        label: label,
-                    },
-                });
+                if (input[0] === ":") {
+                    var _a = parseInput(input), source = _a.source, label = _a.label;
+                    tmp.edges.push({
+                        data: {
+                            source: source,
+                            target: nodeId,
+                            label: label,
+                        },
+                    });
+                }
             });
         }
         if ("update" in node && node.update) {
