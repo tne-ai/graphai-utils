@@ -133,14 +133,16 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
       if ("inputs" in node) {
         // computed node
         inputs2dataSources(node.inputs).forEach((input: string) => {
-          const { source, label } = parseInput(input);
-          tmp.edges.push({
-            data: {
-              source,
-              target: nodeId,
-              label,
-            },
-          });
+          if (input[0] === ":") {
+            const { source, label } = parseInput(input);
+            tmp.edges.push({
+              data: {
+                source,
+                target: nodeId,
+                label,
+              },
+            });
+          }
         });
       }
       if ("update" in node && node.update) {
