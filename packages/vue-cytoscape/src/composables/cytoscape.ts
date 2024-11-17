@@ -152,32 +152,35 @@ const node2cyEdge = (node: NodeData, nodeId: string) => {
   return edges;
 };
 
-const cytoscapeFromGraph = (graph_data: GraphData) => {
-  const elements = Object.keys(graph_data.nodes || {}).reduce(
-    (
-      tmp: {
-        nodes: NodeDefinition[];
-        edges: EdgeDefinition[];
-        map: Record<string, NodeDefinition>;
-      },
-      nodeId,
-    ) => {
+const cytoscapeFromGraph = (_graph_data: GraphData) => {
+  const elements: {
+    nodes: NodeDefinition[];
+    edges: EdgeDefinition[];
+    map: Record<string, NodeDefinition>;
+  } = { nodes: [], edges: [], map: {} };
+
+  const toGraph = (graph_data: GraphData) => {
+    Object.keys(graph_data.nodes || {}).forEach((nodeId) => {
       const node: NodeData = graph_data.nodes[nodeId];
       const cyNode = node2cyNode(node, nodeId);
-      tmp.nodes.push(cyNode);
-      tmp.map[nodeId] = cyNode;
+      elements.nodes.push(cyNode);
+      elements.map[nodeId] = cyNode;
 
       node2cyEdge(node, nodeId).forEach((edge) => {
-        tmp.edges.push(edge);
+        elements.edges.push(edge);
       });
       // nested
       if ("agent" in node && node.agent === "nestedAgent") {
-        console.log(node.graph);
+        const graph = { ...node.graph };
+        Object.keys(node.inputs).forEach((key) => {
+          graph.nodes[key] = { value: "dummy" };
+        });
+        toGraph(node.graph);
       }
-      return tmp;
-    },
-    { nodes: [], edges: [], map: {} },
-  );
+    });
+  };
+  toGraph(_graph_data);
+
   return { elements };
 };
 
