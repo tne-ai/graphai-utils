@@ -108,6 +108,50 @@ export const dataSourceNodeIds = (sources: DataSource[]): string[] => {
   return sources.filter((source: DataSource) => source.nodeId).map((source) => source.nodeId!);
 };
 
+const node2cyNode = (node: NodeData, nodeId: string) => {
+  const isStatic = "value" in node;
+  const cyNode = {
+    data: {
+      id: nodeId,
+      color: isStatic ? colorStatic : colorMap[NodeState.Waiting],
+      isStatic,
+    },
+  };
+  return cyNode;
+};
+
+const node2cyEdge = (node: NodeData, nodeId: string) => {
+  const edges: EdgeDefinition[] = [];
+  if ("inputs" in node) {
+    // computed node
+    inputs2dataSources(node.inputs).forEach((input: string) => {
+      if (input[0] === ":") {
+        const { source, label } = parseInput(input);
+        edges.push({
+          data: {
+            source,
+            target: nodeId,
+            label,
+          },
+        });
+      }
+    });
+  }
+  if ("update" in node && node.update) {
+    // static node
+    const { source, label } = parseInput(node.update);
+    edges.push({
+      data: {
+        source,
+        target: nodeId,
+        isUpdate: true,
+        label,
+      },
+    });
+  }
+  return edges;
+};
+
 const cytoscapeFromGraph = (graph_data: GraphData) => {
   const elements = Object.keys(graph_data.nodes || {}).reduce(
     (
@@ -119,42 +163,16 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
       nodeId,
     ) => {
       const node: NodeData = graph_data.nodes[nodeId];
-      const isStatic = "value" in node;
-      const cyNode = {
-        data: {
-          id: nodeId,
-          color: isStatic ? colorStatic : colorMap[NodeState.Waiting],
-          isStatic,
-        },
-      };
+      const cyNode = node2cyNode(node, nodeId);
       tmp.nodes.push(cyNode);
       tmp.map[nodeId] = cyNode;
-      if ("inputs" in node) {
-        // computed node
-        inputs2dataSources(node.inputs).forEach((input: string) => {
-          if (input[0] === ":") {
-            const { source, label } = parseInput(input);
-            tmp.edges.push({
-              data: {
-                source,
-                target: nodeId,
-                label,
-              },
-            });
-          }
-        });
-      }
-      if ("update" in node && node.update) {
-        // static node
-        const { source, label } = parseInput(node.update);
-        tmp.edges.push({
-          data: {
-            source,
-            target: nodeId,
-            isUpdate: true,
-            label,
-          },
-        });
+
+      node2cyEdge(node, nodeId).forEach((edge) => {
+        tmp.edges.push(edge);
+      });
+      // nested
+      if ("agent" in node && node.agent === "nestedAgent") {
+        console.log(node.graph);
       }
       return tmp;
     },
