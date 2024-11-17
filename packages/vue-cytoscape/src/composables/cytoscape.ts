@@ -171,11 +171,12 @@ const cytoscapeFromGraph = (_graph_data: GraphData) => {
       });
       // nested
       if ("agent" in node && node.agent === "nestedAgent") {
-        const graph = { ...node.graph };
+        
+        const graph = typeof node.graph === "string" ? JSON.parse(node.graph) : { ...node.graph };
         Object.keys(node.inputs).forEach((key) => {
           graph.nodes[key] = { value: "dummy" };
         });
-        toGraph(node.graph);
+        toGraph(graph);
       }
     });
   };
