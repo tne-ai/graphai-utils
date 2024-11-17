@@ -13,7 +13,7 @@
 import { defineComponent, ref } from "vue";
 
 import { GraphAI } from "graphai";
-import { streamMockAgent } from "@graphai/vanilla";
+import * as vanilla from "@graphai/vanilla";
 
 import { graphData } from "./data";
 
@@ -25,7 +25,7 @@ export default defineComponent({
     const { updateCytoscape, cytoscapeRef } = useCytoscape(selectdGraph);
 
     const run = async () => {
-      const graphai = new GraphAI(graphData, { streamMockAgent });
+      const graphai = new GraphAI(graphData, vanilla);
       graphai.onLogCallback = async ({ nodeId, state }) => {
         // logs.value.push({ nodeId, state, inputs, result, errorMessage });
         updateCytoscape(nodeId, state);

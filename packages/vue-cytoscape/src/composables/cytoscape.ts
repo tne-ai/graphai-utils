@@ -108,58 +108,80 @@ export const dataSourceNodeIds = (sources: DataSource[]): string[] => {
   return sources.filter((source: DataSource) => source.nodeId).map((source) => source.nodeId!);
 };
 
-const cytoscapeFromGraph = (graph_data: GraphData) => {
-  const elements = Object.keys(graph_data.nodes || {}).reduce(
-    (
-      tmp: {
-        nodes: NodeDefinition[];
-        edges: EdgeDefinition[];
-        map: Record<string, NodeDefinition>;
-      },
-      nodeId,
-    ) => {
-      const node: NodeData = graph_data.nodes[nodeId];
-      const isStatic = "value" in node;
-      const cyNode = {
-        data: {
-          id: nodeId,
-          color: isStatic ? colorStatic : colorMap[NodeState.Waiting],
-          isStatic,
-        },
-      };
-      tmp.nodes.push(cyNode);
-      tmp.map[nodeId] = cyNode;
-      if ("inputs" in node) {
-        // computed node
-        inputs2dataSources(node.inputs).forEach((input: string) => {
-          if (input[0] === ":") {
-            const { source, label } = parseInput(input);
-            tmp.edges.push({
-              data: {
-                source,
-                target: nodeId,
-                label,
-              },
-            });
-          }
-        });
-      }
-      if ("update" in node && node.update) {
-        // static node
-        const { source, label } = parseInput(node.update);
-        tmp.edges.push({
+const node2cyNode = (node: NodeData, nodeId: string) => {
+  const isStatic = "value" in node;
+  const cyNode = {
+    data: {
+      id: nodeId,
+      color: isStatic ? colorStatic : colorMap[NodeState.Waiting],
+      isStatic,
+    },
+  };
+  return cyNode;
+};
+
+const node2cyEdge = (node: NodeData, nodeId: string) => {
+  const edges: EdgeDefinition[] = [];
+  if ("inputs" in node) {
+    // computed node
+    inputs2dataSources(node.inputs).forEach((input: string) => {
+      if (input[0] === ":") {
+        const { source, label } = parseInput(input);
+        edges.push({
           data: {
             source,
             target: nodeId,
-            isUpdate: true,
             label,
           },
         });
       }
-      return tmp;
-    },
-    { nodes: [], edges: [], map: {} },
-  );
+    });
+  }
+  if ("update" in node && node.update) {
+    // static node
+    const { source, label } = parseInput(node.update);
+    edges.push({
+      data: {
+        source,
+        target: nodeId,
+        isUpdate: true,
+        label,
+      },
+    });
+  }
+  return edges;
+};
+
+const cytoscapeFromGraph = (_graph_data: GraphData) => {
+  const elements: {
+    nodes: NodeDefinition[];
+    edges: EdgeDefinition[];
+    map: Record<string, NodeDefinition>;
+  } = { nodes: [], edges: [], map: {} };
+
+  const toGraph = (graph_data: GraphData) => {
+    Object.keys(graph_data.nodes || {}).forEach((nodeId) => {
+      const node: NodeData = graph_data.nodes[nodeId];
+      const cyNode = node2cyNode(node, nodeId);
+      elements.nodes.push(cyNode);
+      elements.map[nodeId] = cyNode;
+
+      node2cyEdge(node, nodeId).forEach((edge) => {
+        elements.edges.push(edge);
+      });
+      // nested
+      if ("agent" in node && node.agent === "nestedAgent") {
+        
+        const graph = typeof node.graph === "string" ? JSON.parse(node.graph) : { ...node.graph };
+        Object.keys(node.inputs).forEach((key) => {
+          graph.nodes[key] = { value: "dummy" };
+        });
+        toGraph(graph);
+      }
+    });
+  };
+  toGraph(_graph_data);
+
   return { elements };
 };
 

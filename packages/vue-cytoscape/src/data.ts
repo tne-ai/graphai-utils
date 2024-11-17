@@ -1,6 +1,43 @@
 export const graphData = {
   version: 0.5,
   nodes: {
+    start: {
+      value: 1,
+    },
+    one: {
+      agent: "sleeperAgent",
+      params: { duration: 1000 },
+      inputs: { data: ":start" },
+    },
+    nested: {
+      agent: "nestedAgent",
+      graph: {
+        version: 0.5,
+        nodes: {
+          child1: {
+            agent: "sleeperAgent",
+            params: { duration: 1000 },
+            inputs: { data: ":data" },
+          },
+          child2: {
+            agent: "sleeperAgent",
+            params: { duration: 1000 },
+            inputs: { data: ":child1" },
+          },
+          child3: {
+            agent: "sleeperAgent",
+            params: { duration: 1000 },
+            inputs: { data: ":child2" },
+          },
+        },
+      },
+      inputs: { data: ":one" },
+    },
+  },
+};
+export const graphData2 = {
+  version: 0.5,
+  nodes: {
     customerPhoneAudioLog: {
       agent: "streamMockAgent",
       params: {
