@@ -14,15 +14,19 @@ export const graphData = {
       graph: {
         version: 0.5,
         nodes: {
+          input1: {
+            value: ":test",
+          },
           child1: {
             agent: "sleeperAgent",
             params: { duration: 1000 },
-            inputs: { data: ":data" },
+            inputs: { data: ":data", data2: ":input1" },
           },
           child2: {
             agent: "sleeperAgent",
             params: { duration: 1000 },
             inputs: { data: ":child1" },
+            isResult: true,
           },
           child3: {
             agent: "sleeperAgent",
@@ -31,7 +35,7 @@ export const graphData = {
           },
         },
       },
-      inputs: { data: ":one" },
+      inputs: { data: ":one", test: ":one" },
     },
   },
 };
