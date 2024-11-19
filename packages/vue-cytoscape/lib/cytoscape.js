@@ -111,6 +111,16 @@ var cyStyle = [
             "target-arrow-color": "#ddd",
         },
     },
+    {
+        selector: "edge[isResult]",
+        style: {
+            color: "#d00",
+            "line-color": "#d00",
+            "line-style": "dotted",
+            "curve-style": "unbundled-bezier",
+            "target-arrow-color": "#d00",
+        },
+    },
 ];
 var colorMap = (_a = {},
     _a[graphai_1.NodeState.Waiting] = "#888",
@@ -196,6 +206,9 @@ var node2cyEdge = function (node, nodeId) {
 };
 var cytoscapeFromGraph = function (_graph_data) {
     var elements = { nodes: [], edges: [], map: {} };
+    var pushEdge = function (data) {
+        elements.edges.push({ data: data });
+    };
     var toGraph = function (graph_data) {
         Object.keys(graph_data.nodes || {}).forEach(function (nodeId) {
             var node = graph_data.nodes[nodeId];
@@ -208,10 +221,33 @@ var cytoscapeFromGraph = function (_graph_data) {
             // nested
             if ("agent" in node && node.agent === "nestedAgent") {
                 var graph_1 = typeof node.graph === "string" ? JSON.parse(node.graph) : __assign({}, node.graph);
-                Object.keys(node.inputs).forEach(function (key) {
-                    graph_1.nodes[key] = { value: "dummy" };
+                var staticInputs_1 = Object.keys(graph_1.nodes)
+                    .filter(function (key) { return "value" in graph_1.nodes[key]; })
+                    .reduce(function (tmp, key) {
+                    var _a = parseInput(graph_1.nodes[key].value), source = _a.source, label = _a.label;
+                    if (!tmp[source]) {
+                        tmp[source] = [];
+                    }
+                    tmp[source].push(key);
+                    return tmp;
+                }, {});
+                Object.keys(node.inputs).forEach(function (parentInputNodeId) {
+                    graph_1.nodes[parentInputNodeId] = { value: "dummy" };
+                    var _a = parseInput(node.inputs[parentInputNodeId]), source = _a.source, label = _a.label;
+                    pushEdge({ source: nodeId, target: parentInputNodeId, label: source });
+                    if (staticInputs_1[parentInputNodeId]) {
+                        staticInputs_1[parentInputNodeId].forEach(function (id) {
+                            pushEdge({ source: nodeId, target: id, label: parentInputNodeId });
+                        });
+                    }
                 });
                 toGraph(graph_1);
+                Object.keys(graph_1.nodes).forEach(function (key) {
+                    var childNode = graph_1.nodes[key];
+                    if ("agent" in childNode && childNode.isResult) {
+                        pushEdge({ source: key, target: nodeId, label: "result", isResult: true });
+                    }
+                });
             }
         });
     };
