@@ -190,7 +190,7 @@ const cytoscapeFromGraph = (_graph_data: GraphData) => {
         const staticInputs: Record<string, string[]> = Object.keys(graph.nodes)
           .filter((key: string) => "value" in graph.nodes[key])
           .reduce((tmp: Record<string, string[]>, key: string) => {
-            const { source, label } = parseInput(graph.nodes[key].value);
+            const { source } = parseInput(graph.nodes[key].value);
             if (!tmp[source]) {
               tmp[source] = [];
             }
@@ -200,7 +200,7 @@ const cytoscapeFromGraph = (_graph_data: GraphData) => {
 
         Object.keys(node.inputs).forEach((parentInputNodeId) => {
           graph.nodes[parentInputNodeId] = { value: "dummy" };
-          const { source, label } = parseInput(node.inputs[parentInputNodeId]);
+          const { source } = parseInput(node.inputs[parentInputNodeId]);
           pushEdge({ source: nodeId, target: parentInputNodeId, label: source });
           if (staticInputs[parentInputNodeId]) {
             staticInputs[parentInputNodeId].forEach((id) => {
