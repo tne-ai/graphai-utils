@@ -3,7 +3,7 @@ import { GraphData, NodeState, NodeData, sleep, isObject } from "graphai";
 
 import { DataSource } from "graphai/lib/type";
 
-import cytoscape, { Core, NodeSingular, NodeDefinition, EdgeDefinition, EdgeSingular, Position } from "cytoscape";
+import cytoscape, { Core, NodeSingular, NodeDefinition, EdgeDefinition, EdgeSingular, Position, EdgeDataDefinition } from "cytoscape";
 import klay from "cytoscape-klay";
 
 cytoscape.use(klay);
@@ -169,7 +169,7 @@ const cytoscapeFromGraph = (_graph_data: GraphData) => {
     map: Record<string, NodeDefinition>;
   } = { nodes: [], edges: [], map: {} };
 
-  const pushEdge = (data: Record<string, string>) => {
+  const pushEdge = (data: EdgeDataDefinition) => {
     elements.edges.push({ data });
   };
 
@@ -187,9 +187,9 @@ const cytoscapeFromGraph = (_graph_data: GraphData) => {
       if ("agent" in node && node.agent === "nestedAgent") {
         const graph = typeof node.graph === "string" ? JSON.parse(node.graph) : { ...node.graph };
 
-        const staticInputs = Object.keys(graph.nodes)
+        const staticInputs: Record<string, string[]> = Object.keys(graph.nodes)
           .filter((key: string) => "value" in graph.nodes[key])
-          .reduce((tmp: Record<string, string>, key: string) => {
+          .reduce((tmp: Record<string, string[]>, key: string) => {
             const { source, label } = parseInput(graph.nodes[key].value);
             if (!tmp[source]) {
               tmp[source] = [];
