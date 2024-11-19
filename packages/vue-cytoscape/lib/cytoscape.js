@@ -224,7 +224,7 @@ var cytoscapeFromGraph = function (_graph_data) {
                 var staticInputs_1 = Object.keys(graph_1.nodes)
                     .filter(function (key) { return "value" in graph_1.nodes[key]; })
                     .reduce(function (tmp, key) {
-                    var _a = parseInput(graph_1.nodes[key].value), source = _a.source, label = _a.label;
+                    var source = parseInput(graph_1.nodes[key].value).source;
                     if (!tmp[source]) {
                         tmp[source] = [];
                     }
@@ -233,7 +233,7 @@ var cytoscapeFromGraph = function (_graph_data) {
                 }, {});
                 Object.keys(node.inputs).forEach(function (parentInputNodeId) {
                     graph_1.nodes[parentInputNodeId] = { value: "dummy" };
-                    var _a = parseInput(node.inputs[parentInputNodeId]), source = _a.source, label = _a.label;
+                    var source = parseInput(node.inputs[parentInputNodeId]).source;
                     pushEdge({ source: nodeId, target: parentInputNodeId, label: source });
                     if (staticInputs_1[parentInputNodeId]) {
                         staticInputs_1[parentInputNodeId].forEach(function (id) {
