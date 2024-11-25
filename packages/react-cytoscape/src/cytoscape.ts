@@ -223,7 +223,6 @@ export const useCytoscape = (selectedGraph: GraphData) => {
     }
   }, [createCytoscape, cytoscapeRef]);
 
-
   useEffect(() => {
     if (selectedGraph) {
       setCytoscapeData(cytoscapeFromGraph(selectedGraph));
