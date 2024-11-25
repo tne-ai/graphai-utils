@@ -1,7 +1,10 @@
 {
-  "name": "react-cytoscape",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@receptron/graphai_react_cytoscape",
+  "version": "0.0.2",
+  "main": "lib/cytoscape.js",
+  "files": [
+    "./lib"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +16,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@receptron/graphai_react_cytoscape": "^0.0.2",
     "cytoscape": "^3.30.3",
     "cytoscape-klay": "^3.1.4",
     "react": "^18.3.1",
@@ -28,5 +32,9 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "vite": "^5.4.10"
+  },
+  "types": "./lib/cytoscape.d.ts",
+  "directories": {
+    "lib": "lib"
   }
 }
