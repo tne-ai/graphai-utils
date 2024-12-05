@@ -1,6 +1,6 @@
 {
   "name": "@receptron/graphai_express_type",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Type file of @receptron/graphai_express. This is for browser.",
   "main": "lib/type.js",
   "files": [
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/receptron/graphai_utils/tree/main/packages/express#readme",
   "devDependencies": {},
   "dependencies": {
-    "graphai": "^0.5.19"
+    "graphai": "^0.6.2"
   },
   "types": "./lib/type.d.ts",
   "directories": {
