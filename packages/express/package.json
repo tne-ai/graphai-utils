@@ -1,6 +1,6 @@
 {
   "name": "@receptron/graphai_express",
-  "version": "0.0.33",
+  "version": "0.1.0",
   "description": "GraphAI express web server middleware.",
   "main": "lib/index.js",
   "files": [
@@ -34,7 +34,7 @@
     "@graphai/agent_filters": "^0.0.8",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "graphai": "^0.5.19"
+    "graphai": "^0.6.2"
   },
   "types": "./lib/index.d.ts",
   "directories": {

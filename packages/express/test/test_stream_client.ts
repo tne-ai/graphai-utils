@@ -1,4 +1,3 @@
-
 // streamMockAgent client.
 // npx ts-node -r tsconfig-paths/register test/stream_client.ts
 
@@ -10,8 +9,8 @@ import { AgentFunctionContext } from "graphai";
 import { DefaultEndOfStreamDelimiter } from "@/type";
 
 async function* streamChatCompletion(url: string, postData: AgentFunctionContext & { agentId?: string }) {
-  const { params, inputs, debugInfo, filterParams, agentId } = postData;
-  const postBody = { params, inputs, debugInfo, filterParams, agentId };
+  const { params, debugInfo, filterParams, agentId } = postData;
+  const postBody = { params, debugInfo, filterParams, agentId };
 
   const completion = await fetch(url, {
     headers: {
@@ -68,7 +67,6 @@ test("test stream echo agent/client 1", async () => {
     params: {
       message: "this is test",
     },
-    inputs: [],
     debugInfo: {
       verbose: false,
       nodeId: "123",
@@ -85,7 +83,6 @@ test("test stream echo agent/client 2", async () => {
     params: {
       message: "this is test",
     },
-    inputs: [],
     debugInfo: {
       verbose: false,
       nodeId: "123",
@@ -102,7 +99,6 @@ test("test stream echo agent/client 3", async () => {
     params: {
       message: "this is test",
     },
-    inputs: [],
     debugInfo: {
       verbose: false,
       nodeId: "123",
@@ -120,7 +116,6 @@ test("test stream echo agent/client 4", async () => {
     params: {
       message: "this is test",
     },
-    inputs: [],
     debugInfo: {
       verbose: false,
       nodeId: "123",

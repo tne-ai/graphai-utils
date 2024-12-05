@@ -7,8 +7,8 @@ import test from "node:test";
 import assert from "node:assert";
 
 const request = async (url: string, postData: AgentFunctionContext) => {
-  const { params, inputs, debugInfo, filterParams } = postData;
-  const postBody = { params, inputs, debugInfo, filterParams };
+  const { params, debugInfo, filterParams } = postData;
+  const postBody = { params, debugInfo, filterParams };
 
   const result = await fetch(url, {
     headers: {
@@ -42,7 +42,6 @@ test("test stream echo agent", async () => {
     params: {
       message: "this is test",
     },
-    inputs: [],
     debugInfo: {
       verbose: false,
       nodeId: "123",
@@ -59,7 +58,6 @@ test("test nonstream echo agent", async () => {
     params: {
       message: "this is test",
     },
-    inputs: [],
     debugInfo: {
       verbose: false,
       nodeId: "123",
