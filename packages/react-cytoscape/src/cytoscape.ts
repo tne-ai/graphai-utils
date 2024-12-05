@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import cytoscape, { Core, NodeSingular, EdgeSingular } from "cytoscape";
 import klay from "cytoscape-klay";
-import { GraphData, NodeState, NodeData, sleep } from "graphai";
+import { GraphData, NodeState, NodeData, sleep, isObject } from "graphai";
 
 cytoscape.use(klay);
 const layout = "klay";
@@ -81,6 +81,24 @@ const parseInput = (input: string) => {
   return { source, label };
 };
 
+export const inputs2dataSources = (inputs: any): string[] => {
+  if (Array.isArray(inputs)) {
+    return inputs.map((inp) => inputs2dataSources(inp)).flat();
+  }
+  if (isObject(inputs)) {
+    return Object.values(inputs)
+      .map((input) => inputs2dataSources(input))
+      .flat();
+  }
+  if (typeof inputs === "string") {
+    const templateMatch = Array.from(inputs.matchAll(/\${(:[^}]+)}/g)).map((m) => m[1]);
+    if (templateMatch.length > 0) {
+      return inputs2dataSources(templateMatch);
+    }
+  }
+  return inputs;
+};
+
 const cytoscapeFromGraph = (graph_data: GraphData) => {
   try {
     const elements = Object.keys(graph_data.nodes || {}).reduce(
@@ -97,12 +115,17 @@ const cytoscapeFromGraph = (graph_data: GraphData) => {
         tmp.nodes.push(cyNode);
         tmp.map[nodeId] = cyNode;
         if ("inputs" in node) {
-          const inputs = Array.isArray(node.inputs) ? node.inputs : Object.values(node.inputs || {});
-          inputs.forEach((input: string) => {
-            const { source, label } = parseInput(input);
-            tmp.edges.push({
-              data: { source, target: nodeId, label },
-            });
+          inputs2dataSources(node.inputs).forEach((input: string) => {
+            if (input[0] === ":") {
+              const { source, label } = parseInput(input);
+              tmp.edges.push({
+                data: {
+                  source,
+                  target: nodeId,
+                  label,
+                },
+              });
+            }
           });
         }
         if ("update" in node && node.update) {

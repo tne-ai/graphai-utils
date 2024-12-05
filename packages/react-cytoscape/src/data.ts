@@ -12,51 +12,51 @@ export const graphData = {
       params: {
         message: "hi, tell me hoge hoge",
       },
-      inputs: [":customerPhoneAudioLog"],
+      inputs: { data: ":customerPhoneAudioLog" },
     },
     sentiment: {
       agent: "streamMockAgent",
       params: {
         message: "angry",
       },
-      inputs: [":customerPhoneAudioLog"],
+      inputs: { data: ":customerPhoneAudioLog" },
     },
     talkAnalysis: {
-      inputs: [":audio2text"],
+      inputs: { data: ":audio2text" },
       agent: "streamMockAgent",
       params: {
         message: "this is message",
       },
     },
     functionCalling: {
-      inputs: [":talkAnalysis"],
+      inputs: { data: ":talkAnalysis" },
       agent: "streamMockAgent",
     },
     onpremiseApi: {
-      inputs: [":functionCalling", ":RAG"],
+      inputs: { array: [":functionCalling", ":RAG"] },
       agent: "streamMockAgent",
     },
     RAG: {
-      inputs: [":sentiment", ":talkAnalysis"],
+      inputs: { array: [":sentiment", ":talkAnalysis"] },
       agent: "streamMockAgent",
       params: {
         message: "foo",
       },
     },
     data2speech: {
-      inputs: [":RAG", ":talkAnalysis", ":onpremiseApi"],
+      inputs: { array: [":RAG", ":talkAnalysis", ":onpremiseApi"] },
       agent: "streamMockAgent",
     },
     responseToCustomer: {
       agent: "streamMockAgent",
-      inputs: [":data2speech"],
+      inputs: { array: [":data2speech"] },
       params: {
         message: "response",
       },
       isResult: true,
     },
     storeToDatabase: {
-      inputs: [":sentiment", ":talkAnalysis", ":onpremiseApi"],
+      inputs: { array: [":sentiment", ":talkAnalysis", ":onpremiseApi"] },
       agent: "streamMockAgent",
       params: {
         message: "response",
