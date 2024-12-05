@@ -1,6 +1,6 @@
 {
   "name": "@receptron/graphai_react_cytoscape",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "lib/cytoscape.js",
   "files": [
     "./lib"
@@ -16,14 +16,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@receptron/graphai_react_cytoscape": "^0.0.2",
     "cytoscape": "^3.30.4",
     "cytoscape-klay": "^3.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.15.0",
+    "@eslint/js": "^9.16.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
