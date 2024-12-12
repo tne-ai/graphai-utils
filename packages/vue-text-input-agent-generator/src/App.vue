@@ -3,7 +3,7 @@
     <div class="h-screen w-full">
       <div class="w-10/12 bg-white">
         <div v-if="inputPromises.length > 0">
-          <div v-for="(inputPromise, k) in inputPromises" class="flex">
+          <div v-for="(inputPromise, k) in inputPromises" class="flex" :key="k">
             <input
               v-model="userInputs[inputPromise.params['name']]"
               @keyup.enter="callSubmit"
@@ -37,7 +37,6 @@ import { textInputAgentGenerator } from "./text_input_agent_generator";
 export default defineComponent({
   setup() {
     const userInputs = ref({});
-    const selectdGraph = ref(graphData);
     const { textInputAgent, inputPromises, submit } = textInputAgentGenerator();
 
     const run = async () => {

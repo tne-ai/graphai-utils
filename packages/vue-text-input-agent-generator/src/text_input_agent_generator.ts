@@ -5,7 +5,7 @@ export const textInputAgentGenerator = () => {
   const inputPromises = ref<{ task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[]>([]);
   const submit = (id: string, value: string, success?: () => void) => {
     if (inputPromises.value.length > 0) {
-      const index = inputPromises.value.findIndex((inp) => inp.id === id); //shift();
+      const index = inputPromises.value.findIndex((inp) => inp.id === id);
       if (index > -1) {
         inputPromises.value[index].task(value);
         inputPromises.value.splice(index, 1);
@@ -17,7 +17,6 @@ export const textInputAgentGenerator = () => {
   };
   const textPromise = (context: AgentFunctionContext) => {
     const id = Math.random().toString(32).substring(2);
-    console.log(id);
     return new Promise((resolved) => {
       const task = (message: string) => {
         resolved(message);
@@ -30,7 +29,6 @@ export const textInputAgentGenerator = () => {
 
   const textInputAgent: AgentFunction = async (context) => {
     const result = await textPromise(context);
-    console.log(result);
     return {
       text: result as string,
       message: { role: "user", content: result as string },

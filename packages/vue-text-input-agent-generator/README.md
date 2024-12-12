@@ -43,7 +43,6 @@ import { textInputAgentGenerator } from "@receptron/text_input_agent_generator";
 export default defineComponent({
   setup() {
     const userInputs = ref({});
-    const selectdGraph = ref(graphData);
     const { textInputAgent, inputPromises, submit } = textInputAgentGenerator();
 
     const run = async () => {
