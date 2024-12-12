@@ -37,12 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.textInputAgentGenerator = void 0;
+var graphai_1 = require("graphai");
 var vue_1 = require("vue");
 var textInputAgentGenerator = function () {
     var inputPromises = (0, vue_1.ref)([]);
     var submit = function (id, value, success) {
         if (inputPromises.value.length > 0) {
-            var index = inputPromises.value.findIndex(function (inp) { return inp.id === id; }); //shift();
+            var index = inputPromises.value.findIndex(function (inp) { return inp.id === id; });
             if (index > -1) {
                 inputPromises.value[index].task(value);
                 inputPromises.value.splice(index, 1);
@@ -54,7 +55,6 @@ var textInputAgentGenerator = function () {
     };
     var textPromise = function (context) {
         var id = Math.random().toString(32).substring(2);
-        console.log(id);
         return new Promise(function (resolved) {
             var task = function (message) {
                 resolved(message);
@@ -71,7 +71,6 @@ var textInputAgentGenerator = function () {
                 case 0: return [4 /*yield*/, textPromise(context)];
                 case 1:
                     result = _a.sent();
-                    console.log(result);
                     return [2 /*return*/, {
                             text: result,
                             message: { role: "user", content: result },
@@ -80,7 +79,7 @@ var textInputAgentGenerator = function () {
         });
     }); };
     return {
-        textInputAgent: textInputAgent,
+        textInputAgent: (0, graphai_1.agentInfoWrapper)(textInputAgent),
         inputPromises: inputPromises,
         submit: submit,
     };

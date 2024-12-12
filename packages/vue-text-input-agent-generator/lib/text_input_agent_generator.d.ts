@@ -1,6 +1,20 @@
 import { AgentFunction } from "graphai";
 export declare const textInputAgentGenerator: () => {
-    textInputAgent: AgentFunction;
+    textInputAgent: {
+        name: string;
+        samples: {
+            inputs: never[];
+            params: {};
+            result: {};
+        }[];
+        description: string;
+        category: never[];
+        author: string;
+        repository: string;
+        license: string;
+        agent: AgentFunction<any, any, any>;
+        mock: AgentFunction<any, any, any>;
+    };
     inputPromises: import("vue").Ref<{
         task: (message: string) => void;
         id: string;
