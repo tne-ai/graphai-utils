@@ -38,15 +38,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.textInputAgentGenerator = void 0;
 var graphai_1 = require("graphai");
-var vue_1 = require("vue");
-var textInputAgentGenerator = function () {
-    var inputPromises = (0, vue_1.ref)([]);
+var textInputAgentGenerator = function (inputPromises) {
     var submit = function (id, value, success) {
-        if (inputPromises.value.length > 0) {
-            var index = inputPromises.value.findIndex(function (inp) { return inp.id === id; });
+        if (inputPromises.length > 0) {
+            var index = inputPromises.findIndex(function (inp) { return inp.id === id; });
             if (index > -1) {
-                inputPromises.value[index].task(value);
-                inputPromises.value.splice(index, 1);
+                inputPromises[index].task(value);
+                inputPromises.splice(index, 1);
                 if (success) {
                     success();
                 }
@@ -61,7 +59,7 @@ var textInputAgentGenerator = function () {
             };
             var params = context.params;
             var _a = context.debugInfo, nodeId = _a.nodeId, agentId = _a.agentId;
-            inputPromises.value.push({ task: task, id: id, nodeId: nodeId, agentId: agentId, params: params });
+            inputPromises.push({ task: task, id: id, nodeId: nodeId, agentId: agentId, params: params });
         });
     };
     var textInputAgent = function (context) { return __awaiter(void 0, void 0, void 0, function () {
@@ -80,7 +78,6 @@ var textInputAgentGenerator = function () {
     }); };
     return {
         textInputAgent: (0, graphai_1.agentInfoWrapper)(textInputAgent),
-        inputPromises: inputPromises,
         submit: submit,
     };
 };

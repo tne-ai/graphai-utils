@@ -1,5 +1,11 @@
 import { AgentFunction } from "graphai";
-export declare const textInputAgentGenerator: () => {
+export declare const textInputAgentGenerator: (inputPromises: {
+    task: (message: string) => void;
+    id: string;
+    nodeId: string;
+    agentId?: string;
+    params: any;
+}[]) => {
     textInputAgent: {
         name: string;
         samples: {
@@ -15,24 +21,5 @@ export declare const textInputAgentGenerator: () => {
         agent: AgentFunction<any, any, any>;
         mock: AgentFunction<any, any, any>;
     };
-    inputPromises: import("vue").Ref<{
-        task: (message: string) => void;
-        id: string;
-        nodeId: string;
-        agentId?: string;
-        params: any;
-    }[], {
-        task: (message: string) => void;
-        id: string;
-        nodeId: string;
-        agentId?: string;
-        params: any;
-    }[] | {
-        task: (message: string) => void;
-        id: string;
-        nodeId: string;
-        agentId?: string;
-        params: any;
-    }[]>;
     submit: (id: string, value: string, success?: () => void) => void;
 };

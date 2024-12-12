@@ -1,5 +1,5 @@
 
-## Text Input Agent generator for Vue
+## Text Input Agent generator
 
 Demo
 
@@ -43,7 +43,8 @@ import { textInputAgentGenerator } from "@receptron/text_input_agent_generator";
 export default defineComponent({
   setup() {
     const userInputs = ref({});
-    const { textInputAgent, inputPromises, submit } = textInputAgentGenerator();
+    const inputPromises = ref<{ task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[]>([]);
+    const { textInputAgent, submit } = textInputAgentGenerator(inputPromises.value);
 
     const run = async () => {
       const graphai = new GraphAI(graphData, { ...vanilla, textInputAgent: agentInfoWrapper(textInputAgent) });
