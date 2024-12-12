@@ -1,14 +1,12 @@
 import { AgentFunction, AgentFunctionContext, agentInfoWrapper } from "graphai";
-import { ref } from "vue";
 
-export const textInputAgentGenerator = () => {
-  const inputPromises = ref<{ task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[]>([]);
+export const textInputAgentGenerator = (inputPromises: { task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[]) => {
   const submit = (id: string, value: string, success?: () => void) => {
-    if (inputPromises.value.length > 0) {
-      const index = inputPromises.value.findIndex((inp) => inp.id === id);
+    if (inputPromises.length > 0) {
+      const index = inputPromises.findIndex((inp) => inp.id === id);
       if (index > -1) {
-        inputPromises.value[index].task(value);
-        inputPromises.value.splice(index, 1);
+        inputPromises[index].task(value);
+        inputPromises.splice(index, 1);
         if (success) {
           success();
         }
@@ -23,7 +21,7 @@ export const textInputAgentGenerator = () => {
       };
       const { params } = context;
       const { nodeId, agentId } = context.debugInfo;
-      inputPromises.value.push({ task, id, nodeId, agentId, params });
+      inputPromises.push({ task, id, nodeId, agentId, params });
     });
   };
 
@@ -36,7 +34,6 @@ export const textInputAgentGenerator = () => {
   };
   return {
     textInputAgent: agentInfoWrapper(textInputAgent),
-    inputPromises,
     submit,
   };
 };
