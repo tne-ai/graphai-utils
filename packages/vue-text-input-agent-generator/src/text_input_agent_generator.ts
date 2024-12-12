@@ -1,4 +1,4 @@
-import { AgentFunction, AgentFunctionContext } from "graphai";
+import { AgentFunction, AgentFunctionContext, agentInfoWrapper } from "graphai";
 import { ref } from "vue";
 
 export const textInputAgentGenerator = () => {
@@ -35,7 +35,7 @@ export const textInputAgentGenerator = () => {
     };
   };
   return {
-    textInputAgent,
+    textInputAgent: agentInfoWrapper(textInputAgent),
     inputPromises,
     submit,
   };

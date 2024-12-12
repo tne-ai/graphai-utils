@@ -28,7 +28,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
-import { GraphAI, agentInfoWrapper } from "graphai";
+import { GraphAI } from "graphai";
 import * as vanilla from "@graphai/vanilla";
 
 import { graphData } from "./data";
@@ -40,7 +40,7 @@ export default defineComponent({
     const { textInputAgent, inputPromises, submit } = textInputAgentGenerator();
 
     const run = async () => {
-      const graphai = new GraphAI(graphData, { ...vanilla, textInputAgent: agentInfoWrapper(textInputAgent) });
+      const graphai = new GraphAI(graphData, { ...vanilla, textInputAgent });
       const result = await graphai.run(true);
       console.log(result);
     };
