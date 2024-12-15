@@ -1,9 +1,7 @@
 {
   "name": "@receptron/graphai_vue_cytoscape",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "main": "lib/cytoscape.js",
-  "module": "lib/bundle.esm.js",
-  "browser": "lib/bundle.umd.js",
   "files": [
     "./lib"
   ],
@@ -12,7 +10,6 @@
     "build": "tsc --esModuleInterop --declaration --outDir lib/ src/composables/cytoscape.ts",
     "preview": "vite preview",
     "build-only": "vite build",
-    "rollup": " npx rollup -c",
     "type-check": "vue-tsc --build --force",
     "test": "echo nothing",
     "eslint": "eslint src",
