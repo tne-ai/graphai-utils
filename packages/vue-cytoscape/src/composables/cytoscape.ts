@@ -149,14 +149,18 @@ const node2cyEdge = (node: NodeData, nodeId: string) => {
   }
   if ("update" in node && node.update) {
     // static node
-    const { source, label } = parseInput(node.update);
-    edges.push({
-      data: {
-        source,
-        target: nodeId,
-        isUpdate: true,
-        label,
-      },
+    inputs2dataSources([node.update]).forEach((input: string) => {
+      if (input[0] === ":") {
+        const { source, label } = parseInput(input);
+        edges.push({
+          data: {
+            source,
+            target: nodeId,
+            isUpdate: true,
+            label,
+          },
+        });
+      }
     });
   }
   return edges;
@@ -190,23 +194,27 @@ const cytoscapeFromGraph = (_graph_data: GraphData) => {
         const staticInputs: Record<string, string[]> = Object.keys(graph.nodes)
           .filter((key: string) => "value" in graph.nodes[key])
           .reduce((tmp: Record<string, string[]>, key: string) => {
-            const { source } = parseInput(graph.nodes[key].value);
-            if (!tmp[source]) {
-              tmp[source] = [];
+            if (graph.nodes[key].value[0] === ":") {
+              const { source } = parseInput(graph.nodes[key].value);
+              if (!tmp[source]) {
+                tmp[source] = [];
+              }
+              tmp[source].push(key);
             }
-            tmp[source].push(key);
             return tmp;
           }, {});
 
         Object.keys(node.inputs).forEach((parentInputNodeId) => {
           graph.nodes[parentInputNodeId] = { value: "dummy" };
-          const { source } = parseInput(node.inputs[parentInputNodeId]);
-          pushEdge({ source: nodeId, target: parentInputNodeId, label: source });
-          if (staticInputs[parentInputNodeId]) {
-            staticInputs[parentInputNodeId].forEach((id) => {
-              pushEdge({ source: nodeId, target: id, label: parentInputNodeId });
-            });
-          }
+          inputs2dataSources([node.inputs[parentInputNodeId]]).forEach((input: string) => {
+            const { source } = parseInput(input);
+            pushEdge({ source: nodeId, target: parentInputNodeId, label: source });
+            if (staticInputs[parentInputNodeId]) {
+              staticInputs[parentInputNodeId].forEach((id) => {
+                pushEdge({ source: nodeId, target: id, label: parentInputNodeId });
+              });
+            }
+          });
         });
         toGraph(graph);
         Object.keys(graph.nodes).forEach((key) => {
