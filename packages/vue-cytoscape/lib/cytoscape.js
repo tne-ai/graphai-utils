@@ -192,14 +192,18 @@ var node2cyEdge = function (node, nodeId) {
     }
     if ("update" in node && node.update) {
         // static node
-        var _a = parseInput(node.update), source = _a.source, label = _a.label;
-        edges.push({
-            data: {
-                source: source,
-                target: nodeId,
-                isUpdate: true,
-                label: label,
-            },
+        (0, exports.inputs2dataSources)([node.update]).forEach(function (input) {
+            if (input[0] === ":") {
+                var _a = parseInput(input), source = _a.source, label = _a.label;
+                edges.push({
+                    data: {
+                        source: source,
+                        target: nodeId,
+                        isUpdate: true,
+                        label: label,
+                    },
+                });
+            }
         });
     }
     return edges;
@@ -224,22 +228,26 @@ var cytoscapeFromGraph = function (_graph_data) {
                 var staticInputs_1 = Object.keys(graph_1.nodes)
                     .filter(function (key) { return "value" in graph_1.nodes[key]; })
                     .reduce(function (tmp, key) {
-                    var source = parseInput(graph_1.nodes[key].value).source;
-                    if (!tmp[source]) {
-                        tmp[source] = [];
+                    if (graph_1.nodes[key].value[0] === ":") {
+                        var source = parseInput(graph_1.nodes[key].value).source;
+                        if (!tmp[source]) {
+                            tmp[source] = [];
+                        }
+                        tmp[source].push(key);
                     }
-                    tmp[source].push(key);
                     return tmp;
                 }, {});
                 Object.keys(node.inputs).forEach(function (parentInputNodeId) {
                     graph_1.nodes[parentInputNodeId] = { value: "dummy" };
-                    var source = parseInput(node.inputs[parentInputNodeId]).source;
-                    pushEdge({ source: nodeId, target: parentInputNodeId, label: source });
-                    if (staticInputs_1[parentInputNodeId]) {
-                        staticInputs_1[parentInputNodeId].forEach(function (id) {
-                            pushEdge({ source: nodeId, target: id, label: parentInputNodeId });
-                        });
-                    }
+                    (0, exports.inputs2dataSources)([node.inputs[parentInputNodeId]]).forEach(function (input) {
+                        var source = parseInput(input).source;
+                        pushEdge({ source: nodeId, target: parentInputNodeId, label: source });
+                        if (staticInputs_1[parentInputNodeId]) {
+                            staticInputs_1[parentInputNodeId].forEach(function (id) {
+                                pushEdge({ source: nodeId, target: id, label: parentInputNodeId });
+                            });
+                        }
+                    });
                 });
                 toGraph(graph_1);
                 Object.keys(graph_1.nodes).forEach(function (key) {
