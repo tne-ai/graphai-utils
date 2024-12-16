@@ -2763,11 +2763,6 @@ gopd@^1.0.1:
   dependencies:
     get-intrinsic "^1.1.3"
 
-graphai@^0.6.6:
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/graphai/-/graphai-0.6.6.tgz#5d2fc6ddc741d6e69fadea3bd649e6aadaa725f8"
-  integrity sha512-hfZz+cHHH7fVziYdC8VtN4o08otfd2BRySDy64vYR2eyGmJArJt0WQKOQEeNZrRXPvf9Qxq+k23sunwdQqBfRg==
-
 graphai@^0.6.7:
   version "0.6.7"
   resolved "https://registry.yarnpkg.com/graphai/-/graphai-0.6.7.tgz#334547d20c6c751d82ca6fc130ee3cc2c771046d"
