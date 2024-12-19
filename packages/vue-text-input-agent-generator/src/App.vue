@@ -32,12 +32,12 @@ import { GraphAI } from "graphai";
 import * as vanilla from "@graphai/vanilla";
 
 import { graphData } from "./data";
-import { textInputAgentGenerator } from "./text_input_agent_generator";
+import { textInputAgentGenerator, InputPromises } from "./text_input_agent_generator";
 
 export default defineComponent({
   setup() {
     const userInputs = ref({});
-    const inputPromises = ref<{ task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[]>([]);
+    const inputPromises = ref<InputPromises>([]);
     const { textInputAgent, submit } = textInputAgentGenerator(inputPromises.value);
 
     const run = async () => {

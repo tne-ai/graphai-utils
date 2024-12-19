@@ -1,5 +1,7 @@
 import { AgentFunction, AgentFunctionContext, agentInfoWrapper } from "graphai";
 
+export type InputPromises = { task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[];
+
 export const textInputAgentGenerator = (inputPromises: { task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[]) => {
   const submit = (id: string, value: string, success?: () => void) => {
     if (inputPromises.length > 0) {

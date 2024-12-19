@@ -1,4 +1,11 @@
 import { AgentFunction } from "graphai";
+export type InputPromises = {
+    task: (message: string) => void;
+    id: string;
+    nodeId: string;
+    agentId?: string;
+    params: any;
+}[];
 export declare const textInputAgentGenerator: (inputPromises: {
     task: (message: string) => void;
     id: string;
