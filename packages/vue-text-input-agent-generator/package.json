@@ -1,9 +1,7 @@
 {
   "name": "@receptron/text_input_agent_generator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "lib/text_input_agent_generator.js",
-  "module": "lib/bundle.esm.js",
-  "browser": "lib/bundle.umd.js",
   "files": [
     "./lib"
   ],
