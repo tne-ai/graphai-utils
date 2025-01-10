@@ -15,17 +15,18 @@ import { defineComponent, ref } from "vue";
 import { GraphAI } from "graphai";
 import * as vanilla from "@graphai/vanilla";
 
-import { graphData } from "./data";
+//import { graphData } from "./data";
+import { graphLoop } from "./data";
 
 import { useCytoscape } from "./composables/cytoscape";
 
 export default defineComponent({
   setup() {
-    const selectdGraph = ref(graphData);
+    const selectdGraph = ref(graphLoop);
     const { updateCytoscape, cytoscapeRef } = useCytoscape(selectdGraph);
 
     const run = async () => {
-      const graphai = new GraphAI(graphData, vanilla);
+      const graphai = new GraphAI(graphLoop, vanilla);
       graphai.onLogCallback = async ({ nodeId, state }) => {
         // logs.value.push({ nodeId, state, inputs, result, errorMessage });
         updateCytoscape(nodeId, state);

@@ -155,3 +155,39 @@ export const graphChat = {
     },
   },
 };
+
+export const graphLoop = {
+  version: 0.5,
+  nodes: {
+    arrayData: {
+      value: [1,2,3]
+    },
+    nestedLoop: {
+      agent: "nestedAgent",
+      inputs: {
+        arrayData: ":arrayData"
+      },
+      graph: {
+        version: 0.5,
+        loop: {
+          while: ":arrayData"
+        },
+        nodes: {
+          arrayData: {
+            value: [],
+            update: ":shift.array",
+            console: {after: true },
+          },
+          shift: {
+            isResult: true,
+            agent: "shiftAgent",
+            inputs: {
+              array: ":arrayData"
+            },
+            console: {after: true },
+          },
+        }
+      }
+    }
+  }
+};

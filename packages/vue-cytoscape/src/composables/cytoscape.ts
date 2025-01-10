@@ -205,7 +205,9 @@ const cytoscapeFromGraph = (_graph_data: GraphData) => {
           }, {});
 
         Object.keys(node.inputs).forEach((parentInputNodeId) => {
-          graph.nodes[parentInputNodeId] = { value: "dummy" };
+          if (!graph.nodes[parentInputNodeId]) {
+            graph.nodes[parentInputNodeId] = { value: "dummy" };
+          }
           inputs2dataSources([node.inputs[parentInputNodeId]]).forEach((input: string) => {
             const { source } = parseInput(input);
             pushEdge({ source: nodeId, target: parentInputNodeId, label: source });
