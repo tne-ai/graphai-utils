@@ -6,6 +6,7 @@ import { DefaultEndOfStreamDelimiter } from "./type";
 import { defaultContentCallback } from "./utils";
 
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, TransactionLog } from "graphai";
+import type { ConfigDataDictionary } from "graphai/lib/type";
 import type { StreamChunkCallback, ContentCallback } from "./type";
 
 export const graphRunner = (
@@ -93,7 +94,7 @@ const streamGraphRunnerInternal = (
   agentFilters: AgentFilterInfo[] = [],
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
-  return async (req: express.Request & { config?: Record<string, unknown> }) => {
+  return async (req: express.Request & { config?: ConfigDataDictionary }) => {
     const { graphData } = req.body;
     const { config } = req;
 
