@@ -27,17 +27,14 @@
   },
   "homepage": "https://github.com/receptron/graphai_utils/tree/main/packages/express#readme",
   "devDependencies": {
-    "eslint": "^9.17.0",
-    "graphai": "^0.6.7",
     "sinon": "^19.0.2",
-    "sinon-express-mock": "^2.2.1",
-    "typescript-eslint": "^8.18.1"
+    "sinon-express-mock": "^2.2.1"
   },
   "dependencies": {
-    "@graphai/agent_filters": "^0.0.8",
+    "@graphai/agent_filters": "^0.0.9",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "graphai": "^0.6.7"
+    "graphai": "^0.6.16"
   },
   "types": "./lib/index.d.ts",
   "directories": {
