@@ -18,6 +18,8 @@ import {
   ContentCallback,
 } from "@/index";
 
+import cors from "cors";
+
 const agentDictionary: AgentFunctionInfoDictionary = agents;
 
 const hostName = "https://example.net";
@@ -33,6 +35,7 @@ app.use(
     },
   }),
 );
+app.use(cors());
 
 const streamChunkCallback: StreamChunkCallback = (context, token) => {
   const data = {
