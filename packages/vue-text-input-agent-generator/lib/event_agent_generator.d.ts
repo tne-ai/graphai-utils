@@ -1,19 +1,14 @@
 import { AgentFunction } from "graphai";
-export type InputEvents = {
-    task: (message: string) => void;
+export type EventData = {
+    onEnd: (data: unknown) => void;
     id: string;
     nodeId: string;
     agentId?: string;
+    type: string;
     params: any;
-}[];
-export declare const textInputAgentGenerator: (inputEvents: {
-    task: (message: string) => void;
-    id: string;
-    nodeId: string;
-    agentId?: string;
-    params: any;
-}[]) => {
-    textInputAgent: {
+};
+export declare const eventAgentGenerator: (onStart: (id: string, data: EventData) => void) => {
+    eventAgent: {
         name: string;
         samples: {
             inputs: never[];
@@ -28,5 +23,4 @@ export declare const textInputAgentGenerator: (inputEvents: {
         agent: AgentFunction<any, any, any, any>;
         mock: AgentFunction<any, any, any, any>;
     };
-    submit: (id: string, value: string, success?: () => void) => void;
 };

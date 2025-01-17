@@ -1,13 +1,13 @@
 {
-  "name": "@receptron/text_input_agent_generator",
-  "version": "0.0.3",
-  "main": "lib/text_input_agent_generator.js",
+  "name": "@receptron/event_agent_generator",
+  "version": "0.0.1",
+  "main": "lib/index.js",
   "files": [
     "./lib"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc --esModuleInterop --declaration --outDir lib/ src/text_input_agent_generator.ts",
+    "build": "tsc --esModuleInterop --declaration --outDir lib/ src/text_input_agent_generator.ts src/event_agent_generator.ts src/index.ts",
     "preview": "vite preview",
     "build-only": "vite build",
     "rollup": " npx rollup -c",
@@ -33,7 +33,7 @@
     "vue": "^3.5.13",
     "vue-tsc": "^2.2.0"
   },
-  "types": "./lib/text_input_agent_generator.d.ts",
+  "types": "./lib/index.d.ts",
   "directories": {
     "lib": "lib"
   }

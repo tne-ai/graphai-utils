@@ -36,49 +36,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.textInputAgentGenerator = void 0;
+exports.eventAgentGenerator = void 0;
 var graphai_1 = require("graphai");
-var textInputAgentGenerator = function (inputEvents) {
-    var submit = function (id, value, success) {
-        if (inputEvents.length > 0) {
-            var index = inputEvents.findIndex(function (inp) { return inp.id === id; });
-            if (index > -1) {
-                inputEvents[index].task(value);
-                inputEvents.splice(index, 1);
-                if (success) {
-                    success();
-                }
-            }
-        }
-    };
-    var textPromise = function (context) {
+var eventAgentGenerator = function (onStart) {
+    var eventPromise = function (context) {
         var id = Math.random().toString(32).substring(2);
         return new Promise(function (resolved) {
-            var task = function (message) {
-                resolved(message);
+            var onEnd = function (data) {
+                resolved(data);
             };
             var params = context.params;
             var _a = context.debugInfo, nodeId = _a.nodeId, agentId = _a.agentId;
-            inputEvents.push({ task: task, id: id, nodeId: nodeId, agentId: agentId, params: params });
+            var type = params.type;
+            var data = { onEnd: onEnd, id: id, nodeId: nodeId, agentId: agentId, type: type, params: params };
+            onStart(id, data);
         });
     };
-    var textInputAgent = function (context) { return __awaiter(void 0, void 0, void 0, function () {
+    var eventAgent = function (context) { return __awaiter(void 0, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, textPromise(context)];
+                case 0: return [4 /*yield*/, eventPromise(context)];
                 case 1:
                     result = _a.sent();
-                    return [2 /*return*/, {
-                            text: result,
-                            message: { role: "user", content: result },
-                        }];
+                    return [2 /*return*/, result];
             }
         });
     }); };
     return {
-        textInputAgent: (0, graphai_1.agentInfoWrapper)(textInputAgent),
-        submit: submit,
+        eventAgent: (0, graphai_1.agentInfoWrapper)(eventAgent),
     };
 };
-exports.textInputAgentGenerator = textInputAgentGenerator;
+exports.eventAgentGenerator = eventAgentGenerator;

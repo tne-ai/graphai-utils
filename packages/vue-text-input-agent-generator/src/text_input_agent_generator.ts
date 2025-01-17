@@ -1,14 +1,14 @@
 import { AgentFunction, AgentFunctionContext, agentInfoWrapper } from "graphai";
 
-export type InputPromises = { task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[];
+export type InputEvents = { task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[];
 
-export const textInputAgentGenerator = (inputPromises: { task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[]) => {
+export const textInputAgentGenerator = (inputEvents: { task: (message: string) => void; id: string; nodeId: string; agentId?: string; params: any }[]) => {
   const submit = (id: string, value: string, success?: () => void) => {
-    if (inputPromises.length > 0) {
-      const index = inputPromises.findIndex((inp) => inp.id === id);
+    if (inputEvents.length > 0) {
+      const index = inputEvents.findIndex((inp) => inp.id === id);
       if (index > -1) {
-        inputPromises[index].task(value);
-        inputPromises.splice(index, 1);
+        inputEvents[index].task(value);
+        inputEvents.splice(index, 1);
         if (success) {
           success();
         }
@@ -23,7 +23,7 @@ export const textInputAgentGenerator = (inputPromises: { task: (message: string)
       };
       const { params } = context;
       const { nodeId, agentId } = context.debugInfo;
-      inputPromises.push({ task, id, nodeId, agentId, params });
+      inputEvents.push({ task, id, nodeId, agentId, params });
     });
   };
 
