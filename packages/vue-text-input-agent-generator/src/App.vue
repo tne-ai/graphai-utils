@@ -43,6 +43,7 @@ export default defineComponent({
     const run = async () => {
       const graphai = new GraphAI(graphData, { ...vanilla, textInputAgent });
       const result = await graphai.run(true);
+      console.log(result);
     };
     run();
 
