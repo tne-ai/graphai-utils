@@ -6,14 +6,14 @@
           <div v-for="(inputPromise, k) in inputPromises" class="flex" :key="k">
             <input
               v-model="userInputs[inputPromise.params['name']]"
-              @keyup.enter="submit(inputPromise.id, inputPromise.params['name'])"
+              @keyup.enter="submit(inputPromise.id, userInputs[inputPromise.params['name']])"
               class="border-2 p-2 rounded-md flex-1 m-4"
               :placeholder="inputPromise.params['name']"
             />
             <button
               class="text-white font-bold items-center rounded-md px-4 py-2 ml-1 hover:bg-sky-700 flex-none m-4"
               :class="inputPromise.length == 0 ? 'bg-sky-200' : 'bg-sky-500'"
-              @click="submit(inputPromise.id, inputPromise.params['name'])"
+              @click="submit(inputPromise.id, userInputs[inputPromise.params['name']])"
             >
               Submit
             </button>
@@ -43,7 +43,6 @@ export default defineComponent({
     const run = async () => {
       const graphai = new GraphAI(graphData, { ...vanilla, textInputAgent });
       const result = await graphai.run(true);
-      console.log(result);
     };
     run();
 
