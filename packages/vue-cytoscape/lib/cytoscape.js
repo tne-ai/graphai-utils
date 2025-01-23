@@ -283,9 +283,10 @@ var useCytoscape = function (selectedGraph) {
                     _d.label = 2;
                 case 2:
                     elements = cytoscapeData.value.elements;
+                    if (!elements.map[nodeId]) return [3 /*break*/, 4];
                     elements.map[nodeId].data.color = colorMap[state];
                     graph = selectedGraph.value;
-                    nodeData = (_b = ((_a = graph === null || graph === void 0 ? void 0 : graph.nodes) !== null && _a !== void 0 ? _a : {})[nodeId]) !== null && _b !== void 0 ? _b : [];
+                    nodeData = (_b = ((_a = graph === null || graph === void 0 ? void 0 : graph.nodes) !== null && _a !== void 0 ? _a : {})[nodeId]) !== null && _b !== void 0 ? _b : {};
                     if ("agent" in nodeData && state === graphai_1.NodeState.Queued && ((_c = nodeData.priority) !== null && _c !== void 0 ? _c : 0) > 0) {
                         // computed node
                         elements.map[nodeId].data.color = colorPriority;
@@ -344,7 +345,7 @@ var useCytoscape = function (selectedGraph) {
                         }
                         return prevName;
                     }, layout);
-                    console.log("layout", name_1);
+                    // console.log("layout", name);
                     cy.layout({ name: name_1 }).run();
                     cy.fit();
                     if (!(name_1 === layout)) return [3 /*break*/, 2];
@@ -358,7 +359,7 @@ var useCytoscape = function (selectedGraph) {
         });
     }); };
     var storePositions = function () {
-        console.log("storePositions");
+        // console.log("storePositions");
         if (cy) {
             cy.nodes().forEach(function (cynode) {
                 var id = cynode.id();
