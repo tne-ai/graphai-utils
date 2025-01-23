@@ -45,10 +45,10 @@ var eventAgentGenerator = function (onStart) {
             var onEnd = function (data) {
                 resolved(data);
             };
-            var params = context.params;
+            var params = context.params, namedInputs = context.namedInputs;
             var _a = context.debugInfo, nodeId = _a.nodeId, agentId = _a.agentId;
             var type = params.type;
-            var data = { onEnd: onEnd, id: id, nodeId: nodeId, agentId: agentId, type: type, params: params };
+            var data = { onEnd: onEnd, id: id, nodeId: nodeId, agentId: agentId, type: type, params: params, namedInputs: namedInputs };
             onStart(id, data);
         });
     };

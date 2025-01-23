@@ -9,10 +9,10 @@ export const eventAgentGenerator = (onStart: (id: string, data: EventData) => vo
       const onEnd = (data: unknown) => {
         resolved(data);
       };
-      const { params } = context;
+      const { params, namedInputs } = context;
       const { nodeId, agentId } = context.debugInfo;
       const { type } = params;
-      const data = { onEnd, id, nodeId, agentId, type, params };
+      const data = { onEnd, id, nodeId, agentId, type, params, namedInputs };
       onStart(id, data);
     });
   };
