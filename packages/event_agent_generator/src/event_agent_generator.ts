@@ -1,6 +1,6 @@
 import { AgentFunction, AgentFunctionContext, agentInfoWrapper } from "graphai";
 
-export type EventData = { onEnd: (data: unknown) => void; id: string; nodeId: string; agentId?: string; type: string; params: any };
+export type EventData = { onEnd: (data: unknown) => void; id: string; nodeId: string; agentId?: string; type: string; params: any, namedInputs: any };
 
 export const eventAgentGenerator = (onStart: (id: string, data: EventData) => void) => {
   const eventPromise = (context: AgentFunctionContext) => {

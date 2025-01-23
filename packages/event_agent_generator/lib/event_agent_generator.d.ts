@@ -6,6 +6,7 @@ export type EventData = {
     agentId?: string;
     type: string;
     params: any;
+    namedInputs: any;
 };
 export declare const eventAgentGenerator: (onStart: (id: string, data: EventData) => void) => {
     eventAgent: {
