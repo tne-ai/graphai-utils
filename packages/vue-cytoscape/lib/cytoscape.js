@@ -270,12 +270,13 @@ var useCytoscape = function (selectedGraph) {
     var cytoscapeData = (0, vue_1.ref)(cytoscapeFromGraph((_a = selectedGraph.value) !== null && _a !== void 0 ? _a : { nodes: {} }));
     var cytoscapeRef = (0, vue_1.ref)();
     var zoomingEnabled = (0, vue_1.ref)(true);
-    var updateCytoscape = function (nodeId, state) { return __awaiter(void 0, void 0, void 0, function () {
-        var elements, graph, nodeData;
+    var updateCytoscape = function (log) { return __awaiter(void 0, void 0, void 0, function () {
+        var nodeId, state, elements, graph, nodeData;
         var _a, _b, _c;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
+                    nodeId = log.nodeId, state = log.state;
                     if (![graphai_1.NodeState.Completed, graphai_1.NodeState.Waiting].includes(state)) return [3 /*break*/, 2];
                     return [4 /*yield*/, (0, graphai_1.sleep)(100)];
                 case 1:

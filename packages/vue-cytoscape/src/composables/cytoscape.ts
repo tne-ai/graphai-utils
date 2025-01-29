@@ -1,5 +1,5 @@
 import { Ref, ref, onMounted, watch, ComputedRef } from "vue";
-import { GraphData, NodeState, NodeData, sleep, isObject } from "graphai";
+import { GraphData, NodeState, NodeData, sleep, isObject, TransactionLog } from "graphai";
 
 import { DataSource } from "graphai/lib/type";
 
@@ -240,7 +240,8 @@ export const useCytoscape = (selectedGraph: ComputedRef<GraphData> | Ref<GraphDa
   const cytoscapeRef = ref();
   const zoomingEnabled = ref(true);
 
-  const updateCytoscape = async (nodeId: string, state: NodeState) => {
+  const updateCytoscape = async (log: TransactionLog) => {
+    const { nodeId, state } = log;
     if ([NodeState.Completed, NodeState.Waiting].includes(state)) {
       await sleep(100);
     }

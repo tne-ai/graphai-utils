@@ -27,11 +27,7 @@ export default defineComponent({
 
     const run = async () => {
       const graphai = new GraphAI(graphLoop, vanilla);
-      graphai.onLogCallback = async ({ nodeId, state }) => {
-        // logs.value.push({ nodeId, state, inputs, result, errorMessage });
-        updateCytoscape(nodeId, state);
-        console.log(nodeId, state);
-      };
+      graphai.registerCallback(updateCytoscape);
       await graphai.run();
     };
     run();

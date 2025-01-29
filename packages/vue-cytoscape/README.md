@@ -23,9 +23,7 @@ export default defineComponent({
     
     const run = async () => {
       const graphai = new GraphAI(selectdGraph.value, agents);
-      graphai.onLogCallback = async ({ nodeId, state }) => {
-        updateCytoscape(nodeId, state);
-      };
+      graphai.registerCallback(updateCytoscape);
       await graphai.run();
     }
     run();
@@ -37,3 +35,6 @@ export default defineComponent({
 });
 ```
 
+### requirement
+
+GraphAI 0.6.23 or above
