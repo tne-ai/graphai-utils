@@ -118,11 +118,11 @@ test("test stream echo agent/client 3", async () => {
 test("test stream echo agent/client 4", async () => {
   // runner
   await streamingRequest("http://localhost:8085/api/agents", {
-    agentId: "streamMockAgent",
     params: {
       message: "this is test",
     },
     debugInfo: {
+      agentId: "streamMockAgent",
       verbose: false,
       nodeId: "123",
       retry: 2,
