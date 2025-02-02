@@ -16,7 +16,10 @@ import {
   graphRunner,
   StreamChunkCallback,
   ContentCallback,
+  updateAgentVerbose,
 } from "@/index";
+
+updateAgentVerbose(true);
 
 import cors from "cors";
 

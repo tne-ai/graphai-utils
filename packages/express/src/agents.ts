@@ -8,6 +8,12 @@ import { ExpressAgentInfo, StreamChunkCallback, ContentCallback } from "./type";
 import { DefaultEndOfStreamDelimiter } from "./type";
 import { defaultContentCallback } from "./utils";
 
+let graphaiExpressVerbose = false;
+
+export const updateAgentVerbose = (val: boolean) => {
+  graphaiExpressVerbose = val;
+};
+
 // express middleware
 // return agent list
 export const agentsList = (agentDictionary: AgentFunctionInfoDictionary, hostName: string = "https://example.com", urlPath: string = "/agent") => {
@@ -70,6 +76,9 @@ const __agentDispatcher = (
   const stream = streamAgentDispatcher(agentDictionary, agentFilters, isDispatch, streamChunkCallback, contentCallback);
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
+    if (graphaiExpressVerbose) {
+      console.log("__agentDispatcher(isStreaming): ", isStreaming);
+    }
     if (isStreaming) {
       return await stream(req, res, next);
     }
@@ -107,6 +116,9 @@ export const agentRunner = (
 // run agent
 export const nonStreamAgentDispatcher = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = [], isDispatch: boolean = true) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (graphaiExpressVerbose) {
+      console.log("nonStreamAgentDispatcher");
+    }
     try {
       const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters, isDispatch);
       const result = await dispatcher(req, res);
@@ -128,6 +140,9 @@ export const streamAgentDispatcher = (
   endOfStreamDelimiter: string = DefaultEndOfStreamDelimiter,
 ) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (graphaiExpressVerbose) {
+      console.log("streamAgentDispatcher");
+    }
     try {
       res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
       res.setHeader("Cache-Control", "no-cache, no-transform");
@@ -165,10 +180,13 @@ export const streamAgentDispatcher = (
 // dispatcher internal function
 const agentDispatcherInternal = (agentDictionary: AgentFunctionInfoDictionary, agentFilters: AgentFilterInfo[] = [], isDispatch: boolean = true) => {
   return async (req: express.Request, res: express.Response) => {
+    if (graphaiExpressVerbose) {
+      console.log("agentDispatcherInternal");
+    }
     const { params } = req;
-    const { agentId } = isDispatch ? params : req.body;
+    const { agentId } = isDispatch ? params : req.body.debugInfo;
 
-    const { nodeId, retry, params: agentParams, inputs, namedInputs } = req.body;
+    const { params: agentParams, debugInfo, filterParams, namedInputs /* graphData */ } = req.body;
     const agent = agentDictionary[agentId];
     if (agent === undefined) {
       res.status(404).send("Not found");
@@ -177,18 +195,14 @@ const agentDispatcherInternal = (agentDictionary: AgentFunctionInfoDictionary, a
 
     const context = {
       params: agentParams || {},
-      inputs,
       namedInputs,
-      debugInfo: {
-        nodeId,
-        retry,
-        state: NodeState.Executing,
-        subGraphs: new Map(),
-        verbose: false,
-      },
+      debugInfo,
       agents: agentDictionary,
-      filterParams: {},
+      filterParams,
     };
+    if (graphaiExpressVerbose) {
+      console.log("agentDispatcherInternal(context): ", context);
+    }
     const agentFilterRunner = agentFilterRunnerBuilder(agentFilters);
     const result = await agentFilterRunner(context, agent.agent);
     return result;
