@@ -1,7 +1,6 @@
 import express from "express";
 
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
-import { NodeState } from "graphai";
 import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
 import { ExpressAgentInfo, StreamChunkCallback, ContentCallback } from "./type";
 
