@@ -1,9 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.streamAgentDispatcher = exports.nonStreamAgentDispatcher = exports.agentRunner = exports.agentDispatcher = exports.agentDoc = exports.agentsList = void 0;
+exports.streamAgentDispatcher = exports.nonStreamAgentDispatcher = exports.agentRunner = exports.agentDispatcher = exports.agentDoc = exports.agentsList = exports.updateAgentVerbose = void 0;
 const agent_filters_1 = require("@graphai/agent_filters");
 const type_1 = require("./type");
 const utils_1 = require("./utils");
+let graphaiExpressVerbose = false;
+const updateAgentVerbose = (val) => {
+    graphaiExpressVerbose = val;
+};
+exports.updateAgentVerbose = updateAgentVerbose;
 // express middleware
 // return agent list
 const agentsList = (agentDictionary, hostName = "https://example.com", urlPath = "/agent") => {
@@ -60,6 +65,9 @@ const __agentDispatcher = (agentDictionary, agentFilters = [], streamChunkCallba
     const stream = (0, exports.streamAgentDispatcher)(agentDictionary, agentFilters, isDispatch, streamChunkCallback, contentCallback);
     return async (req, res, next) => {
         const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream");
+        if (graphaiExpressVerbose) {
+            console.log("__agentDispatcher(isStreaming): ", isStreaming);
+        }
         if (isStreaming) {
             return await stream(req, res, next);
         }
@@ -84,6 +92,9 @@ exports.agentRunner = agentRunner;
 // run agent
 const nonStreamAgentDispatcher = (agentDictionary, agentFilters = [], isDispatch = true) => {
     return async (req, res, next) => {
+        if (graphaiExpressVerbose) {
+            console.log("nonStreamAgentDispatcher");
+        }
         try {
             const dispatcher = agentDispatcherInternal(agentDictionary, agentFilters, isDispatch);
             const result = await dispatcher(req, res);
@@ -99,6 +110,9 @@ exports.nonStreamAgentDispatcher = nonStreamAgentDispatcher;
 // run agent with streaming
 const streamAgentDispatcher = (agentDictionary, agentFilters = [], isDispatch = true, streamChunkCallback, contentCallback = utils_1.defaultContentCallback, endOfStreamDelimiter = type_1.DefaultEndOfStreamDelimiter) => {
     return async (req, res, next) => {
+        if (graphaiExpressVerbose) {
+            console.log("streamAgentDispatcher");
+        }
         try {
             res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
             res.setHeader("Cache-Control", "no-cache, no-transform");
@@ -135,9 +149,12 @@ exports.streamAgentDispatcher = streamAgentDispatcher;
 // dispatcher internal function
 const agentDispatcherInternal = (agentDictionary, agentFilters = [], isDispatch = true) => {
     return async (req, res) => {
+        if (graphaiExpressVerbose) {
+            console.log("agentDispatcherInternal");
+        }
         const { params } = req;
-        const { agentId } = isDispatch ? params : req.body;
-        const { nodeId, retry, params: agentParams, inputs, namedInputs } = req.body;
+        const { agentId } = isDispatch ? params : req.body.debugInfo;
+        const { params: agentParams, debugInfo, filterParams, namedInputs /* graphData */ } = req.body;
         const agent = agentDictionary[agentId];
         if (agent === undefined) {
             res.status(404).send("Not found");
@@ -145,16 +162,14 @@ const agentDispatcherInternal = (agentDictionary, agentFilters = [], isDispatch 
         }
         const context = {
             params: agentParams || {},
-            inputs,
             namedInputs,
-            debugInfo: {
-                nodeId,
-                retry,
-                verbose: false,
-            },
+            debugInfo,
             agents: agentDictionary,
-            filterParams: {},
+            filterParams,
         };
+        if (graphaiExpressVerbose) {
+            console.log("agentDispatcherInternal(context): ", context);
+        }
         const agentFilterRunner = (0, agent_filters_1.agentFilterRunnerBuilder)(agentFilters);
         const result = await agentFilterRunner(context, agent.agent);
         return result;
