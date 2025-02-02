@@ -11,7 +11,7 @@
   },
   "private": true,
   "devDependencies": {
-    "@graphai/agents": "^0.2.8",
+    "@graphai/agents": "^0.2.9",
     "@graphai/vanilla": "^0.2.14",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-node-resolve": "^16.0.0",
