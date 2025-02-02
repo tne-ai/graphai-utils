@@ -4,7 +4,7 @@
 import test from "node:test";
 // import assert from "node:assert";
 
-import { AgentFunctionContext } from "graphai";
+import { AgentFunctionContext, NodeState } from "graphai";
 
 import { DefaultEndOfStreamDelimiter } from "@/type";
 
@@ -71,6 +71,8 @@ test("test stream echo agent/client 1", async () => {
       verbose: false,
       nodeId: "123",
       retry: 2,
+      state: NodeState.Executing,
+      subGraphs: new Map(),
     },
     namedInputs: {},
     filterParams: {},
@@ -87,6 +89,8 @@ test("test stream echo agent/client 2", async () => {
       verbose: false,
       nodeId: "123",
       retry: 2,
+      state: NodeState.Executing,
+      subGraphs: new Map(),
     },
     namedInputs: {},
     filterParams: {},
@@ -103,6 +107,8 @@ test("test stream echo agent/client 3", async () => {
       verbose: false,
       nodeId: "123",
       retry: 2,
+      state: NodeState.Executing,
+      subGraphs: new Map(),
     },
     namedInputs: {},
     filterParams: {},
@@ -120,6 +126,8 @@ test("test stream echo agent/client 4", async () => {
       verbose: false,
       nodeId: "123",
       retry: 2,
+      state: NodeState.Executing,
+      subGraphs: new Map(),
     },
     namedInputs: {},
     filterParams: {},

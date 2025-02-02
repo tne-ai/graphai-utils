@@ -1,7 +1,7 @@
 // echoAgent client.
 // npx ts-node -r tsconfig-paths/register test/client.ts
 
-import { AgentFunctionContext } from "graphai";
+import { AgentFunctionContext, NodeState } from "graphai";
 
 import test from "node:test";
 import assert from "node:assert";
@@ -46,6 +46,8 @@ test("test stream echo agent", async () => {
       verbose: false,
       nodeId: "123",
       retry: 2,
+      state: NodeState.Executing,
+      subGraphs: new Map(),
     },
     namedInputs: {},
     filterParams: {},
@@ -62,6 +64,8 @@ test("test nonstream echo agent", async () => {
       verbose: false,
       nodeId: "123",
       retry: 2,
+      state: NodeState.Executing,
+      subGraphs: new Map(),
     },
     namedInputs: {},
     filterParams: {},

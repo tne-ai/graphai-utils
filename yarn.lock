@@ -439,10 +439,10 @@
   resolved "https://registry.yarnpkg.com/@google/generative-ai/-/generative-ai-0.21.0.tgz#a5011aab9e6082e706937b26ef23445933fa0d15"
   integrity sha512-7XhUbtnlkSEZK15kN3t+tzIMxsbKm/dSkKBFalj+20NvPKe1kBY7mR2P7vuijEn+f06z5+A8bVGKO0v39cr6Wg==
 
-"@graphai/agent_filters@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@graphai/agent_filters/-/agent_filters-0.2.0.tgz#ba6d4a53edc1275995ca3385cac43e8cccb25d10"
-  integrity sha512-4+7E2WNl2R5R30pkt1jiUT7xK+PzOTmShCgBnv7AIwKRwQZsnVtaU9VNKC8QRRyHxhOrWukDbrlPrsSOAlQoVQ==
+"@graphai/agent_filters@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@graphai/agent_filters/-/agent_filters-0.2.2.tgz#2013ff6c75f010dc8405e8de20f5be288cc97bca"
+  integrity sha512-DYhKxbBiXdIV2koip6LD79GMJvb0aTXTpQxOmTgrAu8rVwt6OfEawxQ/XLg0sryFUvFpOkGC2cFSruDI4RUMaA==
   dependencies:
     "@noble/hashes" "^1.7.1"
     ajv "^8.16.0"
