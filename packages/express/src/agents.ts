@@ -1,6 +1,7 @@
 import express from "express";
 
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, AgentFunctionContext } from "graphai";
+import { NodeState } from "graphai";
 import { streamAgentFilterGenerator, agentFilterRunnerBuilder } from "@graphai/agent_filters";
 import { ExpressAgentInfo, StreamChunkCallback, ContentCallback } from "./type";
 
@@ -181,12 +182,13 @@ const agentDispatcherInternal = (agentDictionary: AgentFunctionInfoDictionary, a
       debugInfo: {
         nodeId,
         retry,
+        state: NodeState.Executing,
+        subGraphs: new Map(),
         verbose: false,
       },
       agents: agentDictionary,
       filterParams: {},
     };
-
     const agentFilterRunner = agentFilterRunnerBuilder(agentFilters);
     const result = await agentFilterRunner(context, agent.agent);
     return result;
