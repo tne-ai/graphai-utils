@@ -41,14 +41,14 @@ var graphai_1 = require("graphai");
 var eventAgentGenerator = function (onStart) {
     var eventPromise = function (context) {
         var id = Math.random().toString(32).substring(2);
-        return new Promise(function (resolved) {
+        return new Promise(function (resolved, reject) {
             var onEnd = function (data) {
                 resolved(data);
             };
             var params = context.params, namedInputs = context.namedInputs;
             var _a = context.debugInfo, nodeId = _a.nodeId, agentId = _a.agentId;
             var type = params.type;
-            var data = { onEnd: onEnd, id: id, nodeId: nodeId, agentId: agentId, type: type, params: params, namedInputs: namedInputs };
+            var data = { onEnd: onEnd, id: id, nodeId: nodeId, agentId: agentId, type: type, params: params, namedInputs: namedInputs, reject: reject };
             onStart(id, data);
         });
     };
