@@ -5,14 +5,14 @@ export type EventData = { onEnd: (data: unknown) => void; id: string; nodeId: st
 export const eventAgentGenerator = (onStart: (id: string, data: EventData) => void) => {
   const eventPromise = (context: AgentFunctionContext) => {
     const id = Math.random().toString(32).substring(2);
-    return new Promise((resolved) => {
+    return new Promise((resolved, reject) => {
       const onEnd = (data: unknown) => {
         resolved(data);
       };
       const { params, namedInputs } = context;
       const { nodeId, agentId } = context.debugInfo;
       const { type } = params;
-      const data = { onEnd, id, nodeId, agentId, type, params, namedInputs };
+      const data = { onEnd, id, nodeId, agentId, type, params, namedInputs, reject };
       onStart(id, data);
     });
   };
