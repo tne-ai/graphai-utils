@@ -168,7 +168,8 @@ const agentDispatcherInternal = (agentDictionary, agentFilters = [], isDispatch 
             filterParams,
         };
         if (graphaiExpressVerbose) {
-            console.log("agentDispatcherInternal(context): ", context);
+            const { agents: _nonLog, ...logContext } = context;
+            console.log("agentDispatcherInternal(context): ", logContext);
         }
         const agentFilterRunner = (0, agent_filters_1.agentFilterRunnerBuilder)(agentFilters);
         const result = await agentFilterRunner(context, agent.agent);
