@@ -29,15 +29,15 @@
   "dependencies": {},
   "devDependencies": {
     "@graphai/vanilla": "^0.2.15",
-    "@types/node": "^22.13.5",
+    "@types/node": "^22.13.10",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
-    "eslint": "^9.21.0",
+    "eslint": "^9.22.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "graphai": "^0.6.25",
     "prettier": "^3.5.2",
     "rollup": "^4.34.8",
-    "typescript-eslint": "^8.25.0",
+    "typescript-eslint": "^8.26.1",
     "vite": "^6.2.0",
     "vue": "^3.5.13",
     "vue-tsc": "^2.2.4"
