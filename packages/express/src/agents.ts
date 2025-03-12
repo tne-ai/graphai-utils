@@ -200,7 +200,7 @@ const agentDispatcherInternal = (agentDictionary: AgentFunctionInfoDictionary, a
       filterParams,
     };
     if (graphaiExpressVerbose) {
-      const { agents: _nonLog, ...logContext } = context;
+      const { agents: __nonLog, ...logContext } = context;
       console.log("agentDispatcherInternal(context): ", logContext);
     }
     const agentFilterRunner = agentFilterRunnerBuilder(agentFilters);
