@@ -70,6 +70,7 @@ test("test stream echo agent/client 1", async () => {
     debugInfo: {
       verbose: false,
       nodeId: "123",
+      isResult: true,
       retry: 2,
       state: NodeState.Executing,
       subGraphs: new Map(),
@@ -88,6 +89,7 @@ test("test stream echo agent/client 2", async () => {
     debugInfo: {
       verbose: false,
       nodeId: "123",
+      isResult: true,
       retry: 2,
       state: NodeState.Executing,
       subGraphs: new Map(),
@@ -106,6 +108,7 @@ test("test stream echo agent/client 3", async () => {
     debugInfo: {
       verbose: false,
       nodeId: "123",
+      isResult: true,
       retry: 2,
       state: NodeState.Executing,
       subGraphs: new Map(),
@@ -125,6 +128,7 @@ test("test stream echo agent/client 4", async () => {
       agentId: "streamMockAgent",
       verbose: false,
       nodeId: "123",
+      isResult: true,
       retry: 2,
       state: NodeState.Executing,
       subGraphs: new Map(),
