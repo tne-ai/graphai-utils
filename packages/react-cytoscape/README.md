@@ -21,9 +21,7 @@ function App() {
 
   const run = async () => {
     const graphai = new GraphAI(selectedGraph, agents);
-    graphai.onLogCallback = async ({ nodeId, state }) => {
-      updateCytoscape(nodeId, state);
-    };
+    graphai.registerCallback(updateCytoscape);
     await graphai.run();
   };
 
