@@ -3,7 +3,15 @@
 
 Call agents with streaming support by combining Firebase Functions with @receptron/graphai_firebase_functions.
 
+## Install
+
 ```
+yarn add @receptron/firebase-tools
+```
+
+## Usage
+
+```TypeScript
   import { buildFirebaseStreamFilter } from "@receptron/firebase-tools";
   
   const { firebaseStreamFilter } = buildFirebaseStreamFilter(firebaseApp, "asia-northeast1", "agent");
