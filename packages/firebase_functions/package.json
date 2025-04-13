@@ -1,0 +1,38 @@
+{
+  "name": "@receptron/graphai_firebase_functions",
+  "version": "1.0.0",
+  "description": "GraphAI firebase functions tools.",
+  "main": "lib/index.js",
+  "files": [
+    "./lib"
+  ],
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "eslint": "eslint --fix",
+    "server": "ts-node -r tsconfig-paths/register test/express.ts",
+    "test_stream": "ts-node -r tsconfig-paths/register test/test_stream_client.ts",
+    "test_stream2": "ts-node -r tsconfig-paths/register test/test_stream_graph.ts",
+    "test": "node --test -r tsconfig-paths/register --require ts-node/register ./test/test_*.ts",
+    "format": "prettier --write '{src,test}/**/*.{yaml,ts,json}'",
+    "ci": "yarn run format && yarn run eslint && yarn run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/receptron/graphai_utils"
+  },
+  "author": "Receptron team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/receptron/graphai_utils/issues"
+  },
+  "homepage": "https://github.com/receptron/graphai_utils/tree/main/packages/firebase_functions#readme",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "@graphai/agent_filters": "^1.0.0"
+  },
+  "types": "./lib/index.d.ts",
+  "directories": {
+    "lib": "lib"
+  }
+}
