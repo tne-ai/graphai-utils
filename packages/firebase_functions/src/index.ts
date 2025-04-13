@@ -1,3 +1,3 @@
-import { StreamChunkCallback, runAgentOnCall } from "./functions";
+export { StreamChunkCallback, runAgentOnCall } from "./functions";
 
 

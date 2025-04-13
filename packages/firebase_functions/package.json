@@ -1,6 +1,6 @@
 {
   "name": "@receptron/graphai_firebase_functions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GraphAI firebase functions tools.",
   "main": "lib/index.js",
   "files": [
@@ -29,7 +29,7 @@
   "devDependencies": {
   },
   "dependencies": {
-    "@graphai/agent_filters": "^1.0.0"
+    "@graphai/agent_filters": "^1.0.1"
   },
   "types": "./lib/index.d.ts",
   "directories": {
