@@ -20,8 +20,6 @@ import {
   completionRunner,
 } from "@/index";
 
-import { StreamCompletionChunkCallback } from "@/type";
-
 updateAgentVerbose(true);
 
 import cors from "cors";
@@ -64,7 +62,7 @@ const onLogCallback = (log: TransactionLog, __isUpdate: boolean) => {
   console.log(log);
 };
 
-const model2graphData = (model: string) => {
+const model2graphData = (__model: string) => {
   const graphData = {
     version: 0.5,
     nodes: {

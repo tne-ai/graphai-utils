@@ -115,7 +115,7 @@ const streamGraphRunner = (
 
       try {
         const dispatcher = streamGraphRunnerInternal(agentDictionary, model2GraphData, filterList, onLogCallback);
-        await dispatcher(req, res);
+        await dispatcher(req);
 
         res.write(streamCompletionChunkCallback(baseData, "end"));
         res.write(streamCompletionChunkCallback(baseData, "done"));
@@ -138,7 +138,7 @@ const nonStreamGraphRunner = (
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const dispatcher = streamGraphRunnerInternal(agentDictionary, model2GraphData, agentFilters, onLogCallback);
-      const result = await dispatcher(req, res);
+      const result = await dispatcher(req);
       return res.json(result);
     } catch (e) {
       next(e);
@@ -153,7 +153,7 @@ const streamGraphRunnerInternal = (
   agentFilters: AgentFilterInfo[] = [],
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
-  return async (req: express.Request & { config?: ConfigDataDictionary }, res: express.Response) => {
+  return async (req: express.Request & { config?: ConfigDataDictionary }) => {
     const { messages, model } = req.body;
     const { config } = req;
 
