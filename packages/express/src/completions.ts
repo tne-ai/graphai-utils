@@ -87,12 +87,6 @@ const streamGraphRunner = (
         res.write(streamChunkCallback({} as any, "", "end"));
         res.write(streamChunkCallback({} as any, "", "end2"));
       }
-      /*
-      if (endOfStreamDelimiter !== "") {
-        res.write(endOfStreamDelimiter);
-      }
-      res.write(contentCallback(result));
-      */
       return res.end();
     } catch (e) {
       next(e);

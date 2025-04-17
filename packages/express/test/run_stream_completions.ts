@@ -61,7 +61,7 @@ const body = {
       content: [
         {
           type: "text",
-          text: "火星への旅行方法を教えて下さい",
+          text: "How can I travel to Mars?",
         },
       ],
     },
