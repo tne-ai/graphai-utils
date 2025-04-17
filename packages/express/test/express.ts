@@ -53,31 +53,6 @@ const streamChunkCallback: StreamChunkCallback = (context, token) => {
   return JSON.stringify(data);
 };
 
-const streamCompletionChunkCallback: StreamCompletionChunkCallback = (data, status, token) => {
-  if (status === "done") {
-    return "data: [DONE]\n\n";
-  }
-  const payload = (() => {
-    if (status === "start") {
-      return {
-        object: "chat.completion.chunk",
-        choices: [{ index: 0, delta: { role: "assistant", content: "" }, logprobs: null, finish_reason: null }],
-      };
-    }
-    if (status === "end") {
-      return {
-        object: "chat.completion.chunk",
-        choices: [{ index: 0, delta: {}, logprobs: null, finish_reason: "stop" }],
-      };
-    }
-    return {
-      object: "chat.completion.chunk",
-      choices: [{ index: 0, delta: { content: token }, logprobs: null, finish_reason: null }],
-    };
-  })();
-  return "data: " + JSON.stringify({ ...data, ...payload }) + "\n\n";
-};
-
 const contentCallback: ContentCallback = (data) => {
   return JSON.stringify({
     type: "content",
@@ -87,6 +62,29 @@ const contentCallback: ContentCallback = (data) => {
 
 const onLogCallback = (log: TransactionLog, __isUpdate: boolean) => {
   console.log(log);
+};
+
+const model2graphData = (model: string) => {
+  const graphData = {
+    version: 0.5,
+    nodes: {
+      messages: {
+        value: [],
+      },
+      llm: {
+        agent: "openAIAgent",
+        params: {
+          stream: true,
+          isResult: true,
+        },
+        inputs: {
+          messages: ":messages",
+        },
+        isResult: true,
+      },
+    },
+  };
+  return graphData;
 };
 
 app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix));
@@ -110,7 +108,7 @@ app.post(apiGraphPrefix + "/", graphRunner(agentDictionary, [], streamChunkCallb
 
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
 
-app.post("/api/chat/completions", completionRunner(agentDictionary, [], streamCompletionChunkCallback, onLogCallback));
+app.post("/api/chat/completions", completionRunner(agentDictionary, model2graphData, [], onLogCallback));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);

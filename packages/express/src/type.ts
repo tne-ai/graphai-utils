@@ -1,4 +1,4 @@
-import type { AgentFunctionInfoSample, AgentFunctionContext } from "graphai";
+import type { AgentFunctionInfoSample, AgentFunctionContext, GraphData } from "graphai";
 
 export type ExpressAgentInfo = {
   agentId: string;
@@ -25,6 +25,7 @@ type BaseData = {
 export type StreamChunkCallback = <T = string | Record<string, string>>(context: AgentFunctionContext, token: T) => void;
 
 export type StreamCompletionChunkCallback = <T = string | Record<string, string>>(data: BaseData, status: string, token?: T) => void;
+export type Model2GraphData = (model: string) => GraphData;
 
 export type ContentCallback = <T = string | Record<string, string>>(token: T) => void;
 
