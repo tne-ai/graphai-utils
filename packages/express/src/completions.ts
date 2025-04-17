@@ -47,7 +47,31 @@ export const completionRunner = (
   const nonStreamRunner = nonStreamGraphRunner(agentDictionary, model2GraphData, agentFilters, onLogCallback);
 
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const { stream } = req.body;
+    const { stream, model, messages } = req.body;
+
+    // validation
+    if (!model || typeof model !== "string") {
+      return res.status(400).json({
+        error: {
+          message: "`model` is required and must be a string",
+          type: "invalid_request_error",
+          param: "model",
+          code: "invalid_model",
+        },
+      });
+    }
+
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({
+        error: {
+          message: "`messages` must be an array of objects with `role` and `content` as strings",
+          type: "invalid_request_error",
+          param: "messages",
+          code: "invalid_messages",
+        },
+      });
+    }
+
     // const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream")
     if (stream) {
       return await streamRunner(req, res, next);
@@ -74,7 +98,6 @@ const streamGraphRunner = (
         id: randomUUID(),
         created: Math.floor(Date.now() / 1000),
         model,
-        // system_fingerprint: "fp_44709d6fcb",
       };
 
       const streamCallback: StreamChunkCallback = (context, token) => {
@@ -90,12 +113,15 @@ const streamGraphRunner = (
 
       res.write(streamCompletionChunkCallback(baseData, "start"));
 
-      const dispatcher = streamGraphRunnerInternal(agentDictionary, model2GraphData, filterList, onLogCallback);
-      await dispatcher(req);
+      try {
+        const dispatcher = streamGraphRunnerInternal(agentDictionary, model2GraphData, filterList, onLogCallback);
+        await dispatcher(req, res);
 
-      res.write(streamCompletionChunkCallback(baseData, "end"));
-      res.write(streamCompletionChunkCallback(baseData, "done"));
-
+        res.write(streamCompletionChunkCallback(baseData, "end"));
+        res.write(streamCompletionChunkCallback(baseData, "done"));
+      } catch (__err) {
+        res.write(`data: ${JSON.stringify({ error: "GraphAI Something went wrong" })}\n\n`);
+      }
       return res.end();
     } catch (e) {
       next(e);
@@ -112,7 +138,7 @@ const nonStreamGraphRunner = (
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const dispatcher = streamGraphRunnerInternal(agentDictionary, model2GraphData, agentFilters, onLogCallback);
-      const result = await dispatcher(req);
+      const result = await dispatcher(req, res);
       return res.json(result);
     } catch (e) {
       next(e);
@@ -127,7 +153,7 @@ const streamGraphRunnerInternal = (
   agentFilters: AgentFilterInfo[] = [],
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
-  return async (req: express.Request & { config?: ConfigDataDictionary }) => {
+  return async (req: express.Request & { config?: ConfigDataDictionary }, res: express.Response) => {
     const { messages, model } = req.body;
     const { config } = req;
 
