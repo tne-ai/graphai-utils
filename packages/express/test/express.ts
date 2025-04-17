@@ -17,6 +17,7 @@ import {
   StreamChunkCallback,
   ContentCallback,
   updateAgentVerbose,
+  completionRunner,
 } from "@/index";
 
 updateAgentVerbose(true);
@@ -40,14 +41,70 @@ app.use(
 );
 app.use(cors());
 
-const streamChunkCallback: StreamChunkCallback = (context, token) => {
+const streamChunkCallback: StreamChunkCallback = (context, token, status) => {
+  /*
   const data = {
     type: "agent",
     nodeId: context.debugInfo.nodeId,
     agentId: context.debugInfo.agentId,
     token,
+    };
+  */
+
+  const data = {
+    id: "chatcmpl-123",
+    object: "chat.completion.chunk",
+    created: 1694268190,
+    model: "gpt-4o-mini",
+    system_fingerprint: "fp_44709d6fcb",
+    choices: [
+      {
+        index: 0,
+        delta: { content: "Hello" },
+        logprobs: null,
+        finish_reason: null,
+      },
+    ],
   };
-  return JSON.stringify(data);
+  console.log("data:" + JSON.stringify(data) + "\n");
+  if (status === "start") {
+    const a = {
+      id: "chatcmpl-123",
+      object: "chat.completion.chunk",
+      created: 1694268190,
+      model: "gpt-4o-mini",
+      system_fingerprint: "fp_44709d6fcb",
+      choices: [
+        { index: 0, delta: { role: "assistant", content: "" }, logprobs: null, finish_reason: null }
+      ],
+    };
+    return "data: " +  JSON.stringify(a)  + "\n\n";
+  }
+  if (status === "end2") {
+    return "data: [DONE]\n\n";
+  }
+  if (status === "end") {
+    const c = {
+      id: "chatcmpl-123",
+      object: "chat.completion.chunk",
+      created: 1694268190,
+      model: "gpt-4o-mini",
+      system_fingerprint: "fp_44709d6fcb",
+      choices: [{ index: 0, delta: {}, logprobs: null, finish_reason: "stop" }],
+    };
+    return "data: " + JSON.stringify(c) + "\n\n";
+  }
+  const b = {
+    id: "chatcmpl-123",
+    object: "chat.completion.chunk",
+    created: 1694268190,
+    model: "gpt-4o-mini",
+    system_fingerprint: "fp_44709d6fcb",
+    choices: [{ index: 0, delta: { content: token }, logprobs: null, finish_reason: null }],
+  };
+  return "data: " + JSON.stringify(b) + "\n\n";
+  
+  //return "data:" + JSON.stringify(data);
 };
 
 const contentCallback: ContentCallback = (data) => {
@@ -81,6 +138,8 @@ app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary))
 app.post(apiGraphPrefix + "/", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, ""));
 
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
+
+app.post("/api/chat/completions", completionRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);
