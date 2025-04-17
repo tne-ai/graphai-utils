@@ -41,16 +41,17 @@ app.use(
 );
 app.use(cors());
 
-const streamChunkCallback: StreamChunkCallback = (context, token, status) => {
-  /*
+const streamChunkCallback: StreamChunkCallback = (context, token) => {
   const data = {
     type: "agent",
     nodeId: context.debugInfo.nodeId,
     agentId: context.debugInfo.agentId,
     token,
-    };
-  */
+  };
+  return JSON.stringify(data);
+};
 
+const streamCompletionChunkCallback: StreamChunkCallback = (context, token, status) => {
   const data = {
     id: "chatcmpl-123",
     object: "chat.completion.chunk",
@@ -139,7 +140,7 @@ app.post(apiGraphPrefix + "/", graphRunner(agentDictionary, [], streamChunkCallb
 
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
 
-app.post("/api/chat/completions", completionRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
+app.post("/api/chat/completions", completionRunner(agentDictionary, [], streamCompletionChunkCallback, contentCallback, "", onLogCallback));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);
