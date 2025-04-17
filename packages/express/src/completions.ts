@@ -2,6 +2,8 @@ import { GraphAI } from "graphai";
 import express from "express";
 import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
+import { randomUUID } from 'crypto';
+
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, TransactionLog } from "graphai";
 import type { ConfigDataDictionary } from "graphai/lib/type";
 import type { StreamCompletionChunkCallback, StreamChunkCallback } from "./type";
@@ -57,10 +59,10 @@ const streamGraphRunner = (
       res.setHeader("X-Accel-Buffering", "no");
 
       const baseData = {
-        id: "chatcmpl-123",
-        created: 1694268190,
+        id: randomUUID(),
+        created: Math.floor(Date.now() / 1000),
         model: "gpt-4o-mini",
-        system_fingerprint: "fp_44709d6fcb",
+        // system_fingerprint: "fp_44709d6fcb",
       };
 
       const streamCallback: StreamChunkCallback = (context, token) => {

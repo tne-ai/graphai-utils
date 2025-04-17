@@ -19,7 +19,7 @@ type BaseData = {
   id: string;
   created: number;
   model: string;
-  system_fingerprint: string;
+  // system_fingerprint: string;
 };
 
 export type StreamChunkCallback = <T = string | Record<string, string>>(context: AgentFunctionContext, token: T) => void;
