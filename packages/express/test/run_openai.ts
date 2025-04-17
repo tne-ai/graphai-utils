@@ -29,6 +29,12 @@ async function main() {
   console.log("\n--- done ---");
   const chatCompletion = await stream.finalChatCompletion();
   console.log(JSON.stringify(chatCompletion, null, 2));
+
+  const result = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages,
+  });
+  console.log(result);
 }
 
 main().catch(console.error);

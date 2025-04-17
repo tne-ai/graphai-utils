@@ -9,8 +9,8 @@ import type { ConfigDataDictionary } from "graphai/lib/type";
 import type { StreamCompletionChunkCallback, StreamChunkCallback, Model2GraphData } from "./type";
 
 // TODO choise graph(done)
-// stream flag
-// non stream api
+// stream flag(done);
+// non stream api(done);
 
 const streamCompletionChunkCallback: StreamCompletionChunkCallback = (data, status, token) => {
   if (status === "done") {
@@ -43,15 +43,16 @@ export const completionRunner = (
   agentFilters: AgentFilterInfo[] = [],
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
-  const stream = streamGraphRunner(agentDictionary, model2GraphData, agentFilters, onLogCallback);
-  const nonStream = nonStreamGraphRunner(agentDictionary, model2GraphData, agentFilters, onLogCallback);
+  const streamRunner = streamGraphRunner(agentDictionary, model2GraphData, agentFilters, onLogCallback);
+  const nonStreamRunner = nonStreamGraphRunner(agentDictionary, model2GraphData, agentFilters, onLogCallback);
 
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream") || true; // TODO
-    if (isStreaming) {
-      return await stream(req, res, next);
+    const { stream } = req.body;
+    // const isStreaming = (req.headers["content-type"] || "").startsWith("text/event-stream")
+    if (stream) {
+      return await streamRunner(req, res, next);
     }
-    return await nonStream(req, res, next);
+    return await nonStreamRunner(req, res, next);
   };
 };
 
