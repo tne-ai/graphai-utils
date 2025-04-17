@@ -36,6 +36,8 @@ app.post(apiAgentPrefix + "/stream/:agentId", streamAgentDispatcher(agentDiction
 // non stream and stream agent server
 app.post(apiGraphPrefix + "/", graphRunner(agentDictionary));
 
+// OpenAI completions Compatible API
+app.post("/api/chat/completions", completionRunner(agentDictionary, model2graphData, [], onLogCallback));
 
 ```
 
