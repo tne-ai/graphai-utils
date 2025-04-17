@@ -140,7 +140,7 @@ app.post(apiGraphPrefix + "/", graphRunner(agentDictionary, [], streamChunkCallb
 
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
 
-app.post("/api/chat/completions", completionRunner(agentDictionary, [], streamCompletionChunkCallback, contentCallback, "", onLogCallback));
+app.post("/api/chat/completions", completionRunner(agentDictionary, [], streamCompletionChunkCallback, onLogCallback));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);

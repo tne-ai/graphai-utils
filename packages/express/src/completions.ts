@@ -2,12 +2,9 @@ import { GraphAI } from "graphai";
 import express from "express";
 import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
-import { DefaultEndOfStreamDelimiter } from "./type";
-import { defaultContentCallback } from "./utils";
-
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, TransactionLog } from "graphai";
 import type { ConfigDataDictionary } from "graphai/lib/type";
-import type { StreamChunkCallback, ContentCallback } from "./type";
+import type { StreamChunkCallback } from "./type";
 
 const graphData = {
   version: 0.5,
@@ -33,11 +30,9 @@ export const completionRunner = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
-  contentCallback: ContentCallback = defaultContentCallback,
-  endOfStreamDelimiter: string = DefaultEndOfStreamDelimiter,
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
-  const stream = streamGraphRunner(agentDictionary, agentFilters, streamChunkCallback, contentCallback, endOfStreamDelimiter, onLogCallback);
+  const stream = streamGraphRunner(agentDictionary, agentFilters, streamChunkCallback, onLogCallback);
   const nonStream = nonStreamGraphRunner(agentDictionary, agentFilters, onLogCallback);
 
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -53,8 +48,6 @@ const streamGraphRunner = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
   streamChunkCallback?: StreamChunkCallback,
-  contentCallback: ContentCallback = defaultContentCallback,
-  endOfStreamDelimiter: string = DefaultEndOfStreamDelimiter,
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -81,7 +74,7 @@ const streamGraphRunner = (
         res.write(streamChunkCallback({} as any, "", "start"));
       }
       const dispatcher = streamGraphRunnerInternal(agentDictionary, filterList, onLogCallback);
-      const result = await dispatcher(req);
+      await dispatcher(req);
 
       if (streamChunkCallback) {
         res.write(streamChunkCallback({} as any, "", "end"));
