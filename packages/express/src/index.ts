@@ -2,4 +2,4 @@ export { agentsList, agentDoc, agentDispatcher, agentRunner, nonStreamAgentDispa
 export { graphRunner, streamGraphRunner, nonStreamGraphRunner } from "./graph";
 export { completionRunner } from "./completions";
 
-export { ExpressAgentInfo, StreamChunkCallback, ContentCallback } from "./type";
+export { ExpressAgentInfo, StreamChunkCallback, ContentCallback, Model2GraphData } from "./type";
