@@ -17,6 +17,7 @@ import {
   StreamChunkCallback,
   ContentCallback,
   updateAgentVerbose,
+  completionRunner,
 } from "@/index";
 
 updateAgentVerbose(true);
@@ -61,6 +62,29 @@ const onLogCallback = (log: TransactionLog, __isUpdate: boolean) => {
   console.log(log);
 };
 
+const model2graphData = (__model: string) => {
+  const graphData = {
+    version: 0.5,
+    nodes: {
+      messages: {
+        value: [],
+      },
+      llm: {
+        agent: "openAIAgent",
+        params: {
+          stream: true,
+          isResult: true,
+        },
+        inputs: {
+          messages: ":messages",
+        },
+        isResult: true,
+      },
+    },
+  };
+  return graphData;
+};
+
 app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix));
 app.get(apiPrefix + "/", agentsList(agentDictionary, hostName, apiPrefix));
 
@@ -81,6 +105,8 @@ app.post(apiPrefix + "/stream/:agentId", streamAgentDispatcher(agentDictionary))
 app.post(apiGraphPrefix + "/", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, ""));
 
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
+
+app.post("/api/chat/completions", completionRunner(agentDictionary, model2graphData, [], onLogCallback));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);
