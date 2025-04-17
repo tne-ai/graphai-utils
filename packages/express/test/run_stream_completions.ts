@@ -50,7 +50,6 @@ const streamingRequest = async (url: string, postData: any, messages: string[]) 
   console.log(last);
 };
 
-
 const body = {
   model: "gpt-4.1",
   messages: [

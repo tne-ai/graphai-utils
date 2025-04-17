@@ -20,6 +20,8 @@ import {
   completionRunner,
 } from "@/index";
 
+import { StreamCompletionChunkCallback } from "@/type";
+
 updateAgentVerbose(true);
 
 import cors from "cors";
@@ -51,61 +53,29 @@ const streamChunkCallback: StreamChunkCallback = (context, token) => {
   return JSON.stringify(data);
 };
 
-const streamCompletionChunkCallback: StreamChunkCallback = (context, token, status) => {
-  const data = {
-    id: "chatcmpl-123",
-    object: "chat.completion.chunk",
-    created: 1694268190,
-    model: "gpt-4o-mini",
-    system_fingerprint: "fp_44709d6fcb",
-    choices: [
-      {
-        index: 0,
-        delta: { content: "Hello" },
-        logprobs: null,
-        finish_reason: null,
-      },
-    ],
-  };
-  console.log("data:" + JSON.stringify(data) + "\n");
-  if (status === "start") {
-    const a = {
-      id: "chatcmpl-123",
-      object: "chat.completion.chunk",
-      created: 1694268190,
-      model: "gpt-4o-mini",
-      system_fingerprint: "fp_44709d6fcb",
-      choices: [
-        { index: 0, delta: { role: "assistant", content: "" }, logprobs: null, finish_reason: null }
-      ],
-    };
-    return "data: " +  JSON.stringify(a)  + "\n\n";
-  }
-  if (status === "end2") {
+const streamCompletionChunkCallback: StreamCompletionChunkCallback = (data, status, token) => {
+  if (status === "done") {
     return "data: [DONE]\n\n";
   }
-  if (status === "end") {
-    const c = {
-      id: "chatcmpl-123",
+  const payload = (() => {
+    if (status === "start") {
+      return {
+        object: "chat.completion.chunk",
+        choices: [{ index: 0, delta: { role: "assistant", content: "" }, logprobs: null, finish_reason: null }],
+      };
+    }
+    if (status === "end") {
+      return {
+        object: "chat.completion.chunk",
+        choices: [{ index: 0, delta: {}, logprobs: null, finish_reason: "stop" }],
+      };
+    }
+    return {
       object: "chat.completion.chunk",
-      created: 1694268190,
-      model: "gpt-4o-mini",
-      system_fingerprint: "fp_44709d6fcb",
-      choices: [{ index: 0, delta: {}, logprobs: null, finish_reason: "stop" }],
+      choices: [{ index: 0, delta: { content: token }, logprobs: null, finish_reason: null }],
     };
-    return "data: " + JSON.stringify(c) + "\n\n";
-  }
-  const b = {
-    id: "chatcmpl-123",
-    object: "chat.completion.chunk",
-    created: 1694268190,
-    model: "gpt-4o-mini",
-    system_fingerprint: "fp_44709d6fcb",
-    choices: [{ index: 0, delta: { content: token }, logprobs: null, finish_reason: null }],
-  };
-  return "data: " + JSON.stringify(b) + "\n\n";
-  
-  //return "data:" + JSON.stringify(data);
+  })();
+  return "data: " + JSON.stringify({ ...data, ...payload }) + "\n\n";
 };
 
 const contentCallback: ContentCallback = (data) => {

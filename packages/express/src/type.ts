@@ -15,7 +15,16 @@ export type ExpressAgentInfo = {
   stream: boolean;
 };
 
-export type StreamChunkCallback = <T = string | Record<string, string>>(context: AgentFunctionContext, token: T, status?: string) => void;
+type BaseData = {
+  id: string;
+  created: number;
+  model: string;
+  system_fingerprint: string;
+};
+
+export type StreamChunkCallback = <T = string | Record<string, string>>(context: AgentFunctionContext, token: T) => void;
+
+export type StreamCompletionChunkCallback = <T = string | Record<string, string>>(data: BaseData, status: string, token?: T) => void;
 
 export type ContentCallback = <T = string | Record<string, string>>(token: T) => void;
 

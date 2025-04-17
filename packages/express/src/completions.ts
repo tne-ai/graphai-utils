@@ -4,7 +4,7 @@ import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
 import type { AgentFunctionInfoDictionary, AgentFilterInfo, TransactionLog } from "graphai";
 import type { ConfigDataDictionary } from "graphai/lib/type";
-import type { StreamChunkCallback } from "./type";
+import type { StreamCompletionChunkCallback, StreamChunkCallback } from "./type";
 
 const graphData = {
   version: 0.5,
@@ -29,10 +29,10 @@ const graphData = {
 export const completionRunner = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
-  streamChunkCallback?: StreamChunkCallback,
+  streamCompletionChunkCallback?: StreamCompletionChunkCallback,
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
-  const stream = streamGraphRunner(agentDictionary, agentFilters, streamChunkCallback, onLogCallback);
+  const stream = streamGraphRunner(agentDictionary, agentFilters, streamCompletionChunkCallback, onLogCallback);
   const nonStream = nonStreamGraphRunner(agentDictionary, agentFilters, onLogCallback);
 
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -47,7 +47,7 @@ export const completionRunner = (
 const streamGraphRunner = (
   agentDictionary: AgentFunctionInfoDictionary,
   agentFilters: AgentFilterInfo[] = [],
-  streamChunkCallback?: StreamChunkCallback,
+  streamCompletionChunkCallback?: StreamCompletionChunkCallback,
   onLogCallback = (__log: TransactionLog, __isUpdate: boolean) => {},
 ) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -55,10 +55,18 @@ const streamGraphRunner = (
       res.setHeader("Content-Type", "text/event-stream;charset=utf-8");
       res.setHeader("Cache-Control", "no-cache, no-transform");
       res.setHeader("X-Accel-Buffering", "no");
+
+      const baseData = {
+        id: "chatcmpl-123",
+        created: 1694268190,
+        model: "gpt-4o-mini",
+        system_fingerprint: "fp_44709d6fcb",
+      };
+
       const streamCallback: StreamChunkCallback = (context, token) => {
         if (token) {
-          if (streamChunkCallback) {
-            res.write(streamChunkCallback(context, token, "payload"));
+          if (streamCompletionChunkCallback) {
+            res.write(streamCompletionChunkCallback(baseData, "payload", token));
           } else {
             res.write(token);
           }
@@ -70,15 +78,15 @@ const streamGraphRunner = (
       };
       const filterList = [...agentFilters, streamAgentFilter];
 
-      if (streamChunkCallback) {
-        res.write(streamChunkCallback({} as any, "", "start"));
+      if (streamCompletionChunkCallback) {
+        res.write(streamCompletionChunkCallback(baseData, "start"));
       }
       const dispatcher = streamGraphRunnerInternal(agentDictionary, filterList, onLogCallback);
       await dispatcher(req);
 
-      if (streamChunkCallback) {
-        res.write(streamChunkCallback({} as any, "", "end"));
-        res.write(streamChunkCallback({} as any, "", "end2"));
+      if (streamCompletionChunkCallback) {
+        res.write(streamCompletionChunkCallback(baseData, "end"));
+        res.write(streamCompletionChunkCallback(baseData, "done"));
       }
       return res.end();
     } catch (e) {
