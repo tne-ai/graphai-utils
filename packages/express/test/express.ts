@@ -5,7 +5,7 @@ import express from "express";
 import type { AgentFunctionInfoDictionary, TransactionLog } from "graphai";
 
 import * as agents from "@graphai/agents";
-import { llmGraphData } from "./graph_data";
+import { llmGraphData, graphDictonary } from "./graph_data";
 
 import {
   agentDispatcher,
@@ -19,6 +19,7 @@ import {
   ContentCallback,
   updateAgentVerbose,
   completionRunner,
+  modelList,
 } from "@/index";
 
 updateAgentVerbose(true);
@@ -89,6 +90,7 @@ app.post(apiGraphPrefix + "/", graphRunner(agentDictionary, [], streamChunkCallb
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
 
 app.post("/api/chat/completions", completionRunner(agentDictionary, model2graphData, [], onLogCallback));
+app.get("/api/models", modelList(graphDictonary));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);
