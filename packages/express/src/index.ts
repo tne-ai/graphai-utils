@@ -3,4 +3,12 @@ export { graphRunner, streamGraphRunner, nonStreamGraphRunner } from "./graph";
 export { completionRunner } from "./completions";
 export { modelList } from "./models";
 
-export { ExpressAgentInfo, StreamChunkCallback, ContentCallback, Model2GraphData } from "./type";
+export {
+  ExpressAgentInfo,
+  StreamChunkCallback,
+  StreamCompletionChunkCallback,
+  Model2GraphData,
+  GraphDictionary,
+  ContentCallback,
+  DefaultEndOfStreamDelimiter,
+} from "./type";
