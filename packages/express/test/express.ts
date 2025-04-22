@@ -5,6 +5,7 @@ import express from "express";
 import type { AgentFunctionInfoDictionary, TransactionLog } from "graphai";
 
 import * as agents from "@graphai/agents";
+import { llmGraphData } from "./graph_data";
 
 import {
   agentDispatcher,
@@ -63,26 +64,7 @@ const onLogCallback = (log: TransactionLog, __isUpdate: boolean) => {
 };
 
 const model2graphData = (__model: string) => {
-  const graphData = {
-    version: 0.5,
-    nodes: {
-      messages: {
-        value: [],
-      },
-      llm: {
-        agent: "openAIAgent",
-        params: {
-          stream: true,
-          isResult: true,
-        },
-        inputs: {
-          messages: ":messages",
-        },
-        isResult: true,
-      },
-    },
-  };
-  return graphData;
+  return llmGraphData;
 };
 
 app.get(apiPrefix + "/:agentId", agentDoc(agentDictionary, hostName, apiPrefix));
