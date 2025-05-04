@@ -98,7 +98,7 @@ app.use((err: any, req: express.Request, res: express.Response, __next: express.
   res.json({});
 });
 
-const port = 8085;
+const port = process.env.PORT || 8085;
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
