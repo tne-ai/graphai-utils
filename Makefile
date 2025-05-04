@@ -23,11 +23,12 @@ install:
 	yarn install
 	yarn build
 
-## run: Start OpenAI Compatible API server
+## run: Start OpenAI Compatible API server on $PORT
+PORT ?= 8085
 .PHONY: run
 run:
 	@echo "Starting OpenAI Compatible API server...using OPENAI_API_KEY"
-	cd packages/express && yarn run server
+	PORT=$(PORT) cd packages/express && yarn run server
 
 ## test: test OpenAI Compatible API server
 .PHONY: test
