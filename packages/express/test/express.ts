@@ -89,8 +89,8 @@ app.post(apiGraphPrefix + "/", graphRunner(agentDictionary, [], streamChunkCallb
 
 app.post(apiGraphPrefix + "/stream", graphRunner(agentDictionary, [], streamChunkCallback, contentCallback, "", onLogCallback));
 
-app.post("/api/chat/completions", completionRunner(agentDictionary, model2graphData, [], onLogCallback));
-app.get("/api/models", modelList(graphDictonary));
+app.post("/v1/api/chat/completions", completionRunner(agentDictionary, model2graphData, [], onLogCallback));
+app.get("/v1/api/models", modelList(graphDictonary));
 
 app.use((err: any, req: express.Request, res: express.Response, __next: express.NextFunction) => {
   console.error(err.stack);
