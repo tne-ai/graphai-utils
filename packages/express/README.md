@@ -1,5 +1,4 @@
-
-## GraphAI express middleware.
+# GraphAI express middleware
 
 ## Install
 
@@ -43,10 +42,11 @@ app.post("/api/chat/completions", completionRunner(agentDictionary, model2graphD
 
 ### Run Test server
 
-```
-yarn run server
-```
+You can set the port with the PORT environment variable
 
+```sh
+PORT=8085 yarn run server
+```
 
 ### Test from curl
 
@@ -69,4 +69,3 @@ yarn install
 yarn run server # then run test express server
 yarn run test_stream
 ```
-

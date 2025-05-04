@@ -1,0 +1,192 @@
+site_name: GraphAI Utils Documentation
+site_description: Complete toolkit for building GraphAI-powered applications with OpenAI API compatibility, graph visualization, and cloud deployment
+site_author: Receptron Team
+site_url: https://receptron.github.io/graphai-utils/
+
+repo_name: receptron/graphai-utils
+repo_url: https://github.com/receptron/graphai-utils
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tabs.link
+    - content.tooltips
+    - header.autohide
+    - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/receptron/graphai-utils
+    - icon: fontawesome/brands/npm
+      link: https://www.npmjs.com/search?q=%40receptron%2Fgraphai
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_KEY
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/extra.js
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: receptron
+      repo: graphai-utils
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abbreviations.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+plugins:
+  - search:
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - minify:
+      minify_html: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - git-committers:
+      repository: receptron/graphai-utils
+      branch: main
+
+nav:
+  - Home: index.md
+  - Quick Start:
+    - quick-start/index.md
+    - OpenAI Server: quick-start/openai-server.md
+    - Add Visualization: quick-start/add-visualization.md
+    - Deploy to Cloud: quick-start/deployment.md
+  - Tutorials:
+    - tutorials/index.md
+    - Chat Server: tutorials/chat-server.md
+    - Graph Dashboard: tutorials/graph-dashboard.md
+    - Agent Generator: tutorials/agent-generator.md
+    - Streaming Data: tutorials/streaming-data.md
+    - Firebase Integration: tutorials/firebase-integration.md
+  - Examples:
+    - examples/index.md
+    - Basic Server: examples/basic-server.md
+    - Vue Dashboard: examples/vue-dashboard.md
+    - React Visualizer: examples/react-visualizer.md
+    - Firebase Deployment: examples/firebase-deployment.md
+    - Custom Agents: examples/custom-agents.md
+  - Guides:
+    - guides/index.md
+    - Installation: guides/installation.md
+    - Configuration: guides/configuration.md
+    - Integration: guides/integration.md
+    - Performance: guides/performance.md
+    - Troubleshooting: guides/troubleshooting.md
+  - Reference:
+    - reference/index.md
+    - Packages:
+      - reference/packages/index.md
+      - Express Middleware: reference/packages/express.md
+      - Express Types: reference/packages/express-type.md
+      - Vue Cytoscape: reference/packages/vue-cytoscape.md
+      - React Cytoscape: reference/packages/react-cytoscape.md
+      - Event Agent Generator: reference/packages/event-agent-generator.md
+      - Stream Utils: reference/packages/stream-utils.md
+      - Firebase Functions: reference/packages/firebase-functions.md
+      - Firebase Tools: reference/packages/firebase-tools.md
+    - API Reference:
+      - reference/api/index.md
+      - Express API: reference/api/express.md
+      - Visualization API: reference/api/visualization.md
+      - Firebase API: reference/api/firebase.md
+    - Changelog: reference/changelog.md
