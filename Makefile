@@ -23,13 +23,14 @@ install:
 	yarn install
 	yarn build
 
-## server: Start OpenAI Compatible API server
-.PHONY: server
-server:
+## run: Start OpenAI Compatible API server
+.PHONY: run
+run:
 	@echo "Starting OpenAI Compatible API server...using OPENAI_API_KEY"
 	cd packages/express && yarn run server
 
 ## test: test OpenAI Compatible API server
 .PHONY: test
 test:
-	cd packages/express && node --test -r tsconfig/register --require ts-node/register ./test/run_openai.ts
+	# cd packages/express && node --test -r tsconfig/register --require ts-node/register ./test/run_openai.ts
+	cd packages/express && node --test -r tsconfig-paths/register --require ts-node/register ./test/run_openai.ts
