@@ -68,3 +68,14 @@ This file records architectural and implementation decisions using a list format
 - Memory Bank population with comprehensive package relationships and usage patterns
 
 [2025-06-02 12:48:13] - Complete package analysis documented in Memory Bank with full ecosystem understanding
+## Decision: Dual Documentation Command Strategy
+**Date**: [2025-06-02 19:53:40]
+**Rationale**: Provide flexible documentation workflow support with both basic preview and development modes to serve different user needs while maintaining consistency with existing Makefile patterns.
+**Implementation Details**:
+- `make docs`: Basic MkDocs serve for quick documentation preview
+- `make docs-dev`: Development mode with strict validation and enhanced error reporting
+- Port 8000 (no conflict with API server on 8085)
+- Self-documented help system integration via `##` comments
+- Comprehensive implementation plan documented in [`docs/guides/makefile-docs-enhancement.md`](../docs/guides/makefile-docs-enhancement.md)
+
+[2025-06-02 19:53:40] - Architectural planning completed for documentation workflow enhancement

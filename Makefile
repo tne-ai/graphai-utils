@@ -35,3 +35,18 @@ run:
 test:
 	# cd packages/express && node --test -r tsconfig/register --require ts-node/register ./test/run_openai.ts
 	cd packages/express && node --test -r tsconfig-paths/register --require ts-node/register ./test/run_openai.ts
+
+## docs: Start MkDocs documentation server locally
+.PHONY: docs
+docs:
+	@echo "Starting MkDocs documentation server..."
+	@echo "Documentation will be available at: http://localhost:8000"
+	mkdocs serve
+
+## docs-dev: Start MkDocs documentation server in development mode
+.PHONY: docs-dev
+docs-dev:
+	@echo "Starting MkDocs documentation server in development mode..."
+	@echo "Documentation will be available at: http://localhost:8000"
+	@echo "Running with strict validation - warnings treated as errors"
+	mkdocs serve --strict
