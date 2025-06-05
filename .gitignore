@@ -5,3 +5,7 @@ node_modules
 .env
 .DS_Store
 .cache
+
+# VitePress build artifacts and cache
+docs/.vitepress/cache/
+docs/.vitepress/dist/

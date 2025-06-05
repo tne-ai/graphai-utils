@@ -36,17 +36,22 @@ test:
 	# cd packages/express && node --test -r tsconfig/register --require ts-node/register ./test/run_openai.ts
 	cd packages/express && node --test -r tsconfig-paths/register --require ts-node/register ./test/run_openai.ts
 
-## docs: Start MkDocs documentation server locally
+## docs: Start VitePress documentation server locally
 .PHONY: docs
 docs:
-	@echo "Starting MkDocs documentation server..."
-	@echo "Documentation will be available at: http://localhost:8000"
-	mkdocs serve
+	@echo "Starting VitePress documentation server..."
+	@echo "Documentation will be available at: http://localhost:5173"
+	yarn docs:dev
 
-## docs-dev: Start MkDocs documentation server in development mode
-.PHONY: docs-dev
-docs-dev:
-	@echo "Starting MkDocs documentation server in development mode..."
-	@echo "Documentation will be available at: http://localhost:8000"
-	@echo "Running with strict validation - warnings treated as errors"
-	mkdocs serve --strict
+## docs-build: Build VitePress documentation for production
+.PHONY: docs-build
+docs-build:
+	@echo "Building VitePress documentation for production..."
+	yarn docs:build
+
+## docs-preview: Preview built documentation
+.PHONY: docs-preview
+docs-preview:
+	@echo "Starting VitePress preview server..."
+	@echo "Preview will be available at: http://localhost:4173"
+	yarn docs:preview

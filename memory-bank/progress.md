@@ -40,3 +40,11 @@ This file tracks the project's progress using a task list format.
 - Created missing MkDocs dependencies: `docs/overrides/`, `docs/stylesheets/extra.css`, `docs/javascripts/extra.js`, `docs/includes/abbreviations.md`
 - Verified both commands work correctly with documentation available at localhost:8000
 - Commands integrated with existing Makefile help system
+[2025-06-04 17:17:08] - **COMPLETED: VitePress Migration**
+- Successfully migrated from MkDocs to VitePress
+- Created comprehensive VitePress configuration with full feature parity
+- Migrated all content and navigation structure
+- Updated build system (Makefile, package.json, GitHub Actions)
+- Removed MkDocs infrastructure (mkdocs.yml, site/ directory)
+- VitePress development server running successfully on port 5173
+- Documented complete migration process in devPrompts.md
