@@ -79,3 +79,20 @@ This file records architectural and implementation decisions using a list format
 - Comprehensive implementation plan documented in [`docs/guides/makefile-docs-enhancement.md`](../docs/guides/makefile-docs-enhancement.md)
 
 [2025-06-02 19:53:40] - Architectural planning completed for documentation workflow enhancement
+## Decision: Migration from MkDocs to VitePress Documentation System
+**Date**: [2025-06-04 21:37:00]
+**Rationale**: Switch to VitePress for modern, fast documentation with better TypeScript integration, improved developer experience, and native Vue.js theming capabilities that align with project's frontend stack.
+**Implementation Details**:
+- Created comprehensive VitePress configuration in `docs/.vitepress/config.mjs` (JavaScript-based for better compatibility)
+- Implemented custom theme with brand colors and styling in `docs/.vitepress/theme/`
+- Updated Makefile with four VitePress commands:
+  - `make docs`: Development server (localhost:5173)
+  - `make docs-dev`: Development server with host binding
+  - `make docs-build`: Production build
+  - `make docs-preview`: Preview built documentation (localhost:4173)
+- Added corresponding npm scripts in package.json (`docs:dev`, `docs:build`, `docs:preview`)
+- Added VitePress v1.6.3 as development dependency
+- Preserved existing documentation structure and navigation hierarchy
+- Successfully tested development server startup
+
+[2025-06-04 21:37:00] - VitePress documentation system successfully implemented and tested
